@@ -1,0 +1,102 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Kokoro.Math;
+
+#if OPENGL
+#if PC
+using Kokoro.OpenGL.PC;
+#endif
+#endif
+
+namespace Kokoro.Engine
+{
+    public enum FrameBufferAttachments
+    {
+        ColorAttachment0,
+        ColorAttachment1,
+        ColorAttachment2,
+        ColorAttachment3,
+        ColorAttachment4,
+        ColorAttachment5,
+        ColorAttachment6,
+        ColorAttachment7,
+        ColorAttachment8,
+        ColorAttachment9,
+        ColorAttachment10,
+        ColorAttachment11,
+        ColorAttachment12,
+        ColorAttachment13,
+        ColorAttachment14,
+        ColorAttachment15,
+        DepthAttachment,
+        DepthStencilAttachment,
+        StencilAttachment
+    }
+
+    public class FrameBuffer : FrameBufferLL, IDisposable
+    {
+        public Vector2 Size;
+
+        private Dictionary<string, FrameBufferTexture> fbufTextures;
+        private Dictionary<string, int> fbufAttachmentsIDs;
+        private Dictionary<string, FrameBufferAttachments> attachments;
+        private int id;
+
+        public FrameBuffer(int width, int height, PixelComponentType pct)
+        {
+            fbufTextures = new Dictionary<string, FrameBufferTexture>();
+            fbufAttachmentsIDs = new Dictionary<string, int>();
+            attachments = new Dictionary<string, FrameBufferAttachments>();
+
+            id = base.Generate();
+            base.Bind(id);
+
+            Add("DepthBuffer", new FrameBufferTexture(width, height, PixelFormat.Depth, PixelComponentType.D32, PixelType.Float), FrameBufferAttachments.DepthAttachment); //Attach the depth buffer to the framebuffer
+
+            base.CheckError();
+            base.Bind(0);
+
+            Kokoro.Debug.ObjectAllocTracker.NewCreated(this, id, "Framebuffer");
+        }
+
+        public void Add(string id, FrameBufferTexture fbufTex, FrameBufferAttachments attachment)
+        {
+            fbufTextures.Add(id, fbufTex);
+            if (attachment != FrameBufferAttachments.DepthAttachment) attachments.Add(id, attachment);
+            fbufTex.BindToFrameBuffer(attachment);
+
+            base.DrawBuffers(attachments.Values.ToArray());
+        }
+
+        public FrameBufferTexture this[string key]
+        {
+            get
+            {
+                return fbufTextures[key];
+            }
+            set
+            {
+                fbufTextures[key] = value;
+            }
+        }
+
+        public void Bind()
+        {
+            base.Bind(id);
+        }
+
+        public void Dispose()
+        {
+            base.Delete(id);
+        }
+
+        ~FrameBuffer()
+        {
+            Kokoro.Debug.ObjectAllocTracker.ObjectDestroyed(this, id, "FrameBuffer");
+        }
+
+    }
+}
