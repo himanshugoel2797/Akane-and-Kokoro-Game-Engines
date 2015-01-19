@@ -119,6 +119,15 @@ namespace Kokoro.OpenGL.PC
         protected float GetZFar() { return ZFar; }
         #endregion
 
+        #region Viewport
+        Kokoro.Math.Vector4 Viewport;
+        protected void SetViewport(Kokoro.Math.Vector4 viewport)
+        {
+            GL.Viewport((int)viewport.X, (int)viewport.Y, (int)viewport.Z, (int)viewport.W);
+        }
+        protected Kokoro.Math.Vector4 GetViewport() { return Viewport; }
+        #endregion
+
         #endregion
 
     }

@@ -117,6 +117,22 @@ namespace Kokoro.Engine
 
         public Matrix4 Projection { get; set; }
         public Matrix4 View { get; set; }
+
+        /// <summary>
+        /// Get/Set the rendering viewport
+        /// </summary>
+        public Vector4 Viewport
+        {
+            get
+            {
+                return base.GetViewport();
+            }
+            set
+            {
+                base.SetViewport(value);
+            }
+        }
+
         /// <summary>
         /// The Far-clipping plane
         /// </summary>

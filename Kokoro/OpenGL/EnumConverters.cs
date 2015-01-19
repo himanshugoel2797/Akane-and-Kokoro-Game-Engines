@@ -77,5 +77,14 @@ namespace Kokoro.OpenGL
             return ShaderType.ComputeShader;
         }
 
+        public static BlendingFactorDest EBlendFuncDST(Engine.BlendingFactor factor)
+        {
+            return (BlendingFactorDest)Enum.Parse(typeof(BlendingFactorDest), factor.ToString());
+        }
+
+        public static BlendingFactorSrc EBlendFuncSRC(Engine.BlendingFactor factor)
+        {
+            return (BlendingFactorSrc)Enum.Parse(typeof(BlendingFactorSrc), factor.ToString());
+        }
     }
 }

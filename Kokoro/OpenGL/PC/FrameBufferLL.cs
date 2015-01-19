@@ -28,6 +28,11 @@ namespace Kokoro.OpenGL.PC
             GL.DrawBuffers(dbEnum.Length, dbEnum.OrderBy(x => x).ToArray());
         }
 
+        protected void BlendFunction(Engine.BlendFunc func, int index)
+        {
+            GL.BlendFunc(index, EnumConverters.EBlendFuncSRC(func.Src), EnumConverters.EBlendFuncDST(func.Dst));
+        }
+
         protected void Delete(int id)
         {
             GL.DeleteFramebuffer(id);

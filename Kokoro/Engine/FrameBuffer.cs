@@ -83,14 +83,31 @@ namespace Kokoro.Engine
             }
         }
 
-        public void Bind()
+        public void SetBlendFunc(BlendFunc func, FrameBufferAttachments attachment)
         {
-            base.Bind(id);
+            int index = int.Parse(attachment.ToString().Replace("ColorAttachment", ""));
+            base.BlendFunction(func, index);
+        }
+
+        public void Bind(GraphicsContext context)
+        {
+            if (id != -1)
+            {
+                base.Bind(id);
+                context.Viewport = new Vector4(0, 0, Size.X, Size.Y);
+                currentFBUF = this;
+            }
         }
 
         public void Dispose()
         {
             base.Delete(id);
+        }
+
+        private static FrameBuffer currentFBUF;
+        public static FrameBuffer GetCurrentFrameBuffer()
+        {
+            return currentFBUF;
         }
 
         ~FrameBuffer()
