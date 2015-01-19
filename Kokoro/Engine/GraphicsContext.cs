@@ -18,6 +18,37 @@ namespace Kokoro.Engine
 {
     public enum CullMode { Off, Back, Front }
 
+    public enum BlendingFactor
+    {
+        Zero = 0,
+        One,
+        SrcAlpha,
+        OneMinusSrcAlpha,
+        DstAlpha,
+        OneMinusDstAlpha,
+        DstColor,
+        OneMinusDstColor,
+        SrcAlphaSaturate,
+        ConstantColorExt,
+        ConstantColor,
+        OneMinusConstantColorExt,
+        OneMinusConstantColor,
+        ConstantAlphaExt,
+        ConstantAlpha,
+        OneMinusConstantAlpha,
+        OneMinusConstantAlphaExt,
+        Src1Alpha,
+        Src1Color,
+        OneMinusSrc1Color,
+        OneMinusSrc1Alpha
+    }
+
+    public struct BlendFunc
+    {
+        public BlendingFactor Src;
+        public BlendingFactor Dst;
+    }
+
     /// <summary>
     /// The GraphicsContext acts as a high level wrapper to the lower level functionality exposed by the platform dependant code
     /// </summary>
@@ -69,6 +100,9 @@ namespace Kokoro.Engine
             }
         }
 
+        /// <summary>
+        /// Get/Set the Depth Function
+        /// </summary>
         public Func<float, float, bool> DepthFunction
         {
             get
@@ -77,9 +111,11 @@ namespace Kokoro.Engine
             }
             set
             {
-
+                base.SetDepthFunc(value);
             }
         }
+
+        public BlendFunc AlphaBlending { get; set; }    //TODO Implement Alpha Blending properly
         #endregion
 
         public GraphicsContext(Vector2 WindowSize)

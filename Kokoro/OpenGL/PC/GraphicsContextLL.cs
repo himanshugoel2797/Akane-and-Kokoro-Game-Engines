@@ -92,12 +92,18 @@ namespace Kokoro.OpenGL.PC
             else if (resultB) dFunction = DepthFunction.Equal;
             else if (!resultB) dFunction = DepthFunction.Notequal;
 
-
+            GL.DepthFunc(dFunction);
+            GL.Enable(EnableCap.DepthTest);
+            depthFunc = func;
         }
         protected Func<float, float, bool> GetDepthFunc()
         {
             return depthFunc;
         }
+        #endregion
+
+        #region Transparency
+        
         #endregion
 
         #endregion
