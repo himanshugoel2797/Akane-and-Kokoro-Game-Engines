@@ -66,5 +66,16 @@ namespace Kokoro.OpenGL
             return 0;
         }
 
+        public static ShaderType EShaderTypes(Engine.Shaders.ShaderTypes type)
+        {
+            if (type == Engine.Shaders.ShaderTypes.Fragment) return ShaderType.FragmentShader;
+            else if (type == Engine.Shaders.ShaderTypes.Geometry) return ShaderType.GeometryShader;
+            else if (type == Engine.Shaders.ShaderTypes.TessellationControl) return ShaderType.TessControlShader;
+            else if (type == Engine.Shaders.ShaderTypes.TessellationEval) return ShaderType.TessEvaluationShader;
+            else if (type == Engine.Shaders.ShaderTypes.Vertex) return ShaderType.VertexShader;
+
+            return ShaderType.ComputeShader;
+        }
+
     }
 }

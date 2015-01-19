@@ -102,8 +102,21 @@ namespace Kokoro.OpenGL.PC
         }
         #endregion
 
-        #region Transparency
-        
+        #region ZNear and ZFar
+        float ZNear, ZFar;
+        protected void SetZNear(float val)
+        {
+            ZNear = val;
+            GL.DepthRange(ZNear, ZFar);
+        }
+        protected float GetZNear() { return ZNear; }
+
+        protected void SetZFar(float val)
+        {
+            ZFar = val;
+            GL.DepthRange(ZNear, ZFar);
+        }
+        protected float GetZFar() { return ZFar; }
         #endregion
 
         #endregion

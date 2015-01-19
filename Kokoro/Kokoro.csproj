@@ -11,7 +11,7 @@
     <AssemblyName>Kokoro</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>a40348d2</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>5f1c55c7</NuGetPackageImportStamp>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -48,6 +48,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AssimpNet">
+      <HintPath>..\packages\AssimpNet.3.3.1\lib\net45\AssimpNet.dll</HintPath>
+    </Reference>
     <Reference Include="BEPUik">
       <HintPath>..\packages\BEPUphysics.1.3.0\lib\net40\BEPUik.dll</HintPath>
     </Reference>
@@ -77,7 +80,16 @@
     <Compile Include="Engine\FrameBuffer.cs" />
     <Compile Include="Engine\FrameBufferTexture.cs" />
     <Compile Include="Engine\GraphicsContext.cs" />
+    <Compile Include="Engine\Material.cs" />
+    <Compile Include="Engine\Model.cs" />
     <Compile Include="Engine\PixelInfo.cs" />
+    <Compile Include="Engine\Prefabs\FullScreenQuad.cs" />
+    <Compile Include="Engine\Shaders\FragmentShader.cs" />
+    <Compile Include="Engine\Shaders\GeometryShader.cs" />
+    <Compile Include="Engine\Shaders\Shader.cs" />
+    <Compile Include="Engine\Shaders\ShaderProgram.cs" />
+    <Compile Include="Engine\Shaders\TessellationShader.cs" />
+    <Compile Include="Engine\Shaders\VertexShader.cs" />
     <Compile Include="Engine\Texture.cs" />
     <Compile Include="Math\BezierCurve.cs" />
     <Compile Include="Math\BezierCurveCubic.cs" />
@@ -109,7 +121,10 @@
     <Compile Include="OpenGL\PC\Debug.cs" />
     <Compile Include="OpenGL\PC\FrameBufferLL.cs" />
     <Compile Include="OpenGL\PC\GraphicsContextLL.cs" />
+    <Compile Include="OpenGL\PC\ShaderLL.cs" />
+    <Compile Include="OpenGL\PC\ShaderProgramLL.cs" />
     <Compile Include="OpenGL\PC\TextureLL.cs" />
+    <Compile Include="OpenGL\PC\VertexBufferLL.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -165,7 +180,9 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\OpenTK.Next.1.1.1616.8959\build\OpenTK.Next.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\OpenTK.Next.1.1.1616.8959\build\OpenTK.Next.targets'))" />
+    <Error Condition="!Exists('..\packages\AssimpNet.3.3.1\build\AssimpNet.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\AssimpNet.3.3.1\build\AssimpNet.targets'))" />
   </Target>
+  <Import Project="..\packages\AssimpNet.3.3.1\build\AssimpNet.targets" Condition="Exists('..\packages\AssimpNet.3.3.1\build\AssimpNet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

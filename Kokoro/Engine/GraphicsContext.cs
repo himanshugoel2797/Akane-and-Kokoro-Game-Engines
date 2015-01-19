@@ -115,7 +115,37 @@ namespace Kokoro.Engine
             }
         }
 
-        public BlendFunc AlphaBlending { get; set; }    //TODO Implement Alpha Blending properly
+        public Matrix4 Projection { get; set; }
+        public Matrix4 View { get; set; }
+        /// <summary>
+        /// The Far-clipping plane
+        /// </summary>
+        public float ZFar
+        {
+            get
+            {
+                return base.GetZFar();
+            }
+            set
+            {
+                base.SetZFar(value);
+            }
+        }
+
+        /// <summary>
+        /// The Near-clipping plane
+        /// </summary>
+        public float ZNear
+        {
+            get
+            {
+                return base.GetZNear();
+            }
+            set
+            {
+                base.SetZNear(value);
+            }
+        }
         #endregion
 
         public GraphicsContext(Vector2 WindowSize)
