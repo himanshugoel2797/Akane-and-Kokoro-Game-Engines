@@ -16,9 +16,11 @@ namespace Kokoro.Engine.Shaders
 {
     public class ShaderProgram : ShaderProgramLL, IDisposable
     {
+        public Action<GraphicsContext, ShaderProgram> PreApply { get; set; }
+
         public ShaderProgram(params Shader[] shaders) : base(shaders) { }
 
-        public ShaderProgram(string directory) : base(ProcessParams(directory)){ }
+        public ShaderProgram(string directory) : base(ProcessParams(directory)) { }
 
         private static Shader[] ProcessParams(string file)
         {
@@ -31,6 +33,7 @@ namespace Kokoro.Engine.Shaders
 
         public void Apply(GraphicsContext context)
         {
+            PreApply(context, this);
             base.sApply(context);
         }
 

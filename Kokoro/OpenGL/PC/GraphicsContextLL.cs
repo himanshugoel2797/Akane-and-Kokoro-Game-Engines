@@ -56,7 +56,31 @@ namespace Kokoro.OpenGL.PC
         #endregion
 
         #region Multisampling
+        int msaaTexID, fbufID;
+        protected void InitializeMSAA(int sampleCount)
+        {
+            msaaTexID = GL.GenTexture();
+            GL.BindTexture(TextureTarget.Texture2DMultisample, msaaTexID);
+            GL.TexImage2DMultisample(TextureTargetMultisample.Texture2DMultisample, sampleCount, PixelInternalFormat.Rgba8, Window.ClientSize.Width, Window.ClientSize.Height, false);
 
+            fbufID = GL.GenFramebuffer();
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, fbufID);
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2DMultisample, msaaTexID, 0);
+        }
+
+        protected void SetMSAA()
+        {
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, fbufID);
+            GL.DrawBuffers(1, new DrawBuffersEnum[] { DrawBuffersEnum.ColorAttachment0 });
+        }
+
+        protected void BlitMSAA()
+        {
+            GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, 0);
+            GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, fbufID);
+            GL.DrawBuffer(DrawBufferMode.Back);
+            GL.BlitFramebuffer(0, 0, )          //TODO finish blitframebuffer arguments from reference
+        }
         #endregion
 
         #region Cull Face

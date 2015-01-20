@@ -39,6 +39,7 @@ namespace Kokoro.Engine
     public class FrameBuffer : FrameBufferLL, IDisposable
     {
         public Vector2 Size;
+        public List<string> RenderTargets { get; set; }
 
         private Dictionary<string, FrameBufferTexture> fbufTextures;
         private Dictionary<string, int> fbufAttachmentsIDs;
@@ -47,6 +48,7 @@ namespace Kokoro.Engine
 
         public FrameBuffer(int width, int height, PixelComponentType pct)
         {
+            RenderTargets = new List<string>();
             fbufTextures = new Dictionary<string, FrameBufferTexture>();
             fbufAttachmentsIDs = new Dictionary<string, int>();
             attachments = new Dictionary<string, FrameBufferAttachments>();
@@ -55,6 +57,7 @@ namespace Kokoro.Engine
             base.Bind(id);
 
             Add("DepthBuffer", new FrameBufferTexture(width, height, PixelFormat.Depth, PixelComponentType.D32, PixelType.Float), FrameBufferAttachments.DepthAttachment); //Attach the depth buffer to the framebuffer
+            Add("Color", new FrameBufferTexture(width, height, PixelFormat.BGRA, PixelComponentType.RGBA16f, PixelType.Float), FrameBufferAttachments.ColorAttachment0);
 
             base.CheckError();
             base.Bind(0);
@@ -64,6 +67,7 @@ namespace Kokoro.Engine
 
         public void Add(string id, FrameBufferTexture fbufTex, FrameBufferAttachments attachment)
         {
+            RenderTargets.Add(id);
             fbufTextures.Add(id, fbufTex);
             if (attachment != FrameBufferAttachments.DepthAttachment) attachments.Add(id, attachment);
             fbufTex.BindToFrameBuffer(attachment);
