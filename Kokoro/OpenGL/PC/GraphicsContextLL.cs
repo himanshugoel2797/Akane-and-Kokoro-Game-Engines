@@ -25,6 +25,13 @@ namespace Kokoro.OpenGL.PC
 
         }
 
+        protected void aClear(float r, float g, float b, float a)
+        {
+            //TODO maybe it'll be faster to just disable depth testing and draw a fsq? This is currently one of the slowest parts of the engine
+            GL.ClearColor(r, g, b, a);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+        }
+
         #region State Machine
 
         #region Depth Write
@@ -56,7 +63,7 @@ namespace Kokoro.OpenGL.PC
         #endregion
 
         #region Multisampling
-        int msaaTexID, fbufID;
+        int msaaTexID, fbufID, msaaLevel;
         protected void InitializeMSAA(int sampleCount)
         {
             msaaTexID = GL.GenTexture();
@@ -66,7 +73,10 @@ namespace Kokoro.OpenGL.PC
             fbufID = GL.GenFramebuffer();
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, fbufID);
             GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2DMultisample, msaaTexID, 0);
+            msaaLevel = sampleCount;
         }
+
+        protected int GetMSAALevel() { return msaaLevel; }
 
         protected void SetMSAA()
         {
@@ -79,7 +89,15 @@ namespace Kokoro.OpenGL.PC
             GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, 0);
             GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, fbufID);
             GL.DrawBuffer(DrawBufferMode.Back);
-            GL.BlitFramebuffer(0, 0, )          //TODO finish blitframebuffer arguments from reference
+            GL.BlitFramebuffer(0, 0, Window.ClientSize.Width, Window.ClientSize.Height, 0, 0, Window.ClientSize.Width, Window.ClientSize.Height, ClearBufferMask.ColorBufferBit, BlitFramebufferFilter.Nearest);          //TODO finish blitframebuffer arguments from reference
+        }
+
+        protected void ResetMSAA()
+        {
+            if (fbufID != 0) GL.DeleteFramebuffer(fbufID);
+            if (msaaTexID != 0) GL.DeleteTexture(msaaTexID);
+            fbufID = 0;
+            msaaTexID = 0;
         }
         #endregion
 

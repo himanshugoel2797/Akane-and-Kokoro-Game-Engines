@@ -162,6 +162,32 @@ namespace Kokoro.Engine
                 base.SetZNear(value);
             }
         }
+
+        /// <summary>
+        /// Get/Set the MSAA sample count
+        /// </summary>
+        public int MSAALevel
+        {
+            get
+            {
+                return base.GetMSAALevel();
+            }
+            set
+            {
+                base.ResetMSAA();
+                base.InitializeMSAA(value);
+            }
+        }
+        #endregion
+
+        internal void SetMSAABuffer() { base.SetMSAA(); }
+
+        #region Clear
+        public void Clear(float r, float g, float b, float a)
+        {
+            base.aClear(r, g, b, a);
+        }
+        public void Clear(Vector4 col) { Clear(col.X, col.Y, col.Z, col.W); }
         #endregion
 
         public GraphicsContext(Vector2 WindowSize)
