@@ -20,9 +20,44 @@ namespace Kokoro.OpenGL.PC
         protected GraphicsContextLL(int windowWidth, int windowHeight)
         {
             Window = new GameWindow(windowWidth, windowHeight);
+            Window.RenderFrame += Window_RenderFrame;
+            Window.UpdateFrame += Window_UpdateFrame;
+            Window.Resize += Window_Resize;
 
             //Depth Test is always enabled, it's a matter of what the depth function is
 
+        }
+
+        void Window_Resize(object sender, EventArgs e)
+        {
+            //TODO Implement Resize handler
+        }
+
+        protected Action<long, Engine.GraphicsContext> update;
+        void Window_UpdateFrame(object sender, FrameEventArgs e)
+        {
+            update((long)e.Time, (this as Engine.GraphicsContext));
+        }
+
+        protected Action<long, Engine.GraphicsContext> render;
+        void Window_RenderFrame(object sender, FrameEventArgs e)
+        {
+            render((long)e.Time, (this as Engine.GraphicsContext));
+        }
+
+        protected void aStart(int fps, int ups)
+        {
+            Window.Run(ups, fps);
+        }
+
+        protected void RegisterUpdateHandler(Action<long, Engine.GraphicsContext> act)
+        {
+            update += act;
+        }
+
+        protected void RegisterRenderHandler(Action<long, Engine.GraphicsContext> act)
+        {
+            render += act;
         }
 
         protected void aClear(float r, float g, float b, float a)
@@ -89,7 +124,7 @@ namespace Kokoro.OpenGL.PC
             GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, 0);
             GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, fbufID);
             GL.DrawBuffer(DrawBufferMode.Back);
-            GL.BlitFramebuffer(0, 0, Window.ClientSize.Width, Window.ClientSize.Height, 0, 0, Window.ClientSize.Width, Window.ClientSize.Height, ClearBufferMask.ColorBufferBit, BlitFramebufferFilter.Nearest);          //TODO finish blitframebuffer arguments from reference
+            GL.BlitFramebuffer(0, 0, Window.ClientSize.Width, Window.ClientSize.Height, 0, 0, Window.ClientSize.Width, Window.ClientSize.Height, ClearBufferMask.ColorBufferBit, BlitFramebufferFilter.Nearest);
         }
 
         protected void ResetMSAA()
@@ -171,6 +206,5 @@ namespace Kokoro.OpenGL.PC
         #endregion
 
         #endregion
-
     }
 }

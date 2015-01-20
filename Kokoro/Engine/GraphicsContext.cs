@@ -178,6 +178,36 @@ namespace Kokoro.Engine
                 base.InitializeMSAA(value);
             }
         }
+
+        /// <summary>
+        /// Render Event
+        /// </summary>
+        public Action<long, GraphicsContext> Render
+        {
+            get
+            {
+                return base.render;
+            }
+            set
+            {
+                base.render = value;
+            }
+        }
+
+        /// <summary>
+        /// Update Event
+        /// </summary>
+        public Action<long, GraphicsContext> Update
+        {
+            get
+            {
+                return base.update;
+            }
+            set
+            {
+                base.update = value;
+            }
+        }
         #endregion
 
         internal void SetMSAABuffer() { base.SetMSAA(); }
@@ -193,10 +223,22 @@ namespace Kokoro.Engine
         public GraphicsContext(Vector2 WindowSize)
             : base((int)WindowSize.X, (int)WindowSize.Y)
         {
-
+            Debug.ObjectAllocTracker.NewCreated(this, -1, "GraphicsContext Created");
         }
 
+        public Action<long, GraphicsContext> Render { get; set; }
+        public Action<long, GraphicsContext> Update { get; set; }
 
+        /// <summary>
+        /// Start the game loop
+        /// </summary>
+        /// <param name="fps">Render calls per second</param>
+        /// <param name="ups">Updates per second</param>
+        public void Start(int fps, int ups)
+        {
+            Debug.ErrorLogger.AddMessage(0, "Engine Started", Debug.DebugType.Marker, Debug.Severity.Notification);
+            base.aStart(fps, ups);
+        }
 
 
     }
