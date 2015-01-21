@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kokoro.Engine.SceneGraph
 {
-    interface IScene
+    public interface IScene
     {
         IScene Parent
         {

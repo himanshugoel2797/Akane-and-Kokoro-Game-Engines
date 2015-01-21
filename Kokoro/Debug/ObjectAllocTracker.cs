@@ -12,7 +12,7 @@ namespace Kokoro.Debug
     public static class ObjectAllocTracker
     {
 #if DEBUG
-        private static string GetParameterName2<T>(T item) where T : class
+        private static string GetParameterName2<T>(T item)
         {
             if (item == null)
                 return string.Empty;
@@ -28,7 +28,7 @@ namespace Kokoro.Debug
         /// </summary>
         /// <param name="obj">The new object</param>
         /// <param name="id">The associated ID, if any</param>
-        public static void NewCreated(object obj, int id = -1, string info = "")
+        public static void NewCreated<T>(T obj, int id = -1, string info = "")
         {
 #if DEBUG
             log += "[NEW][" + GetParameterName2(obj) + "][ID:" + id + "]" + info + "\n";
@@ -56,6 +56,16 @@ namespace Kokoro.Debug
 #if DEBUG
             log += "[LOOP]" + timeTaken;
 #endif
+        }
+
+        public static void PostUPS(double ups)
+        {
+            DebuggerManager.monitor.PostMSPU((double)(1000 / ups));
+        }
+
+        public static void PostFPS(double fps)
+        {
+            DebuggerManager.monitor.PostMSPR((double)(1000 / fps));
         }
 
     }

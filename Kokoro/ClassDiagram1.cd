@@ -1,0 +1,560 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Kokoro.Debug.DebuggerManager" Collapsed="true">
+    <Position X="16.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAACAAAAAAAAgAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>Debug\DebuggerManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kokoro.Debug.ErrorLogger" Collapsed="true">
+    <Position X="20" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAABAAACAAAAAAAAAAAAAAAAAAAQAA=</HashCode>
+      <FileName>Debug\ErrorLogger.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kokoro.Debug.LogViewer" Collapsed="true">
+    <Position X="18.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>FAAiABAAACIAAQAAkADAAQCCAAAIABAAAEAAAAIAEAA=</HashCode>
+      <FileName>Debug\LogViewer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kokoro.Debug.MemoryMonitor" Collapsed="true">
+    <Position X="21.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAACAACAEBUAACACAAEACAAAAACAAAAAAAAAABAA=</HashCode>
+      <FileName>Debug\MemoryMonitor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kokoro.Debug.ObjectAllocTracker" Collapsed="true">
+    <Position X="14.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAACAAAAAAAAAAACAAAAAAAAAQAAEgAAAAAAAA=</HashCode>
+      <FileName>Debug\ObjectAllocTracker.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kokoro.Engine.FrameBuffer" Collapsed="true">
+    <Position X="9.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAIAgAAAASAAgAAACQAAAAAAAAAAAQAAhAAIAAAAAgA=</HashCode>
+      <FileName>Engine\FrameBuffer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Kokoro.Engine.FrameBufferTexture" Collapsed="true">
+    <Position X="0.5" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Engine\FrameBufferTexture.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kokoro.Engine.GraphicsContext" Collapsed="true">
+    <Position X="6.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgQAAgAAADiEAAAAAAAAAAAAAAABAAAIQBAAAAFQAAA=</HashCode>
+      <FileName>Engine\GraphicsContext.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kokoro.Engine.Model" Collapsed="true">
+    <Position X="4" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gEAAgAAAALAAAgAAAgAAAAAAAAAAAAAAACAAAAAEAAA=</HashCode>
+      <FileName>Engine\Model.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Kokoro.Engine.Pipeline" Collapsed="true">
+    <Position X="16.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAABAAAAAABAAAAAAAAAAAAAAAIIAAAAAAAAA=</HashCode>
+      <FileName>Engine\Pipeline.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kokoro.Engine.RenderPass" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAADAAAAAAIgAAAAAAAAAAAAAAAQAAAABAAAA=</HashCode>
+      <FileName>Engine\RenderPass.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Kokoro.Engine.Texture" Collapsed="true">
+    <Position X="0.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAACAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAgA=</HashCode>
+      <FileName>Engine\Texture.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Kokoro.Engine.Prefabs.FullScreenQuad" Collapsed="true">
+    <Position X="0.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Engine\Prefabs\FullScreenQuad.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kokoro.Engine.Prefabs.HighResQuad" Collapsed="true">
+    <Position X="3" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Engine\Prefabs\HighResQuad.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kokoro.Engine.Prefabs.Quad" Collapsed="true">
+    <Position X="5.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Engine\Prefabs\Quad.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kokoro.Engine.Prefabs.Sphere" Collapsed="true">
+    <Position X="7.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Engine\Prefabs\Sphere.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kokoro.Engine.SceneGraph.SceneManager" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAYAAAAAAAAAAABAAAAARIAAAAABAgAAABAAAAAAAAA=</HashCode>
+      <FileName>Engine\SceneGraph\SceneManager.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Kokoro.Engine.Shaders.FragmentShader" Collapsed="true">
+    <Position X="7.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Engine\Shaders\FragmentShader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kokoro.Engine.Shaders.GeometryShader" Collapsed="true">
+    <Position X="10" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Engine\Shaders\GeometryShader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kokoro.Engine.Shaders.Shader" Collapsed="true">
+    <Position X="6.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAEAgAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Engine\Shaders\Shader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kokoro.Engine.Shaders.ShaderProgram" Collapsed="true">
+    <Position X="3.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACIAAAAABAAAAAAgAAAAAAAACAAAAAAAMAAAEAAAAA=</HashCode>
+      <FileName>Engine\Shaders\ShaderProgram.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Kokoro.Engine.Shaders.TessellationShader" Collapsed="true">
+    <Position X="12.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAABCAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Engine\Shaders\TessellationShader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kokoro.Engine.Shaders.TessellationControlShader" Collapsed="true">
+    <Position X="1" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Engine\Shaders\TessellationShader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kokoro.Engine.Shaders.TessellationEvalShader" Collapsed="true">
+    <Position X="3.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Engine\Shaders\TessellationShader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kokoro.Engine.Shaders.VertexShader" Collapsed="true">
+    <Position X="5.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Engine\Shaders\VertexShader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kokoro.Game.Game" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAgAAAAAAAAAAQAAAAAAAAAAAABAABAAAAAA=</HashCode>
+      <FileName>Game\Game.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Kokoro.Game.TestA" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAQAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>Game\TestA.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Kokoro.Math.Functions" Collapsed="true">
+    <Position X="21.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAMAAAAQAAAAABAAAAAAAAAAFBAAAAAIAAAECAAAA=</HashCode>
+      <FileName>Math\Functions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kokoro.Math.MathHelper" Collapsed="true">
+    <Position X="20" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAtAAAAQAAAABQDAACAAAAAAQBAAAAAIEAAgAAAAA=</HashCode>
+      <FileName>Math\MathHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kokoro.OpenGL.EnumConverters" Collapsed="true">
+    <Position X="18.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAwAAAEAgAAAAAQAAAAAQAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>OpenGL\EnumConverters.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kokoro.OpenGL.PC.Debug" Collapsed="true">
+    <Position X="14.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAEAAAAAAAAAAAAAIAAAAAQAAAAAAAAAAAAAAACAAI=</HashCode>
+      <FileName>OpenGL\PC\Debug.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kokoro.OpenGL.PC.FrameBufferLL" Collapsed="true">
+    <Position X="9.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAABAAAAAAAAAAAAAAACAAEAAAAABAAAAEAAAAA=</HashCode>
+      <FileName>OpenGL\PC\FrameBufferLL.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kokoro.OpenGL.PC.GraphicsContextLL" Collapsed="true">
+    <Position X="6.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAEBICFwEAAIAAAAAAgAIAABUAEAPoEahCJAVBBA=</HashCode>
+      <FileName>OpenGL\PC\GraphicsContextLL.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kokoro.OpenGL.PC.ShaderLL" Collapsed="true">
+    <Position X="6.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAACAAAAAAAAAAAAAgAACAAAAAAEEAAQAAAgA=</HashCode>
+      <FileName>OpenGL\PC\ShaderLL.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Kokoro.OpenGL.PC.ShaderProgramLL" Collapsed="true">
+    <Position X="3.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>wAQAgAAAACAQAgAAAAAIACAAAAIABAAgAAAAAAAEBgA=</HashCode>
+      <FileName>OpenGL\PC\ShaderProgramLL.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kokoro.OpenGL.PC.TextureLL" Collapsed="true">
+    <Position X="0.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAACAAAAAABAAAAAAAAAAAAAEAAEAAAAAACAAAAAA=</HashCode>
+      <FileName>OpenGL\PC\TextureLL.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kokoro.OpenGL.PC.HelperClass" Collapsed="true">
+    <Position X="16.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>OpenGL\PC\VertexBufferLL.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kokoro.OpenGL.PC.VertexBufferLL" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAgEAwADAAAgAAAAAAAAEAEQAAACAAACgEAAKAAAA=</HashCode>
+      <FileName>OpenGL\PC\VertexBufferLL.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Kokoro.Program" Collapsed="true">
+    <Position X="18.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kokoro.Properties.Resources" Collapsed="true">
+    <Position X="21.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kokoro.Properties.Settings" Collapsed="true">
+    <Position X="18.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kokoro.Scripting.Script" Collapsed="true">
+    <Position X="16.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAA=</HashCode>
+      <FileName>Scripting\PyScript.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="Kokoro.Engine.BlendFunc" Collapsed="true">
+    <Position X="20" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAIAAAAAAAA=</HashCode>
+      <FileName>Engine\GraphicsContext.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Kokoro.Engine.Material" Collapsed="true">
+    <Position X="16.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QEAAgAAAAAAYQABAIgQAAAQAAAAAAAAAAABAAAAAAAA=</HashCode>
+      <FileName>Engine\Material.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Kokoro.Math.BezierCurve" Collapsed="true">
+    <Position X="14.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAACAAgAgAAAAAAAAAAQAAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>Math\BezierCurve.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Kokoro.Math.BezierCurveCubic" Collapsed="true">
+    <Position X="16.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAkCAIAAgAAAAAAAAAAQAAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>Math\BezierCurveCubic.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Kokoro.Math.BezierCurveQuadric" Collapsed="true">
+    <Position X="18.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgACAAAgCAAAAgAAAAAAAAAAQAAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>Math\BezierCurveQuadric.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Kokoro.Math.Box2" Collapsed="true">
+    <Position X="21.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIABAAAAAAEAAAQAEAAAAAIAAAACACAAAAAAAA=</HashCode>
+      <FileName>Math\Box2.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Kokoro.Math.Half" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIDgAAAgAAAAAA0kgCAQhAAgAEAQgkAIAAAgAAAIACA=</HashCode>
+      <FileName>Math\Half.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Struct>
+  <Struct Name="Kokoro.Math.Matrix2" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="18.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAQAAAAgAAEiAADAAQAEQAAgOEAAECAAAgAIAA=</HashCode>
+      <FileName>Math\Matrix2.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Struct>
+  <Struct Name="Kokoro.Math.Matrix3" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAQAAAAEAAEiAQDAMQBEQAAwOEAAECAAAgAIAA=</HashCode>
+      <FileName>Math\Matrix3.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Struct>
+  <Struct Name="Kokoro.Math.Matrix4" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAWESQAAAAEBAGoAMAACBD0gN4ALAAAEQAAAgBAiI=</HashCode>
+      <FileName>Math\Matrix4.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Struct>
+  <Struct Name="Kokoro.Math.Matrix4d" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAWESAAAAAEBAGoAMAACBD0AN4ALAAAEQAAAgBAiI=</HashCode>
+      <FileName>Math\Matrix4d.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Struct>
+  <Struct Name="Kokoro.Math.Quaternion" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAFIAgAAAAJAE8BEBAABAgAAAAIAAAEggAAAMYiU=</HashCode>
+      <FileName>Math\Quaternion.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Struct>
+  <Struct Name="Kokoro.Math.Quaterniond" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="18.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAFIAgAAAAJAE8BEBAABAgAAAAIAAAEggAAAMYiU=</HashCode>
+      <FileName>Math\Quaterniond.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Struct>
+  <Struct Name="Kokoro.Math.Vector2" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAMAIAABARAAAhgs8AcT4ARBCQAAAIAAgAAgAAAAYqQ=</HashCode>
+      <FileName>Math\Vector2.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Struct>
+  <Struct Name="Kokoro.Math.Vector2d" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAIAABARAAEhgk8AcD4QRBCQAAAIAAgAAgAAAAYqQ=</HashCode>
+      <FileName>Math\Vector2d.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Struct>
+  <Struct Name="Kokoro.Math.Vector2h" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAEAAAEAEEgAAAgQAgAAAEAkAAAAAAAAAAYAA=</HashCode>
+      <FileName>Math\Vector2h.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Struct>
+  <Struct Name="Kokoro.Math.Vector3" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAMEIgABgRAAAhgs8AczwAVICwAAAIAAgACgQAAAYqU=</HashCode>
+      <FileName>Math\Vector3.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Struct>
+  <Struct Name="Kokoro.Math.Vector3d" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="18.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAMEIgABgRAAIhgs8AcjwgVICwAAAIAAgACgQAAAYqU=</HashCode>
+      <FileName>Math\Vector3d.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Struct>
+  <Struct Name="Kokoro.Math.Vector3h" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAoAAAIAEEgAAAggAgAAAEAkAAAAAAAAAAYAE=</HashCode>
+      <FileName>Math\Vector3h.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Struct>
+  <Struct Name="Kokoro.Math.Vector4" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAIgABgRAAAhgs8AcTwARACQAAAIAAgAAgAAAIYqU=</HashCode>
+      <FileName>Math\Vector4.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Struct>
+  <Struct Name="Kokoro.Math.Vector4d" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAIgABgRAAAhws8AcDwARACQAAAIAAgAAgAAAIYqU=</HashCode>
+      <FileName>Math\Vector4d.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Struct>
+  <Struct Name="Kokoro.Math.Vector4h" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAgAQAAAUEgAAAwAAgAAAEAkAAAAAAAAAIYAE=</HashCode>
+      <FileName>Math\Vector4h.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Struct>
+  <Interface Name="Kokoro.Engine.SceneGraph.IScene" Collapsed="true">
+    <Position X="14.75" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAQAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>Engine\SceneGraph\IScene.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Kokoro.Engine.SceneGraph.ITransitionEvaluator" Collapsed="true">
+    <Position X="16.5" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Engine\SceneGraph\ITransitionEvaluator.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="Kokoro.Debug.DebugType" Collapsed="true">
+    <Position X="18.25" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAAAQAAAABAAQAAAAAAABAAAAAAAAAAACA=</HashCode>
+      <FileName>Debug\ErrorLogger.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Kokoro.Debug.Severity" Collapsed="true">
+    <Position X="20" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAgAAAAAAAAgAQAAAAAAAAAAEAAA=</HashCode>
+      <FileName>Debug\ErrorLogger.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Kokoro.Engine.FrameBufferAttachments" Collapsed="true">
+    <Position X="21.75" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>KAAAgH8YAAAAAAAAAAAAAACAAACBAIBAAAAAAAAAEAA=</HashCode>
+      <FileName>Engine\FrameBuffer.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Kokoro.Engine.CullMode" Collapsed="true">
+    <Position X="16.5" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAEIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Engine\GraphicsContext.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Kokoro.Engine.BlendingFactor" Collapsed="true">
+    <Position X="14.75" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAQAAADIAAQAgAAAAAAAQAQIKQACAEAFAACIoA=</HashCode>
+      <FileName>Engine\GraphicsContext.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Kokoro.Engine.DrawMode" Collapsed="true">
+    <Position X="20" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAEAAAgAABAAAAAAAAAAAAAAACAAAAgAAAAAA=</HashCode>
+      <FileName>Engine\Model.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Kokoro.Engine.PixelFormat" Collapsed="true">
+    <Position X="16.5" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEgAQAAAAAAAAA=</HashCode>
+      <FileName>Engine\PixelInfo.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Kokoro.Engine.PixelComponentType" Collapsed="true">
+    <Position X="14.75" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAQAAAAAAQIAAAAAIAAAAAAAAAAAAAAAASAAAAA=</HashCode>
+      <FileName>Engine\PixelInfo.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Kokoro.Engine.PixelType" Collapsed="true">
+    <Position X="18.25" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAACAAAABAQAAAAAAAAAAQAEAAIAAAAAgAAA=</HashCode>
+      <FileName>Engine\PixelInfo.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Kokoro.Engine.Shaders.ShaderTypes" Collapsed="true">
+    <Position X="21.75" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAQABAAAAAAAAAAAAAAACAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>Engine\Shaders\Shader.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

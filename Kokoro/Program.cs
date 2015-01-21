@@ -14,7 +14,7 @@ namespace Kokoro
         [STAThread]
         static void Main()
         {
-
+            Game.Game game = new Game.Game();
         }
     }
 }

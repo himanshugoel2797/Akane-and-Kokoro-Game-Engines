@@ -226,9 +226,6 @@ namespace Kokoro.Engine
             Debug.ObjectAllocTracker.NewCreated(this, -1, "GraphicsContext Created");
         }
 
-        public Action<long, GraphicsContext> Render { get; set; }
-        public Action<long, GraphicsContext> Update { get; set; }
-
         /// <summary>
         /// Start the game loop
         /// </summary>
@@ -236,6 +233,7 @@ namespace Kokoro.Engine
         /// <param name="ups">Updates per second</param>
         public void Start(int fps, int ups)
         {
+            Debug.ErrorLogger.StartLogger(true);
             Debug.ErrorLogger.AddMessage(0, "Engine Started", Debug.DebugType.Marker, Debug.Severity.Notification);
             base.aStart(fps, ups);
         }

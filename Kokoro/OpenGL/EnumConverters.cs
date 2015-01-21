@@ -86,5 +86,18 @@ namespace Kokoro.OpenGL
         {
             return (BlendingFactorSrc)Enum.Parse(typeof(BlendingFactorSrc), factor.ToString());
         }
+
+        public static Kokoro.Debug.DebugType ODebugType(DebugType debType)
+        {
+            if (debType == DebugType.DebugTypeDeprecatedBehavior) return Debug.DebugType.Compatibility;
+            else if (debType == DebugType.DebugTypeError) return Debug.DebugType.Error;
+            else if (debType == DebugType.DebugTypeMarker) return Debug.DebugType.Marker;
+            else if (debType == DebugType.DebugTypeOther) return Debug.DebugType.Other;
+            else if (debType == DebugType.DebugTypePerformance) return Debug.DebugType.Performance;
+            else if (debType == DebugType.DebugTypePortability) return Debug.DebugType.Compatibility;
+            else if (debType == DebugType.DebugTypeUndefinedBehavior) return Debug.DebugType.Compatibility;
+
+            return Debug.DebugType.Other;
+        }
     }
 }

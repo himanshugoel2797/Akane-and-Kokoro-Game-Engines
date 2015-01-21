@@ -13,6 +13,7 @@ using Kokoro.Engine;
 
 namespace Kokoro.Scripting
 {
+    /*
     public class Script
     {
         MemoryStream outputStream, pdbStream;
@@ -58,5 +59,5 @@ namespace Kokoro.Scripting
             return new Script(filename);
         }
 
-    }
+    }*/
 }

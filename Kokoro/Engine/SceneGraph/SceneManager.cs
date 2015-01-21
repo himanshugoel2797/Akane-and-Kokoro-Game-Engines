@@ -18,6 +18,12 @@ namespace Kokoro.Engine.SceneGraph
             scenes = new Dictionary<string, IScene>();
         }
 
+        public void Register(GraphicsContext context)
+        {
+            context.Render += this.Render;
+            context.Update += this.Update;
+        }
+
         public void Add(string key, IScene scene)
         {
             scene.Parent = this;

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 #if OPENGL
 #if PC
 using deb = Kokoro.OpenGL.PC.Debug;
+using System.Threading;
 #endif
 #endif
 
@@ -17,7 +18,7 @@ namespace Kokoro.Debug
     /// </summary>
     public enum DebugType
     {
-        Error, Performance, Marker, Other, Compatibility
+        Error, Performance, Marker, Other, Compatibility, Undefined
     }
 
     /// <summary>
@@ -33,21 +34,26 @@ namespace Kokoro.Debug
     /// </summary>
     public class ErrorLogger
     {
+
         /// <summary>
         /// Start logging
         /// </summary>
         /// <param name="showLoggerWindow">Show Logger Window?</param>
         public static void StartLogger(bool showLoggerWindow)
         {
+            DebuggerManager.ShowDebugger();
+
             deb.EnableDebug();
             deb.RegisterCallback(Callback);
         }
 
         static string log = "";
-        private static void Callback(string message)
+        private static void Callback(string message, DebugType debType, Severity severity)
         {
             log += message;
             log += "\n";
+
+            DebuggerManager.logger.NewMessage(message, debType, severity);
         }
 
         /// <summary>
@@ -59,6 +65,7 @@ namespace Kokoro.Debug
         /// <param name="severity">The message severity</param>
         public static void AddMessage(int id, string message, DebugType type, Severity severity)
         {
+            while (DebuggerManager.logger.Pause) { }    //Block until resume
             deb.InsertDebugMessage(id, message, type, severity);
         }
 

@@ -10,7 +10,7 @@ namespace Kokoro.OpenGL.PC
     /// <summary>
     /// Exposes Debugging related functions to the engine runtime
     /// </summary>
-    public class Debug
+    public static class Debug
     {
         public static void EnableDebug()
         {
@@ -37,8 +37,9 @@ namespace Kokoro.OpenGL.PC
             GL.DebugMessageInsert(DebugSourceExternal.DebugSourceApplication, type, id, severeness, message.Length, message);
         }
 
-        static Action<string> actionCallback;
-        private static void DebugCallback(DebugSource src, DebugType type, int id, DebugSeverity severity, int length, IntPtr message, IntPtr usrData)
+        static DebugProc proc;
+        static Action<string, Kokoro.Debug.DebugType, Kokoro.Debug.Severity> actionCallback;
+        public static void DebugCallback(DebugSource src, DebugType type, int id, DebugSeverity severity, int length, IntPtr message, IntPtr usrData)
         {
             string msg = "";
             if (src == DebugSource.DebugSourceApi) msg += "[API]";
@@ -63,14 +64,15 @@ namespace Kokoro.OpenGL.PC
 
             msg += "[ID = " + id + "]";
 
-            if(message != IntPtr.Zero)msg += System.Runtime.InteropServices.Marshal.PtrToStringAuto(message, length);
+            if (message != IntPtr.Zero) msg += System.Runtime.InteropServices.Marshal.PtrToStringAnsi(message, length);
 
-            actionCallback(msg);
+            actionCallback(msg, EnumConverters.ODebugType(type), (Kokoro.Debug.Severity)Enum.Parse(typeof(Kokoro.Debug.Severity), severity.ToString().Replace("DebugSeverity", "")));
         }
-        public static void RegisterCallback(Action<string> callback)
+        public static void RegisterCallback(Action<string, Kokoro.Debug.DebugType, Kokoro.Debug.Severity> callback)
         {
             actionCallback = callback;
-            GL.DebugMessageCallback(DebugCallback, IntPtr.Zero);
+            proc = DebugCallback;
+            GL.DebugMessageCallback(proc, IntPtr.Zero);
         }
 
 

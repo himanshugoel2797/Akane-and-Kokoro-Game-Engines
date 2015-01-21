@@ -36,6 +36,12 @@ namespace Kokoro.OpenGL.PC
         protected Action<long, Engine.GraphicsContext> update;
         void Window_UpdateFrame(object sender, FrameEventArgs e)
         {
+#if DEBUG
+            Kokoro.Debug.ObjectAllocTracker.PostUPS(Window.UpdateFrequency);
+            Kokoro.Debug.ObjectAllocTracker.PostFPS(Window.RenderFrequency);
+            Window.Title = "Render : " + ((int)Window.RenderFrequency).ToString() + "  Update : " + ((int)Window.UpdateFrequency).ToString();
+#endif
+
             update((long)e.Time, (this as Engine.GraphicsContext));
         }
 
@@ -43,6 +49,7 @@ namespace Kokoro.OpenGL.PC
         void Window_RenderFrame(object sender, FrameEventArgs e)
         {
             render((long)e.Time, (this as Engine.GraphicsContext));
+            Window.SwapBuffers();
         }
 
         protected void aStart(int fps, int ups)
