@@ -50,10 +50,7 @@ namespace Kokoro.Debug
         static string log = "";
         private static void Callback(string message, DebugType debType, Severity severity)
         {
-            log += message;
-            log += "\n";
-
-            DebuggerManager.logger.NewMessage(message, debType, severity);
+            if(!message.Contains("End Render Frame"))DebuggerManager.logger.NewMessage(message, debType, severity);
         }
 
         /// <summary>

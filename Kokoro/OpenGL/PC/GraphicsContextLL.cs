@@ -24,6 +24,7 @@ namespace Kokoro.OpenGL.PC
             Window.UpdateFrame += Window_UpdateFrame;
             Window.Resize += Window_Resize;
 
+
             //Depth Test is always enabled, it's a matter of what the depth function is
 
         }

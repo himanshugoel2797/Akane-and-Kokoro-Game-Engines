@@ -223,6 +223,7 @@ namespace Kokoro.Engine
         public GraphicsContext(Vector2 WindowSize)
             : base((int)WindowSize.X, (int)WindowSize.Y)
         {
+            Debug.ErrorLogger.StartLogger(true);
             Debug.ObjectAllocTracker.NewCreated(this, -1, "GraphicsContext Created");
         }
 
@@ -233,7 +234,6 @@ namespace Kokoro.Engine
         /// <param name="ups">Updates per second</param>
         public void Start(int fps, int ups)
         {
-            Debug.ErrorLogger.StartLogger(true);
             Debug.ErrorLogger.AddMessage(0, "Engine Started", Debug.DebugType.Marker, Debug.Severity.Notification);
             base.aStart(fps, ups);
         }

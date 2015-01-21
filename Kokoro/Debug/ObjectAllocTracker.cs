@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Kokoro.Engine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,6 +33,7 @@ namespace Kokoro.Debug
         {
 #if DEBUG
             log += "[NEW][" + GetParameterName2(obj) + "][ID:" + id + "]" + info + "\n";
+            DebuggerManager.monitor.ObjectAllocated(typeof(T));
 #endif
         }
 
@@ -40,10 +42,11 @@ namespace Kokoro.Debug
         /// </summary>
         /// <param name="obj">The destroyed object</param>
         /// <param name="id">The associated ID, if any</param>
-        public static void ObjectDestroyed(object obj, int id = -1, string info = "")
+        public static void ObjectDestroyed<T>(T obj, int id = -1, string info = "")
         {
 #if DEBUG
             log += "[DESTROY][" + GetParameterName2(obj) + "][ID:" + id + "]" + info + "\n";
+            DebuggerManager.monitor.ObjectFreed(typeof(T));
 #endif
         }
 
@@ -51,10 +54,12 @@ namespace Kokoro.Debug
         /// Mark the end of a single loop
         /// </summary>
         /// <param name="timeTaken">The time taken for this loop</param>
-        public static void MarkGameLoop(long timeTaken)
+        public static void MarkGameLoop(long timeTaken, GraphicsContext context)
         {
 #if DEBUG
             log += "[LOOP]" + timeTaken;
+            DebuggerManager.monitor.PostGLStatus(context);
+            DebuggerManager.monitor.MarkLoop();
 #endif
         }
 

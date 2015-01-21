@@ -31,6 +31,7 @@ namespace Kokoro.Game
         public void Update(long interval, GraphicsContext context)
         {
             Kokoro.Debug.ErrorLogger.AddMessage(0, "End Render Frame", Kokoro.Debug.DebugType.Other, Kokoro.Debug.Severity.Notification);
+            ObjectAllocTracker.MarkGameLoop(interval, context);
         }
     }
 }
