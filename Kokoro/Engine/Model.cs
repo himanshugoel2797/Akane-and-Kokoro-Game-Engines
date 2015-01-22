@@ -136,6 +136,17 @@ namespace Kokoro.Engine
             return m;
         }
 
+#if DEBUG
+        public Model()
+        {
+            Kokoro.Debug.ObjectAllocTracker.NewCreated(this, 0, "Model");
+        }
+        ~Model()
+        {
+            Kokoro.Debug.ObjectAllocTracker.ObjectDestroyed(this, 0, "Model");
+        }
+#endif
+
         public Action<GraphicsContext> PreDraw { get; set; }
 
         public void Draw(GraphicsContext context)

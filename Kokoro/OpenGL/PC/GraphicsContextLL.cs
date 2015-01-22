@@ -23,7 +23,10 @@ namespace Kokoro.OpenGL.PC
             Window.RenderFrame += Window_RenderFrame;
             Window.UpdateFrame += Window_UpdateFrame;
             Window.Resize += Window_Resize;
-
+            Window.Closing += (a, b) =>
+            {
+                Environment.Exit(0);
+            };
 
             //Depth Test is always enabled, it's a matter of what the depth function is
 
@@ -47,8 +50,11 @@ namespace Kokoro.OpenGL.PC
         }
 
         protected Action<long, Engine.GraphicsContext> render;
+        bool tmp = false;
         void Window_RenderFrame(object sender, FrameEventArgs e)
         {
+            GL.ClearColor(0, 0, 1, 0);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             render((long)e.Time, (this as Engine.GraphicsContext));
             Window.SwapBuffers();
         }

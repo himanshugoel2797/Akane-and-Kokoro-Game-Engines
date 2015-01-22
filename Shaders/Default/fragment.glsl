@@ -16,6 +16,8 @@ uniform float mode;
 
 void main(){
 
+	color = vec4(1);
+
 	// Output color = color of the texture at the specified UV
 	if(mode == 1)color = col;
 	else {

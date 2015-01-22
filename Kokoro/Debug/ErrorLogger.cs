@@ -41,16 +41,20 @@ namespace Kokoro.Debug
         /// <param name="showLoggerWindow">Show Logger Window?</param>
         public static void StartLogger(bool showLoggerWindow)
         {
+#if DEBUG
             DebuggerManager.ShowDebugger();
 
             deb.EnableDebug();
             deb.RegisterCallback(Callback);
+#endif
         }
 
         static string log = "";
         private static void Callback(string message, DebugType debType, Severity severity)
         {
+#if DEBUG
             if(!message.Contains("End Render Frame"))DebuggerManager.logger.NewMessage(message, debType, severity);
+#endif
         }
 
         /// <summary>
@@ -62,8 +66,10 @@ namespace Kokoro.Debug
         /// <param name="severity">The message severity</param>
         public static void AddMessage(int id, string message, DebugType type, Severity severity)
         {
+#if DEBUG
             while (DebuggerManager.logger.Pause) { }    //Block until resume
             deb.InsertDebugMessage(id, message, type, severity);
+#endif
         }
 
     }

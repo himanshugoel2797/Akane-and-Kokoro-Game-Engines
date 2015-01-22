@@ -33,7 +33,7 @@ namespace Kokoro.Engine.Shaders
 
         public void Apply(GraphicsContext context)
         {
-            PreApply(context, this);
+            if(PreApply != null)PreApply(context, this);
             base.sApply(context);
         }
 

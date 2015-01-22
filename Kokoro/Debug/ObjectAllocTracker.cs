@@ -65,12 +65,16 @@ namespace Kokoro.Debug
 
         public static void PostUPS(double ups)
         {
+#if DEBUG
             DebuggerManager.monitor.PostMSPU((double)(1000 / ups));
+#endif
         }
 
         public static void PostFPS(double fps)
         {
+#if DEBUG
             DebuggerManager.monitor.PostMSPR((double)(1000 / fps));
+#endif
         }
 
     }

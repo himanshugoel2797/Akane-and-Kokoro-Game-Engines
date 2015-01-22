@@ -15,7 +15,13 @@ namespace Kokoro.Game
 {
     class TestA : IScene
     {
-        public TestA() { }
+        Model model;
+
+        public TestA()
+        {
+            model = new Sphere(1);
+            model.Materials[0].Shader = new ShaderProgram("Shaders/Default");
+        }
 
         public IScene Parent
         {
@@ -25,7 +31,7 @@ namespace Kokoro.Game
 
         public void Render(long interval, GraphicsContext context)
         {
-
+            model.Draw(context);
         }
 
         public void Update(long interval, GraphicsContext context)
