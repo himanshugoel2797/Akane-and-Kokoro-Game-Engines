@@ -42,6 +42,26 @@ namespace Kokoro.Engine.Shaders
             base.sCleanup(context);
         }
 
+        public object this[string name]
+        {
+            set
+            {
+                Type t = value.GetType();
+
+                if (t == typeof(bool)) SetShaderBool(name, (bool)value);
+                else if (t == typeof(Matrix4)) SetShaderMatrix(name, (Matrix4)value);
+                else if (t == typeof(Matrix3)) SetShaderMatrix(name, (Matrix3)value);
+                else if (t == typeof(Matrix2)) SetShaderMatrix(name, (Matrix2)value);
+                else if (t == typeof(Vector4)) SetShaderVector(name, (Vector4)value);
+                else if (t == typeof(Vector3)) SetShaderVector(name, (Vector3)value);
+                else if (t == typeof(Vector2)) SetShaderVector(name, (Vector2)value);
+                else if (t == typeof(float)) SetShaderFloat(name, (float)value);
+                else if (t == typeof(Texture)) SetTexture(name, (Texture)value);
+                else if (t == typeof(FrameBufferTexture)) SetTexture(name, (Texture)value);
+                else throw new Exception();
+            }
+        }
+
         public void SetShaderBool(string name, bool val)
         {
             base.aSetShaderBool(name, val);

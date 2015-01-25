@@ -14,7 +14,7 @@ namespace Kokoro.Engine.SceneGraph
             set;
         }
 
-        void Render(long interval, GraphicsContext context);
-        void Update(long interval, GraphicsContext context);
+        void Render(double interval, GraphicsContext context);
+        void Update(double interval, GraphicsContext context);
     }
 }

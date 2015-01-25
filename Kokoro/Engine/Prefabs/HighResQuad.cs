@@ -15,13 +15,12 @@ namespace Kokoro.Engine.Prefabs
 {
     public class HighResQuad : Model
     {
-        public HighResQuad(float x0, float y0, int terrainWidth, int terrainHeight, Texture tex = null)
+        public HighResQuad(float x0, float y0, int terrainWidth, int terrainHeight, Texture tex = null) : base()
         {
             filepath = "";
             vbufs = new VertexBufferLL[1];
             vbufs[0] = new VertexBufferLL();
 
-            Materials = new Material[1];
 
             Vector3[] vertices = new Vector3[terrainWidth * terrainHeight];
             Vector2[] uvs = new Vector2[terrainWidth * terrainHeight];
@@ -73,7 +72,7 @@ namespace Kokoro.Engine.Prefabs
             vbufs[0].SetVertices(verts.ToArray());
             vbufs[0].SetNormals(norms.ToArray());
             vbufs[0].DrawMode = DrawMode.Triangles;
-            Materials[0] = new Material { Diffuse = tex };
+            Materials[0] = new Material { ColorMap = tex };
 
 
             World = Matrix4.Identity;

@@ -15,10 +15,10 @@ namespace Kokoro.Debug
 #if DEBUG
         private static string GetParameterName2<T>(T item)
         {
-            if (item == null)
+            //if (item == null)
                 return string.Empty;
 
-            return typeof(T).GetProperties()[0].Name;
+            //return typeof(T).GetProperties()[0].Name;
         }
 #endif
 
@@ -34,6 +34,7 @@ namespace Kokoro.Debug
 #if DEBUG
             log += "[NEW][" + GetParameterName2(obj) + "][ID:" + id + "]" + info + "\n";
             DebuggerManager.monitor.ObjectAllocated(typeof(T));
+            if (typeof(T).Name.Contains("Texture")) DebuggerManager.monitor.AddTexture(id.ToString() + info, id);
 #endif
         }
 
@@ -45,6 +46,10 @@ namespace Kokoro.Debug
         public static void ObjectDestroyed<T>(T obj, int id = -1, string info = "")
         {
 #if DEBUG
+
+            //TODO Warn if id was supplied, suggests there may be memory leak, also start monitoring object disposal and implement logging to files
+            //Shader params as indexer implementation
+            //fix up rendering pipeline (with proper projection matrix code and view matrix camera) and implement Skeletal animation with Collada for now? XML based custom formats later?
             log += "[DESTROY][" + GetParameterName2(obj) + "][ID:" + id + "]" + info + "\n";
             DebuggerManager.monitor.ObjectFreed(typeof(T));
 #endif

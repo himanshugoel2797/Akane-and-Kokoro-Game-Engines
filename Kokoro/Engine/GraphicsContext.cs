@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Kokoro.Engine.HighLevel.Cameras;
 using Kokoro.Math;
 
 //Conditional compilation used to manage multiplatform support
@@ -116,8 +117,18 @@ namespace Kokoro.Engine
         }
 
         public Matrix4 Projection { get; set; }
-        public Matrix4 View { get; set; }
-
+        public Matrix4 View
+        {
+            get
+            {
+                return Camera.View;
+            }
+            set
+            {
+                Camera.View = value;
+            }
+        }
+        public Camera Camera { get; set; }
         /// <summary>
         /// Get/Set the rendering viewport
         /// </summary>
@@ -130,6 +141,18 @@ namespace Kokoro.Engine
             set
             {
                 base.SetViewport(value);
+            }
+        }
+
+        public BlendFunc Blending
+        {
+            get
+            {
+                return GetBlendFunc();
+            }
+            set
+            {
+                SetBlendFunc(value);
             }
         }
 
@@ -182,7 +205,7 @@ namespace Kokoro.Engine
         /// <summary>
         /// Render Event
         /// </summary>
-        public Action<long, GraphicsContext> Render
+        public Action<double, GraphicsContext> Render
         {
             get
             {
@@ -197,7 +220,7 @@ namespace Kokoro.Engine
         /// <summary>
         /// Update Event
         /// </summary>
-        public Action<long, GraphicsContext> Update
+        public Action<double, GraphicsContext> Update
         {
             get
             {
@@ -206,6 +229,61 @@ namespace Kokoro.Engine
             set
             {
                 base.update = value;
+            }
+        }
+
+        /// <summary>
+        /// The current mouse position
+        /// </summary>
+        public Vector2 MousePosition
+        {
+            get
+            {
+                return base.aMousePosition;
+            }
+        }
+
+        /// <summary>
+        /// The change in mouse position since the last time the mouse moved
+        /// </summary>
+        public Vector2 MouseDelta
+        {
+            get
+            {
+                return base.aMouseDelta;
+            }
+        }
+
+        /// <summary>
+        /// Is the Left mouse button held?
+        /// </summary>
+        public bool MouseLeftButtonDown
+        {
+            get
+            {
+                return base.aMouseLeftButtonDown;
+            }
+        }
+
+        /// <summary>
+        /// Is the Right mouse button held?
+        /// </summary>
+        public bool MouseRightButtonDown
+        {
+            get
+            {
+                return base.aMouseRightButtonDown;
+            }
+        }
+
+        /// <summary>
+        /// List of Keys currently pressed
+        /// </summary>
+        public string[] Keys
+        {
+            get
+            {
+                return base.aKeys;
             }
         }
         #endregion
@@ -223,8 +301,13 @@ namespace Kokoro.Engine
         public GraphicsContext(Vector2 WindowSize)
             : base((int)WindowSize.X, (int)WindowSize.Y)
         {
+            Debug.DebuggerManager.ShowDebugger();
             Debug.ErrorLogger.StartLogger(true);
-            Debug.ObjectAllocTracker.NewCreated(this, -1, "GraphicsContext Created");
+            ZNear = 0.1f;
+            ZFar = 1000f;
+            DepthWrite = true;
+            Viewport = new Vector4(0, 0, WindowSize.X, WindowSize.Y);
+            Debug.ObjectAllocTracker.NewCreated(this, 0, "GraphicsContext Created");
         }
 
         /// <summary>

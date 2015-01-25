@@ -152,6 +152,9 @@
     <Compile Include="Engine\FrameBuffer.cs" />
     <Compile Include="Engine\FrameBufferTexture.cs" />
     <Compile Include="Engine\GraphicsContext.cs" />
+    <Compile Include="Engine\HighLevel\Cameras\Camera.cs" />
+    <Compile Include="Engine\HighLevel\Cameras\FirstPersonCamera.cs" />
+    <Compile Include="Engine\HighLevel\Rendering\DeepGBuffer.cs" />
     <Compile Include="Engine\Material.cs" />
     <Compile Include="Engine\Model.cs" />
     <Compile Include="Engine\Pipeline.cs" />

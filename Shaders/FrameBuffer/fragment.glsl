@@ -7,10 +7,10 @@ in vec2 UV;
 out vec4 color;
 
 // Values that stay constant for the whole mesh.
-uniform sampler2D diffuse;
+uniform sampler2D ColorMap;
 
 void main(){
 
 	// Output color = color of the texture at the specified UV
-	color = texture2D( diffuse, UV );
+	color = texture2D( ColorMap, UV );
 }

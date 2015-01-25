@@ -23,17 +23,17 @@ namespace Kokoro.Engine
         public Texture(int width, int height, PixelFormat pf, PixelComponentType pct, PixelType pixelType)
         {
             id = base.Create(width, height, pct, pf, pixelType);
-            ObjectAllocTracker.NewCreated(this, id);
+            ObjectAllocTracker.NewCreated(this, id, " { " + pf.ToString() + ", " + pct.ToString() + ", " + pixelType.ToString() + "}");
         }
         public Texture(string filename)
         {
             id = base.Create(filename);
-            ObjectAllocTracker.NewCreated(this, id, filename);
+            ObjectAllocTracker.NewCreated(this, id, " " + filename);
         }
         public Texture(int id)
         {
             this.id = id;
-            ObjectAllocTracker.NewCreated(this, id, "Duplicate");
+            ObjectAllocTracker.NewCreated(this, id, " Duplicate");
         }
 
 #if DEBUG
@@ -46,13 +46,11 @@ namespace Kokoro.Engine
         public virtual void Bind(int texUnit)
         {
             base.BindTexture(texUnit, id);
-            Kokoro.Debug.ErrorLogger.AddMessage(id, "Bound", DebugType.Marker, Severity.Notification);
         }
 
         public static void UnBind(int texUnit)
         {
             UnBindTexture(texUnit);
-            Kokoro.Debug.ErrorLogger.AddMessage(-1, "UnBound", DebugType.Marker, Severity.Notification);
         }
 
         public void Dispose()

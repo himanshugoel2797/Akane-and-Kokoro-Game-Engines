@@ -17,9 +17,9 @@ namespace Kokoro.Engine
 
         private static FullScreenQuad quad = new FullScreenQuad();
 
-        public RenderPass(int width, int height, PixelComponentType pf)
+        public RenderPass(int width, int height, PixelComponentType pf, GraphicsContext context)
         {
-            RenderTarget = new FrameBuffer(width, height, pf);
+            RenderTarget = new FrameBuffer(width, height, pf, context);
         }
 
         public void Clear(GraphicsContext context, float r, float g, float b, float a)
@@ -35,7 +35,7 @@ namespace Kokoro.Engine
             var tmp = FrameBuffer.GetCurrentFrameBuffer();
             RenderTarget.Bind(context);
             quad.Materials[0].Shader = Shader;
-            quad.Materials[0].Diffuse = Diffuse;
+            quad.Materials[0].ColorMap = Diffuse;
             quad.Draw(context);
             tmp.Bind(context);
         }

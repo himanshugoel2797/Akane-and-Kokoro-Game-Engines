@@ -4,10 +4,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kokoro", "Kokoro\Kokoro.csproj", "{6D8EB8BD-F8AD-4FE1-995F-4EEFBC2BC8F5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{802D0C28-D52E-4718-8A42-28B72FAB05E5} = {802D0C28-D52E-4718-8A42-28B72FAB05E5}
+		{1F25123A-85AA-4CDE-B0CE-A918F867BA12} = {1F25123A-85AA-4CDE-B0CE-A918F867BA12}
+		{3CC9E16B-C337-420E-A9D2-D7203CE4ABFE} = {3CC9E16B-C337-420E-A9D2-D7203CE4ABFE}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Resources.csproj", "{1F25123A-85AA-4CDE-B0CE-A918F867BA12}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shaders", "Shaders\Shaders.csproj", "{802D0C28-D52E-4718-8A42-28B72FAB05E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kokoro.Shaders", "Kokoro.Shaders\Kokoro.Shaders.csproj", "{3CC9E16B-C337-420E-A9D2-D7203CE4ABFE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +34,10 @@ Global
 		{802D0C28-D52E-4718-8A42-28B72FAB05E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{802D0C28-D52E-4718-8A42-28B72FAB05E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{802D0C28-D52E-4718-8A42-28B72FAB05E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CC9E16B-C337-420E-A9D2-D7203CE4ABFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CC9E16B-C337-420E-A9D2-D7203CE4ABFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CC9E16B-C337-420E-A9D2-D7203CE4ABFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CC9E16B-C337-420E-A9D2-D7203CE4ABFE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

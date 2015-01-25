@@ -17,7 +17,7 @@ namespace Kokoro.OpenGL.PC
         protected GameWindow Window;
 
         private GraphicsContextLL() { }     //Block this class from normal construction
-        protected GraphicsContextLL(int windowWidth, int windowHeight)
+        protected GraphicsContextLL(int windowWidth, int windowHeight, bool fullscreen = false)
         {
             Window = new GameWindow(windowWidth, windowHeight);
             Window.RenderFrame += Window_RenderFrame;
@@ -27,49 +27,77 @@ namespace Kokoro.OpenGL.PC
             {
                 Environment.Exit(0);
             };
+            //Register the internal keyboard handlers
+            Window.Keyboard.KeyDown += Keyboard_KeyDown;
+            Window.Keyboard.KeyUp += Keyboard_KeyUp;
+            Window.Mouse.ButtonDown += Mouse_ButtonDown;
+            Window.Mouse.ButtonUp += Mouse_ButtonUp;
 
             //Depth Test is always enabled, it's a matter of what the depth function is
+            GL.Enable(EnableCap.DepthTest);
+            //GL.Enable(EnableCap.Blend);
 
         }
 
         void Window_Resize(object sender, EventArgs e)
         {
             //TODO Implement Resize handler
+            SetViewport(new Math.Vector4(0, 0, Window.ClientSize.Width, Window.ClientSize.Height));
+            InitializeMSAA(0);
         }
 
-        protected Action<long, Engine.GraphicsContext> update;
+        protected Action<double, Engine.GraphicsContext> update;
         void Window_UpdateFrame(object sender, FrameEventArgs e)
         {
 #if DEBUG
+            Kokoro.Debug.ErrorLogger.AddMessage(0, "End Render Frame", Kokoro.Debug.DebugType.Other, Kokoro.Debug.Severity.Notification);
+            Kokoro.Debug.ObjectAllocTracker.MarkGameLoop((long)e.Time, (this as Engine.GraphicsContext));
             Kokoro.Debug.ObjectAllocTracker.PostUPS(Window.UpdateFrequency);
             Kokoro.Debug.ObjectAllocTracker.PostFPS(Window.RenderFrequency);
             Window.Title = "Render : " + ((int)Window.RenderFrequency).ToString() + "  Update : " + ((int)Window.UpdateFrequency).ToString();
+
+            ErrorCode err = GL.GetError();
+            if (err != ErrorCode.NoError) Kokoro.Debug.ErrorLogger.AddMessage(0, err.ToString(), Kokoro.Debug.DebugType.Error, Kokoro.Debug.Severity.High);
 #endif
 
-            update((long)e.Time, (this as Engine.GraphicsContext));
+            update(e.Time, (this as Engine.GraphicsContext));
         }
 
-        protected Action<long, Engine.GraphicsContext> render;
-        bool tmp = false;
+        protected Action<double, Engine.GraphicsContext> render;
         void Window_RenderFrame(object sender, FrameEventArgs e)
         {
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
             GL.ClearColor(0, 0, 1, 0);
+            //SetMSAA();
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            render((long)e.Time, (this as Engine.GraphicsContext));
+            render(e.Time, (this as Engine.GraphicsContext));
+            //BlitMSAA();
             Window.SwapBuffers();
+#if DEBUG
+            if (curRequestTexture != 0) Debug.DLbmp(curRequestTexture);
+            curRequestTexture = 0;
+#endif
         }
+
+#if DEBUG
+        static int curRequestTexture = 0;
+        internal static void RequestTexture(int id)
+        {
+            curRequestTexture = id;
+        }
+#endif
 
         protected void aStart(int fps, int ups)
         {
             Window.Run(ups, fps);
         }
 
-        protected void RegisterUpdateHandler(Action<long, Engine.GraphicsContext> act)
+        protected void RegisterUpdateHandler(Action<double, Engine.GraphicsContext> act)
         {
             update += act;
         }
 
-        protected void RegisterRenderHandler(Action<long, Engine.GraphicsContext> act)
+        protected void RegisterRenderHandler(Action<double, Engine.GraphicsContext> act)
         {
             render += act;
         }
@@ -80,6 +108,54 @@ namespace Kokoro.OpenGL.PC
             GL.ClearColor(r, g, b, a);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
         }
+
+        #region Keyboard
+        protected string[] aKeys = new string[1];
+        protected bool aMouseLeftButtonDown { get; private set; }
+        protected bool aMouseRightButtonDown { get; private set; }
+        public Math.Vector2 aMousePosition
+        {
+            get
+            {
+                return new Math.Vector2(Window.Mouse.X, Window.Mouse.Y);
+            }
+        }
+        protected Math.Vector2 aMouseDelta
+        {
+            get
+            {
+                return new Math.Vector2(Window.Mouse.XDelta, Window.Mouse.YDelta);
+            }
+        }
+        List<string> keysDown = new List<string>();
+        bool alt, shift, control;
+        void Keyboard_KeyUp(object sender, OpenTK.Input.KeyboardKeyEventArgs e)
+        {
+            keysDown.Remove(e.Key.ToString());
+            aKeys = keysDown.ToArray();
+            alt = e.Alt;
+            shift = e.Shift;
+            control = e.Control;
+        }
+        void Mouse_ButtonDown(object sender, OpenTK.Input.MouseButtonEventArgs e)
+        {
+            aMouseLeftButtonDown = (e.Button == OpenTK.Input.MouseButton.Left);
+            aMouseRightButtonDown = (e.Button == OpenTK.Input.MouseButton.Right);
+        }
+        void Mouse_ButtonUp(object sender, OpenTK.Input.MouseButtonEventArgs e)
+        {
+            aMouseLeftButtonDown = !(e.Button == OpenTK.Input.MouseButton.Left);
+            aMouseRightButtonDown = !(e.Button == OpenTK.Input.MouseButton.Right);
+        }
+        void Keyboard_KeyDown(object sender, OpenTK.Input.KeyboardKeyEventArgs e)
+        {
+            if (!keysDown.Contains(e.Key.ToString())) keysDown.Add(e.Key.ToString());
+            aKeys = keysDown.ToArray();
+            alt = e.Alt;
+            shift = e.Shift;
+            control = e.Control;
+        }
+        #endregion
 
         #region State Machine
 
@@ -121,7 +197,7 @@ namespace Kokoro.OpenGL.PC
 
             fbufID = GL.GenFramebuffer();
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, fbufID);
-            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2DMultisample, msaaTexID, 0);
+            GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, msaaTexID, 0);
             msaaLevel = sampleCount;
         }
 
@@ -214,9 +290,23 @@ namespace Kokoro.OpenGL.PC
         Kokoro.Math.Vector4 Viewport;
         protected void SetViewport(Kokoro.Math.Vector4 viewport)
         {
+            Viewport = viewport;
             GL.Viewport((int)viewport.X, (int)viewport.Y, (int)viewport.Z, (int)viewport.W);
         }
         protected Kokoro.Math.Vector4 GetViewport() { return Viewport; }
+        #endregion
+
+        #region Blending
+        Engine.BlendFunc blFunc;
+        protected Engine.BlendFunc GetBlendFunc()
+        {
+            return blFunc;
+        }
+        protected void SetBlendFunc(Engine.BlendFunc blend)
+        {
+            blFunc = blend;
+            GL.BlendFunc(EnumConverters.EBlendFuncSRC(blFunc.Src), EnumConverters.EBlendFuncDST(blFunc.Dst));
+        }
         #endregion
 
         #endregion

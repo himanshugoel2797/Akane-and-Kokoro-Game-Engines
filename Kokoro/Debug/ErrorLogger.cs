@@ -42,14 +42,11 @@ namespace Kokoro.Debug
         public static void StartLogger(bool showLoggerWindow)
         {
 #if DEBUG
-            DebuggerManager.ShowDebugger();
-
             deb.EnableDebug();
             deb.RegisterCallback(Callback);
 #endif
         }
 
-        static string log = "";
         private static void Callback(string message, DebugType debType, Severity severity)
         {
 #if DEBUG

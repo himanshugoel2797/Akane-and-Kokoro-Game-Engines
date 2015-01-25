@@ -29,7 +29,14 @@ namespace Kokoro.Engine.Shaders
                 fshader += "/geometry.glsl";
                 base.id = gshaderDB[fshader];
             }
+            Kokoro.Debug.ObjectAllocTracker.NewCreated(this, id, "Geometry Shader");
         }
-
+        
+#if DEBUG
+        ~GeometryShader()
+        {
+            Kokoro.Debug.ObjectAllocTracker.ObjectDestroyed(this, id, "Geometry Shader");
+        }
+#endif
     }
 }

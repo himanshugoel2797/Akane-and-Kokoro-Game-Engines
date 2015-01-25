@@ -15,7 +15,7 @@ namespace Kokoro.Engine.Prefabs
 {
     public class Sphere : Model
     {
-        public Sphere(float radius, int step = 10)
+        public Sphere(float radius, int step = 10) : base()
         {
 
             this.DrawMode = DrawMode.Triangles;
@@ -136,7 +136,6 @@ namespace Kokoro.Engine.Prefabs
             vbufs[0].SetUVs(uvs.ToArray());
             vbufs[0].SetVertices(verts.ToArray());
             vbufs[0].SetNormals(normals.ToArray());
-            Materials = new Material[1];
         }
     }
 }

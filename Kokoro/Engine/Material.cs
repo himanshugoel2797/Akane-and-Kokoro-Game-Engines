@@ -10,20 +10,33 @@ using Kokoro.Engine.Shaders;
 
 namespace Kokoro.Engine
 {
-    public struct Material
+    public class Material
     {
         public string Name { get; set; }
-        public Texture Diffuse { get; set; }
-        public Texture Specular { get; set; }
+        public Texture ColorMap { get; set; }
+        public Texture LightingMap { get; set; }
         public Texture NormalMap { get; set; }
         public ShaderProgram Shader { get; set; }
 
-        public float Lit { get; set; }
-        public float FresnelTerm { get; set; }
-        public float DiffuseReflectivity { get; set; }
+        public virtual void Apply(GraphicsContext context, Model m)
+        {
+            Shader["World"] = m.World;
+            Shader["View"] = context.View;
+            Shader["Projection"] = context.Projection;
+            Shader["ZNear"] = context.ZNear;
+            Shader["ZFar"] = context.ZFar;
 
-        public bool Bloom { get; set; }
-        public float Reflectivity { get; set; }
+            if (ColorMap != null) Shader["ColorMap"] = ColorMap;
+            if (LightingMap != null) Shader["LightingMap"] = LightingMap;
+            if (NormalMap != null) Shader["NormalMap"] = NormalMap;
+
+            Shader.Apply(context);
+        }
+
+        public virtual void Cleanup(GraphicsContext context, Model m)
+        {
+            Shader.Cleanup(context);
+        }
 
         /// <summary>
         /// Parse shader parameters from the material file
@@ -81,10 +94,10 @@ namespace Kokoro.Engine
             {
                 switch (lines[i].Split(']')[0])
                 {
-                    case "[Diffuse":
+                    case "[ColorMap":
                         diffuse = lines[i].Split(']')[1].Trim();
                         break;
-                    case "[Specular":
+                    case "[LightingMap":
                         specular = lines[i].Split(']')[1].Trim();
                         break;
                     case "[NormalMap":
@@ -121,9 +134,9 @@ namespace Kokoro.Engine
             Material mat = new Material()
             {
                 Shader = s,
-                Specular = new Texture(specular),
+                LightingMap = new Texture(specular),
                 NormalMap = new Texture(ambient),
-                Diffuse = new Texture(diffuse),
+                ColorMap = new Texture(diffuse),
                 Name = name
             };
             return mat;

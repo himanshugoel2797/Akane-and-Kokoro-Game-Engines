@@ -12,14 +12,21 @@ namespace Kokoro.OpenGL.PC
 {
     public class TextureLL
     {
-        protected int Create(int width, int height, Kokoro.Engine.PixelComponentType pfI, Kokoro.Engine.PixelFormat pf, Kokoro.Engine.PixelType type)
+        protected int Create(int width, int height, Kokoro.Engine.PixelComponentType pfI, Kokoro.Engine.PixelFormat pf, Kokoro.Engine.PixelType type, bool multisample = false, int sampleCount = 1)
         {
             int id = GL.GenTexture();
 
             GL.BindTexture(TextureTarget.Texture2D, id);
 
-            GL.TexImage2D(TextureTarget.Texture2D, 0, EnumConverters.EPixelComponentType(pfI), width, height, 0,
-                EnumConverters.EPixelFormat(pf), EnumConverters.EPixelType(type), (IntPtr)0);
+            if (!multisample)
+            {
+                GL.TexImage2D(TextureTarget.Texture2D, 0, EnumConverters.EPixelComponentType(pfI), width, height, 0,
+                    EnumConverters.EPixelFormat(pf), EnumConverters.EPixelType(type), (IntPtr)0);
+            }
+            else
+            {
+                GL.TexImage2DMultisample(TextureTargetMultisample.Texture2DMultisample, sampleCount, EnumConverters.EPixelComponentType(pfI), width, height, false);
+            }
 
             // We haven't uploaded mipmaps, so disable mipmapping (otherwise the texture will not appear).
             // On newer video cards, we can use GL.GenerateMipmaps() or GL.Ext.GenerateMipmaps() to create

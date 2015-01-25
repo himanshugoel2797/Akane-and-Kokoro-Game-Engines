@@ -13,8 +13,6 @@ namespace Kokoro.Engine
         public FrameBufferTexture(int width, int height, PixelFormat pf, PixelComponentType pct, PixelType pixelType)
             : base(width, height, pf, pct, pixelType)
         {
-            base.id = base.Create(width, height, pct, pf, pixelType);
-            ObjectAllocTracker.NewCreated(this, id);
         }
 
         public void BindToFrameBuffer(FrameBufferAttachments texUnit)

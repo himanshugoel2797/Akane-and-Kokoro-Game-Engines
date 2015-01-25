@@ -8,9 +8,9 @@ layout(location = 1) in vec2 vertexUV;
 out vec2 UV;
 
 // Values that stay constant for the whole mesh.
-uniform mat4 Model;
+uniform mat4 World;
 uniform mat4 View;
-uniform mat4 Proj;
+uniform mat4 Projection;
 
 void main(){
 

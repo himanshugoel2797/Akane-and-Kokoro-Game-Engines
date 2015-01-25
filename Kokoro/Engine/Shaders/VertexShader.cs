@@ -29,6 +29,13 @@ namespace Kokoro.Engine.Shaders
                 fshader += "/vertex.glsl";
                 base.id = vshaderDB[fshader];
             }
+            Kokoro.Debug.ObjectAllocTracker.NewCreated(this, id, "Vertex Shader");
         }
+#if DEBUG
+        ~VertexShader()
+        {
+            Kokoro.Debug.ObjectAllocTracker.ObjectDestroyed(this, id, "Vertex Shader");
+        }
+#endif
     }
 }

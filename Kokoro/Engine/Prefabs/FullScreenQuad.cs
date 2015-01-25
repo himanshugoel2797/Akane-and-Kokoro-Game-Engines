@@ -15,7 +15,7 @@ namespace Kokoro.Engine.Prefabs
 {
     public class FullScreenQuad : Model
     {
-        public FullScreenQuad()
+        public FullScreenQuad() : base()
         {
             vbufs = new VertexBufferLL[1];
             vbufs[0] = new VertexBufferLL();
@@ -37,7 +37,6 @@ namespace Kokoro.Engine.Prefabs
                 -1, -1,0
             });
 
-            Materials = new Material[1];
 
             Materials[0].Shader = new ShaderProgram(new VertexShader("Shaders/FrameBuffer"), new FragmentShader("Shaders/Default"));
         }

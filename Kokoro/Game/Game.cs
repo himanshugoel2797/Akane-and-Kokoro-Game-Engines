@@ -25,7 +25,7 @@ namespace Kokoro.Game
             Context.Update += Update;
 
             sceneManager = new SceneManager();
-            sceneManager.Add("TestA", new TestA());
+            sceneManager.Add("TestA", new TestA(Context));
 
             sceneManager.Activate("TestA");
 
@@ -38,12 +38,12 @@ namespace Kokoro.Game
             set;
         }
 
-        public void Render(long interval, GraphicsContext context)
+        public void Render(double interval, GraphicsContext context)
         {
             sceneManager.Render(interval, context);
         }
 
-        public void Update(long interval, GraphicsContext context)
+        public void Update(double interval, GraphicsContext context)
         {
             sceneManager.Update(interval, context);
         }

@@ -127,7 +127,7 @@ namespace Kokoro.Engine
             {
                 m.Materials[i] = new Material
                 {
-                    Diffuse = tmp.Item2[i],
+                    ColorMap = tmp.Item2[i],
                     Shader = new ShaderProgram(new VertexShader("Shaders/GBuffer"), new FragmentShader("Shaders/GBuffer"))
                 };
             }
@@ -136,11 +136,15 @@ namespace Kokoro.Engine
             return m;
         }
 
-#if DEBUG
         public Model()
         {
+            Materials = new Material[] { new Material() };
+            DrawMode = Engine.DrawMode.Triangles;
+#if DEBUG
             Kokoro.Debug.ObjectAllocTracker.NewCreated(this, 0, "Model");
+#endif
         }
+#if DEBUG
         ~Model()
         {
             Kokoro.Debug.ObjectAllocTracker.ObjectDestroyed(this, 0, "Model");
@@ -156,30 +160,16 @@ namespace Kokoro.Engine
             {
                 vbufs[a].DrawMode = this.DrawMode;
                 vbufs[a].Bind();
-                Materials[a].Shader.SetShaderMatrix("Model", World);
-                Materials[a].Shader.SetShaderMatrix("View", context.View);
-                Materials[a].Shader.SetShaderMatrix("Proj", context.Projection);
-                Materials[a].Shader.SetShaderFloat("zNear", context.ZNear);
-                Materials[a].Shader.SetShaderFloat("zFar", context.ZFar);
-
-                //Calculate normal matrix
-                //var nrm = Matrix4.Invert(context.View * World);
-                //nrm.Transpose();
-                //Materials[a].Shader.VertexShader.SetShaderMatrix("Normal", nrm);
-
-                if (Materials[a].Diffuse != null) Materials[a].Shader.SetTexture("diffuse", Materials[a].Diffuse);
-                if (Materials[a].Specular != null) Materials[a].Shader.SetTexture("specular", Materials[a].Specular);
-                if (Materials[a].NormalMap != null) Materials[a].Shader.SetTexture("normalMap", Materials[a].NormalMap);
-                Materials[a].Shader.SetShaderFloat("roughness", Materials[a].Lit);
-                Materials[a].Shader.SetShaderFloat("fresnel", Materials[a].FresnelTerm);
-                Materials[a].Shader.SetShaderFloat("k", Materials[a].DiffuseReflectivity);
-                Materials[a].Shader.SetShaderFloat("reflectiveness", Materials[a].Reflectivity);
-
+                
                 if (PreDraw != null) PreDraw(context);
 
-                Materials[a].Shader.Apply(context);
+                //Apply the Material
+                Materials[a].Apply(context, this);
+
                 vbufs[a].Draw((int)vbufs[a].IndexCount);
-                Materials[a].Shader.Cleanup(context);
+
+                //Cleanup the Material
+                Materials[a].Cleanup(context, this);
             }
 
             VertexBufferLL.UnBind();

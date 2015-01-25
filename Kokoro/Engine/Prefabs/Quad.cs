@@ -15,14 +15,12 @@ namespace Kokoro.Engine.Prefabs
 {
     public class Quad : Model
     {
-        public Quad(float x, float y, float width, float height, Texture tex = null)
+        public Quad(float x, float y, float width, float height, Texture tex = null) : base()
         {
             filepath = "";
             this.DrawMode = DrawMode.Triangles;
             vbufs = new VertexBufferLL[1];
             vbufs[0] = new VertexBufferLL();
-
-            Materials = new Material[1];
 
             vbufs[0].SetIndices(new ushort[] { 3, 2, 0, 0, 2, 1 });
             vbufs[0].SetUVs(new float[] { 
@@ -38,7 +36,7 @@ namespace Kokoro.Engine.Prefabs
                 x + width, 0, y,
                 x, 0, y
             });
-            Materials[0] = new Material { Diffuse = tex };
+            Materials[0] = new Material { ColorMap = tex };
 
             World = Matrix4.Identity;
         }

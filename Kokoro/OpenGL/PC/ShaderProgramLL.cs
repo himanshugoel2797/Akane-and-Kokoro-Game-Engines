@@ -69,7 +69,7 @@ namespace Kokoro.OpenGL.PC
                 int result = 1;
                 GL.LinkProgram(id);
                 GL.GetProgram(id, GetProgramParameterName.LinkStatus, out result);
-                Console.WriteLine("Program Linking Result: " + result.ToString("X8") + "\n" + GL.GetProgramInfoLog(id));
+                Kokoro.Debug.ErrorLogger.AddMessage(id, "Program Linking Result: " + result.ToString("X8") + "\n" + GL.GetProgramInfoLog(id), Kokoro.Debug.DebugType.Other, Kokoro.Debug.Severity.Notification);
 
             }
             else id = programDB[name];                                       //Retrieve the shader if it already exists
@@ -137,6 +137,8 @@ namespace Kokoro.OpenGL.PC
                 }
             }
 
+            GL.UseProgram(id);
+
         }
 
         /// <summary>
@@ -158,6 +160,8 @@ namespace Kokoro.OpenGL.PC
                         break;
                 }
             }
+
+            GL.UseProgram(0);
         }
         #endregion
 

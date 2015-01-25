@@ -41,12 +41,12 @@ namespace Kokoro.Engine.SceneGraph
             curScene = scenes[scene];
         }
 
-        public void Update(long interval, GraphicsContext context)
+        public void Update(double interval, GraphicsContext context)
         {
             if (curScene != null) curScene.Update(interval, context);
         }
 
-        public void Render(long interval, GraphicsContext context)
+        public void Render(double interval, GraphicsContext context)
         {
             if (curScene != null) curScene.Render(interval, context);
         }

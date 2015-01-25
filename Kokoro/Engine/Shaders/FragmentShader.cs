@@ -28,6 +28,14 @@ namespace Kokoro.Engine.Shaders
                 fshader += "/fragment.glsl";
                 base.id = fshaderDB[fshader];
             }
+            Kokoro.Debug.ObjectAllocTracker.NewCreated(this, id, "Fragment Shader");
         }
+
+#if DEBUG
+        ~FragmentShader()
+        {
+            Kokoro.Debug.ObjectAllocTracker.ObjectDestroyed(this, id, "Fragment Shader");
+        }
+#endif
     }
 }
