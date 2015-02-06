@@ -39,10 +39,10 @@ namespace Kokoro.Engine
         public Material[] Materials { get; set; }
         public DrawMode DrawMode { get; set; }
 
-        private static Tuple<VertexBufferLL[], Texture[]> LoadModelVB(string filename, int frame)
+        protected static Tuple<VertexBufferLL[], Texture[]> LoadModelVB(string filename, int frame)
         {
             AssimpContext context = new AssimpContext();
-            Scene model = context.ImportFile(filename);
+            Scene model = context.ImportFile(filename, PostProcessSteps.CalculateTangentSpace | PostProcessSteps.GenerateSmoothNormals | PostProcessSteps.ImproveCacheLocality | PostProcessSteps.RemoveRedundantMaterials);
 
             string baseDir = Path.GetDirectoryName(filename);
 
@@ -109,6 +109,20 @@ namespace Kokoro.Engine
                         normals[v + 2] = m.Normals[(v - (v % 3)) / 3].Z;
                     }
                     vbuf.SetNormals(normals);
+                }
+                
+                
+
+                if(m.HasTangentBasis)
+                {
+                    float[] tangents = new float[m.VertexCount * 3];
+                    for (int v = 0; v < m.VertexCount * 3; v += 3)
+                    {
+                        tangents[v] = m.Tangents[(v - (v % 3)) / 3].X;
+                        tangents[v + 1] = m.Tangents[(v - (v % 3)) / 3].Y;
+                        tangents[v + 2] = m.Tangents[(v - (v % 3)) / 3].Z;
+                    }
+                    vbuf.SetTangents(tangents);
                 }
 
                 vbufs.Add(vbuf);

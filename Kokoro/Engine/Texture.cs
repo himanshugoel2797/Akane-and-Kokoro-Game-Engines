@@ -8,6 +8,7 @@ using Kokoro.Debug;
 #if OPENGL
 #if PC
 using Kokoro.OpenGL.PC;
+using System.Drawing;
 #endif
 #endif
 
@@ -42,6 +43,11 @@ namespace Kokoro.Engine
             ObjectAllocTracker.ObjectDestroyed(this, id);
         }
 #endif
+
+        public Bitmap ToBMP()
+        {
+            return base.FetchTextureData(id);
+        }
 
         public virtual void Bind(int texUnit)
         {

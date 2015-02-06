@@ -18,6 +18,7 @@ namespace Kokoro.OpenGL.PC
         protected void Bind(int id)
         {
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, id);
+            GL.Enable(EnableCap.Blend);
         }
 
         protected void DrawBuffers(Kokoro.Engine.FrameBufferAttachments[] attachments)

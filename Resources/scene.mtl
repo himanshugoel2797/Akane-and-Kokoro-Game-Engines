@@ -1,5 +1,24 @@
 # Blender MTL File: 'scene.blend'
-# Material Count: 1
+# Material Count: 6
+
+newmtl Material
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl Material.002
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd WoodRough0106_2_S.jpg
 
 newmtl None
 Ns 0
@@ -8,3 +27,34 @@ Kd 0.8 0.8 0.8
 Ks 0.8 0.8 0.8
 d 1
 illum 2
+map_Kd seamless-green-grass-texture.jpg
+
+newmtl fenceA.001
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd WoodRough0106_2_S.jpg
+
+newmtl fenceB.001
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.102625 1.000000 0.000000
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd WoodRough0106_2_S.jpg
+
+newmtl fenceC-Top.001
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.762742 0.800000
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd WoodRough0106_2_S.jpg

@@ -89,6 +89,21 @@ namespace Kokoro.OpenGL.PC
             GL.FramebufferTexture(FramebufferTarget.Framebuffer, attach, id, 0);
         }
 
+        protected Bitmap FetchTextureData(int id)
+        {
+            GL.BindTexture(TextureTarget.Texture2D, id);
+            int width, height;
+            GL.GetTexLevelParameter(TextureTarget.Texture2D, 0, GetTextureParameter.TextureWidth, out width);
+            GL.GetTexLevelParameter(TextureTarget.Texture2D, 0, GetTextureParameter.TextureHeight, out height);
+            Bitmap bmp = new Bitmap(width, height);
+            BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            GL.GetTexImage(TextureTarget.Texture2D, 0, OpenTK.Graphics.OpenGL4.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
+            bmp.UnlockBits(data);
+            bmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
+
+            return bmp;
+        }
+
         protected static void UnBindFromFBuffer(int texUnit)
         {
             FramebufferAttachment attach = (FramebufferAttachment)texUnit;

@@ -154,6 +154,7 @@ namespace Kokoro.OpenGL.PC
                 switch (variables[i].type)
                 {
                     case VarType.Texture:
+                        GL.ProgramUniform1(id, variables[i].pos, 0);
                         Texture.UnBind(variables[i].metadata);
                         break;
                     default:
@@ -161,7 +162,9 @@ namespace Kokoro.OpenGL.PC
                 }
             }
 
-            GL.UseProgram(0);
+            for (int i = 0; i < 8; i++) Texture.UnBind(i);  //Unbind all textures
+
+                GL.UseProgram(0);
         }
         #endregion
 

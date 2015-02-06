@@ -33,6 +33,8 @@ namespace Kokoro.OpenGL.PC
             Window.Mouse.ButtonDown += Mouse_ButtonDown;
             Window.Mouse.ButtonUp += Mouse_ButtonUp;
 
+            Window.VSync = VSyncMode.Off;
+
             //Depth Test is always enabled, it's a matter of what the depth function is
             GL.Enable(EnableCap.DepthTest);
             //GL.Enable(EnableCap.Blend);
@@ -230,7 +232,15 @@ namespace Kokoro.OpenGL.PC
         Engine.CullMode cullMode = Engine.CullMode.Off;
         protected void SetCullMode(Engine.CullMode cullMode)
         {
-            if (cullMode != Engine.CullMode.Off) GL.CullFace(EnumConverters.ECullMode(cullMode));
+            if (cullMode != Engine.CullMode.Off)
+            {
+                GL.Enable(EnableCap.CullFace);
+                GL.CullFace(EnumConverters.ECullMode(cullMode));
+            }
+            else
+            {
+                GL.Disable(EnableCap.CullFace);
+            }
             this.cullMode = cullMode;
         }
         protected Engine.CullMode GetCullMode() { return cullMode; }
@@ -274,14 +284,14 @@ namespace Kokoro.OpenGL.PC
         protected void SetZNear(float val)
         {
             ZNear = val;
-            GL.DepthRange(ZNear, ZFar);
+            //GL.DepthRange(ZNear, ZFar);
         }
         protected float GetZNear() { return ZNear; }
 
         protected void SetZFar(float val)
         {
             ZFar = val;
-            GL.DepthRange(ZNear, ZFar);
+            //GL.DepthRange(ZNear, ZFar);
         }
         protected float GetZFar() { return ZFar; }
         #endregion
@@ -306,6 +316,17 @@ namespace Kokoro.OpenGL.PC
         {
             blFunc = blend;
             GL.BlendFunc(EnumConverters.EBlendFuncSRC(blFunc.Src), EnumConverters.EBlendFuncDST(blFunc.Dst));
+        }
+        #endregion
+
+        #region Window Size
+        protected Kokoro.Math.Vector2 GetWinSize()
+        {
+            return new Kokoro.Math.Vector2(Window.ClientSize.Width, Window.ClientSize.Height);
+        }
+        protected void SetWinSize(Kokoro.Math.Vector2 vec)
+        {
+            Window.ClientSize = new System.Drawing.Size((int)vec.X, (int)vec.Y);
         }
         #endregion
 

@@ -290,6 +290,18 @@ namespace Kokoro.Engine
 
         internal void SetMSAABuffer() { base.SetMSAA(); }
 
+        public Vector2 WindowSize
+        {
+            get
+            {
+                return GetWinSize();
+            }
+            set
+            {
+                SetWinSize(value);
+            }
+        }
+
         #region Clear
         public void Clear(float r, float g, float b, float a)
         {

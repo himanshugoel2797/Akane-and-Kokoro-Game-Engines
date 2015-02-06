@@ -27,6 +27,7 @@ namespace Kokoro.OpenGL.PC
         private int iboID;
         private int uvID;
         private int normID;
+        private int tanID;
         private Type indexType;
 
 
@@ -83,6 +84,18 @@ namespace Kokoro.OpenGL.PC
             GL.BindVertexArray(0);
         }
 
+        public void SetTangents<T>(T[] normals) where T : struct
+        {
+            GL.BindVertexArray(vaID);
+
+            tanID = GL.GenBuffer();
+            GL.BindBuffer(BufferTarget.ArrayBuffer, tanID);
+            GL.BufferData<T>(BufferTarget.ArrayBuffer, (IntPtr)(normals.Length * Marshal.SizeOf(typeof(T))), normals, BufferUsageHint.StaticDraw);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+
+            GL.BindVertexArray(0);
+        }
+
         public void SetIndices<T>(T[] indices) where T : struct
         {
             GL.BindVertexArray(vaID);
@@ -100,6 +113,7 @@ namespace Kokoro.OpenGL.PC
         {
             DrawElementsType drawEl = (indexType == typeof(uint)) ? DrawElementsType.UnsignedInt : DrawElementsType.UnsignedShort;
             GL.DrawElements((BeginMode)Enum.Parse(typeof(BeginMode), DrawMode.ToString()), count, drawEl, 0);
+            GL.Flush();
         }
 
         public void Bind()
@@ -131,6 +145,14 @@ namespace Kokoro.OpenGL.PC
                 GL.BindBuffer(BufferTarget.ArrayBuffer, normal);
                 GL.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, false, 0, 0);
                 GL.VertexAttribDivisor(2, 0);
+            }
+
+            if(tanID != 0)
+            {
+                GL.EnableVertexAttribArray(3);
+                GL.BindBuffer(BufferTarget.ArrayBuffer, tanID);
+                GL.VertexAttribPointer(3, 3, VertexAttribPointerType.Float, false, 0, 0);
+                GL.VertexAttribDivisor(3, 0);
             }
         }
 
