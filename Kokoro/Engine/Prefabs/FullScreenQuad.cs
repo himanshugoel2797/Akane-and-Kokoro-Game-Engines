@@ -31,13 +31,13 @@ namespace Kokoro.Engine.Prefabs
             });
 
             vbufs[0].SetVertices(new float[]{
-                -1, 1, 0,
-                1, 1, 0,
-                1, -1,0,
-                -1, -1,0
+                -1, 1, 0.5f,
+                1, 1, 0.5f,
+                1, -1,0.5f,
+                -1, -1,0.5f
             });
 
-
+            World = Math.Matrix4.Identity;
             Materials[0].Shader = new ShaderProgram(new VertexShader("Shaders/FrameBuffer"), new FragmentShader("Shaders/Default"));
         }
     }

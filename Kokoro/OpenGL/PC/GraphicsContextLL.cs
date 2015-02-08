@@ -56,7 +56,7 @@ namespace Kokoro.OpenGL.PC
             Kokoro.Debug.ObjectAllocTracker.MarkGameLoop((long)e.Time, (this as Engine.GraphicsContext));
             Kokoro.Debug.ObjectAllocTracker.PostUPS(Window.UpdateFrequency);
             Kokoro.Debug.ObjectAllocTracker.PostFPS(Window.RenderFrequency);
-            Window.Title = "Render : " + ((int)Window.RenderFrequency).ToString() + "  Update : " + ((int)Window.UpdateFrequency).ToString();
+            Window.Title = "Render : " + (Window.RenderPeriod).ToString() + "  Update : " + (Window.UpdatePeriod).ToString();
 
             ErrorCode err = GL.GetError();
             if (err != ErrorCode.NoError) Kokoro.Debug.ErrorLogger.AddMessage(0, err.ToString(), Kokoro.Debug.DebugType.Error, Kokoro.Debug.Severity.High);

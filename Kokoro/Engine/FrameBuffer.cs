@@ -59,7 +59,7 @@ namespace Kokoro.Engine
             base.Bind(id);
 
             Add("DepthBuffer", new FrameBufferTexture(width, height, PixelFormat.Depth, PixelComponentType.D32, PixelType.Float), FrameBufferAttachments.DepthAttachment, context); //Attach the depth buffer to the framebuffer
-            Add("Color", new FrameBufferTexture(width, height, PixelFormat.BGRA, PixelComponentType.RGBA16f, PixelType.Float), FrameBufferAttachments.ColorAttachment0, context);
+            Add("Color", new FrameBufferTexture(width, height, PixelFormat.BGRA, pct, PixelType.Float), FrameBufferAttachments.ColorAttachment0, context);
 
             base.CheckError();
             base.Bind(0);
@@ -71,8 +71,16 @@ namespace Kokoro.Engine
         {
             this.Bind(context);
             RenderTargets.Add(id);
-            fbufTextures.Add(id, fbufTex);
-            if (attachment != FrameBufferAttachments.DepthAttachment && !attachments.ContainsValue(attachment)) attachments.Add(id, attachment);
+            
+            if (!fbufTextures.ContainsKey(id)) fbufTextures.Add(id, fbufTex);
+            else fbufTextures[id] = fbufTex;
+
+            if (attachment != FrameBufferAttachments.DepthAttachment && !attachments.ContainsValue(attachment))
+            {
+                if (!attachments.ContainsKey(id)) attachments.Add(id, attachment);
+                else attachments[id] = attachment;
+            }
+
             fbufTex.BindToFrameBuffer(attachment);
             base.DrawBuffers(attachments.Values.ToArray());
             base.CheckError();

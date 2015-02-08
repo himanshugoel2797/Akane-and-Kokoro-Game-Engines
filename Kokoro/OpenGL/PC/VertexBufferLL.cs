@@ -113,7 +113,7 @@ namespace Kokoro.OpenGL.PC
         {
             DrawElementsType drawEl = (indexType == typeof(uint)) ? DrawElementsType.UnsignedInt : DrawElementsType.UnsignedShort;
             GL.DrawElements((BeginMode)Enum.Parse(typeof(BeginMode), DrawMode.ToString()), count, drawEl, 0);
-            GL.Flush();
+            //GL.Finish();
         }
 
         public void Bind()

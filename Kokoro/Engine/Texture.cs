@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kokoro.Debug;
+using Kokoro.Math;
 
 #if OPENGL
 #if PC
@@ -20,6 +21,14 @@ namespace Kokoro.Engine
     public class Texture : TextureLL, IDisposable
     {
         protected int id;
+
+        public Vector2 Size
+        {
+            get
+            {
+                return new Vector2(base.width, base.height);
+            }
+        }
 
         public Texture(int width, int height, PixelFormat pf, PixelComponentType pct, PixelType pixelType)
         {

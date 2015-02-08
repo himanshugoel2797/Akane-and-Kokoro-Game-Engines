@@ -70,6 +70,8 @@ namespace Kokoro.Game
 
         public void Draw(double interval, GraphicsContext context)
         {
+            //context.Wireframe = true;
+            context.FaceCulling = CullMode.Back;
             context.Blending = new BlendFunc()
             {
                 Src = BlendingFactor.SrcAlpha,
@@ -78,8 +80,9 @@ namespace Kokoro.Game
 
             //model.Materials[5].Shader = engine.Shader;
             model.Draw(context);
+            model.Draw(context);
 
-            ground.World = Matrix4.CreateTranslation(0, 0.1f, 0) * Matrix4.Scale(1, 1f, 1);
+            /*ground.World = Matrix4.CreateTranslation(0, 0.1f, 0) * Matrix4.Scale(1, 1f, 1);
 
             for (int i = 0; i < ground.Materials.Length; i++)
             {
@@ -88,10 +91,11 @@ namespace Kokoro.Game
                 ground.Materials[i].Shader["layer"] = (float)i;
                 ground.Materials[i].Shader["density"] = (float)i;
             }
-            ground.Draw(context);
+            ground.Draw(context);*/
             //context.FaceCulling = CullMode.Off;
             
             //context.FaceCulling = CullMode.Back;
+            //context.Wireframe = false;
         }
 
         public void Render(double interval, GraphicsContext context)
