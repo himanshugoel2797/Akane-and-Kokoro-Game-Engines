@@ -41,6 +41,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Akane.Engine", "Akane.Engin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImoutoPlatformer", "ImoutoPlatformer\ImoutoPlatformer.csproj", "{A050D0CF-8E71-40B2-BCDC-765100464E19}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimationMaker", "AnimationMaker\AnimationMaker.csproj", "{89702D86-190A-4C0D-A751-EBBA9C3598D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{A050D0CF-8E71-40B2-BCDC-765100464E19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A050D0CF-8E71-40B2-BCDC-765100464E19}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A050D0CF-8E71-40B2-BCDC-765100464E19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89702D86-190A-4C0D-A751-EBBA9C3598D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89702D86-190A-4C0D-A751-EBBA9C3598D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89702D86-190A-4C0D-A751-EBBA9C3598D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89702D86-190A-4C0D-A751-EBBA9C3598D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -100,5 +106,6 @@ Global
 		{B27D0C4E-2654-4ED1-B67F-56C4BD48B0C6} = {B093D051-CCB5-40FA-8FA1-24B1D5C13AAB}
 		{02262FDE-922E-41C3-9E29-C88D466522A4} = {B093D051-CCB5-40FA-8FA1-24B1D5C13AAB}
 		{A050D0CF-8E71-40B2-BCDC-765100464E19} = {6ED43B58-CBFE-45B3-B24A-AAC955F18CFE}
+		{89702D86-190A-4C0D-A751-EBBA9C3598D1} = {0306BFB8-4DB5-4877-8345-8A764A28E689}
 	EndGlobalSection
 EndGlobal

@@ -15,6 +15,11 @@ using System.Drawing;
 
 namespace Kokoro.Engine
 {
+    public enum TextureFilter
+    {
+        Linear, Nearest
+    }
+
     /// <summary>
     /// Texture
     /// </summary>
@@ -27,6 +32,14 @@ namespace Kokoro.Engine
             get
             {
                 return new Vector2(base.width, base.height);
+            }
+        }
+
+        public TextureFilter FilterMode
+        {
+            set
+            {
+                SetFilterMode(value);
             }
         }
 

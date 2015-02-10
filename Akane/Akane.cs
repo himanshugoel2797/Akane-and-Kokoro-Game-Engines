@@ -45,6 +45,7 @@ namespace Akane
 
         private void _update(double time, GraphicsContext context)
         {
+            World.Input.Update(context);
             Update(time, this);
         }
 

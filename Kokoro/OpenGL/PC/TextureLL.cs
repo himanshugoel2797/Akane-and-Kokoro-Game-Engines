@@ -15,6 +15,20 @@ namespace Kokoro.OpenGL.PC
         protected int width;
         protected int height;
 
+        protected void SetFilterMode(Engine.TextureFilter filter)
+        {
+            if(filter == Engine.TextureFilter.Linear)
+            {
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            }
+            else
+            {
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+            }
+        }
+
         protected int Create(int width, int height, Kokoro.Engine.PixelComponentType pfI, Kokoro.Engine.PixelFormat pf, Kokoro.Engine.PixelType type, bool multisample = false, int sampleCount = 1)
         {
             this.width = width;

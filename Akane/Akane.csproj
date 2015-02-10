@@ -43,7 +43,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Akane.cs" />
+    <Compile Include="Graphics\Sprite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="World\CharacterController.cs" />
+    <Compile Include="World\Input.cs" />
     <Compile Include="World\Map.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -53,7 +56,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Graphics\" />
     <Folder Include="Physics\" />
   </ItemGroup>
   <ItemGroup>
