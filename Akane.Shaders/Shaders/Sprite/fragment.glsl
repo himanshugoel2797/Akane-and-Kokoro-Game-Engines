@@ -11,7 +11,20 @@ uniform sampler2D ColorMap;
 uniform sampler2D LightingMap;
 uniform sampler2D NormalMap;
 
+uniform vec2 TexSize;
+uniform vec2 TexPos;
+uniform vec2 SpriteSize;
 
 void main(){
-	color = texture2D(ColorMap, UV);
+
+	vec2 nTexPos = TexPos;
+	vec2 nSpriteSize = SpriteSize;
+	
+	nTexPos.y = TexSize.y - nTexPos.y;
+	nTexPos.y -= SpriteSize.y;
+	nTexPos /= TexSize;
+
+	nSpriteSize /= TexSize;
+
+	color = texture2D(ColorMap, (nTexPos + UV * nSpriteSize) );
 }

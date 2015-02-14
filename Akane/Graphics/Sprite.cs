@@ -1,4 +1,7 @@
-﻿using Kokoro.Math;
+﻿using Kokoro.Engine;
+using Kokoro.Engine.Prefabs;
+using Kokoro.Engine.Shaders;
+using Kokoro.Math;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,18 +24,27 @@ namespace Akane.Graphics
     {
         public bool Visible { get; set; }
         public Vector2 Position { get; set; }
-        string spriteImg;
+        Texture spriteImg;
         public Dictionary<string, FrameData> Frames { get; set; }
         public Dictionary<string, string[]> Animations { get; set; }
-        public Vector2 Size;
+        public Vector2 Size { get; private set; }
+        public Vector2 Scale { get; set; }
         string curAnimation;
         int interval;
         int curFrame, curInterval;
+        ShaderProgram spriteShader;
+        Model spriteQuad;
+        FrameBuffer buffer;
 
         public Sprite(string animations)
         {
             Visible = true;
             LoadAnimations(animations);
+
+            spriteShader = new ShaderProgram("Shaders/Sprite");
+            //spriteQuad = new Quad(0, 0, 10, 10);
+            spriteQuad = new FullScreenQuad();
+            Scale = new Vector2(1, 1);
         }
 
         public void SetAnimation(string name, int interval, int defaultFrame)
@@ -54,11 +66,25 @@ namespace Akane.Graphics
             curInterval++;
 
             FrameData img = Frames[Animations[curAnimation][curFrame]];
-            Size.X = img.Width;
-            Size.Y = img.Height;
+            Size = new Vector2(img.Width, img.Height);
 
+            if (buffer == null)
+                buffer = new FrameBuffer(512, 512, PixelComponentType.RGBA8, manager.context);
+
+            //buffer.Bind(manager.context);
+
+            //TODO Draw sprite
+            spriteQuad.World = Matrix4.Scale(manager.AspectRatio * 2 * Scale.X, Scale.Y , 1) * Matrix4.CreateTranslation(Position.X * manager.AspectRatio * 2 * 0.25f, -Position.Y * 0.25f, 0);
+            spriteQuad.Materials[0].Shader = spriteShader;
+            spriteQuad.Materials[0].ColorMap = spriteImg;
+            spriteQuad.Materials[0].Shader["TexSize"] = spriteImg.Size;
+            spriteQuad.Materials[0].Shader["TexPos"] = new Vector2(img.X, img.Y);
+            spriteQuad.Materials[0].Shader["SpriteSize"] = Size;
+
+            spriteQuad.Draw(manager.context);
             //EngineCore.SetTexture(Textures.GetTexture(spriteImg), 0);
             //EngineCore.DrawRect(Position.X, Position.Y, img.X, img.Y, img.Width, img.Height);
+            //buffer.UnBind();
         }
 
         private void LoadAnimations(string animationPath)
@@ -100,8 +126,9 @@ namespace Akane.Graphics
                         switch (doc.Name)
                         {
                             case "TextureAtlas":
-                                spriteImg = doc["imagePath"];
-                                if (!Path.IsPathRooted(spriteImg)) spriteImg = Path.Combine(Path.GetDirectoryName(spritePath), spriteImg);
+                                string tmpImg = doc["imagePath"];
+                                if (!Path.IsPathRooted(tmpImg)) tmpImg = Path.Combine(Path.GetDirectoryName(spritePath), tmpImg);
+                                spriteImg = new Texture(tmpImg);
                                 break;
                             case "sprite":
                                 Frames[doc["n"]] = new FrameData()

@@ -1,4 +1,4 @@
-﻿using Kokoro.Engine;
+﻿using Kokoro.Engine.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,22 +27,22 @@ namespace Akane.World
     {
         public static InputKeys KeysPressed { get; internal set; }
 
-        internal static void Update(GraphicsContext context)
+        internal static void Update()
         {
             //Update the Input data
             //TODO Load strings from config
             InputKeys keys = InputKeys.Empty;
 
-            if (context.Keys.Contains("Up")) keys |= InputKeys.Up;
-            if (context.Keys.Contains("Down")) keys |= InputKeys.Down;
-            if (context.Keys.Contains("Left")) keys |= InputKeys.Left;
-            if (context.Keys.Contains("Right")) keys |= InputKeys.Right;
-            if (context.Keys.Contains("Right")) keys |= InputKeys.Enter;
-            if (context.Keys.Contains("Right")) keys |= InputKeys.Back;
-            if (context.Keys.Contains("Right")) keys |= InputKeys.Start;
-            if (context.Keys.Contains("Right")) keys |= InputKeys.Select;
-            if (context.Keys.Contains("Right")) keys |= InputKeys.Square;
-            if (context.Keys.Contains("Right")) keys |= InputKeys.Triangle;
+            if (Keyboard.IsKeyPressed(Key.Up)) keys |= InputKeys.Up;
+            if (Keyboard.IsKeyPressed(Key.Down)) keys |= InputKeys.Down;
+            if (Keyboard.IsKeyPressed(Key.Left)) keys |= InputKeys.Left;
+            if (Keyboard.IsKeyPressed(Key.Right)) keys |= InputKeys.Right;
+            if (Keyboard.IsKeyPressed(Key.Enter)) keys |= InputKeys.Enter;
+            if (Keyboard.IsKeyPressed(Key.BackSpace)) keys |= InputKeys.Back;
+            if (Keyboard.IsKeyPressed(Key.Escape)) keys |= InputKeys.Start;
+            if (Keyboard.IsKeyPressed(Key.Space)) keys |= InputKeys.Select;
+            if (Keyboard.IsKeyPressed(Key.Q)) keys |= InputKeys.Square;
+            if (Keyboard.IsKeyPressed(Key.W)) keys |= InputKeys.Triangle;
 
             if (keys.ToString() != InputKeys.Empty.ToString()) keys &= ~InputKeys.Empty;
             KeysPressed = keys;

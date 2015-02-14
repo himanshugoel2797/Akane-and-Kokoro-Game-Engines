@@ -41,7 +41,7 @@ void main(){
 	//The id of the tile
 	float tileId = round(float(texelFetch(TileIDs, ivec2( ceil((UV - curPixelPos) * viewportTileRes - vec2(0.3, 0.3) + viewportOffset )), 0).r * maxGid)) - firstGid;
 	
-	if(tileId >= 0 && tileId <= maxGid - firstGid)
+	//if(tileId >= 0 && tileId <= maxGid)
 	{
 		//The appropriate tile position
 		vec2 offset = vec2(0);

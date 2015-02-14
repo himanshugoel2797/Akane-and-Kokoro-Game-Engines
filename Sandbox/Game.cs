@@ -18,23 +18,30 @@ namespace Kokoro.Game
         GraphicsContext Context;
         SceneManager sceneManager;
 
-        public Game()
+        public Game(GraphicsContext context)
         {
-            Context = new GraphicsContext(new Vector2(960, 540));
+            Context = context;
+
+            Context.Initialize += Initialize;
             Context.Render += Render;
             Context.Update += Update;
 
-            sceneManager = new SceneManager();
-            sceneManager.Add("TestA", new TestA(Context));
 
-            sceneManager.Activate("TestA");
-            Context.Start(0, 0);
+            Context.Start(160000, 160000);
         }
 
         public IScene Parent
         {
             get;
             set;
+        }
+
+        public void Initialize(GraphicsContext context)
+        {
+            sceneManager = new SceneManager();
+            sceneManager.Add("TestA", new TestA(Context));
+
+            sceneManager.Activate("TestA");
         }
 
         public void Render(double interval, GraphicsContext context)

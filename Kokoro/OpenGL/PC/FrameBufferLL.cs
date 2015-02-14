@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if OPENGL
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -46,3 +48,5 @@ namespace Kokoro.OpenGL.PC
 
     }
 }
+
+#endif

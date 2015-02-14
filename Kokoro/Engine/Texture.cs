@@ -25,6 +25,7 @@ namespace Kokoro.Engine
     /// </summary>
     public class Texture : TextureLL, IDisposable
     {
+        private static readonly object locker = new object();
         protected int id;
 
         public Vector2 Size
@@ -45,18 +46,27 @@ namespace Kokoro.Engine
 
         public Texture(int width, int height, PixelFormat pf, PixelComponentType pct, PixelType pixelType)
         {
-            id = base.Create(width, height, pct, pf, pixelType);
-            ObjectAllocTracker.NewCreated(this, id, " { " + pf.ToString() + ", " + pct.ToString() + ", " + pixelType.ToString() + "}");
+            lock (locker)
+            {
+                id = base.Create(width, height, pct, pf, pixelType);
+                ObjectAllocTracker.NewCreated(this, id, " { " + pf.ToString() + ", " + pct.ToString() + ", " + pixelType.ToString() + "}");
+            }
         }
         public Texture(string filename)
         {
-            id = base.Create(filename);
-            ObjectAllocTracker.NewCreated(this, id, " " + filename);
+            lock (locker)
+            {
+                id = base.Create(filename);
+                ObjectAllocTracker.NewCreated(this, id, " " + filename);
+            }
         }
         public Texture(int id)
         {
-            this.id = id;
-            ObjectAllocTracker.NewCreated(this, id, " Duplicate");
+            lock (locker)
+            {
+                this.id = id;
+                ObjectAllocTracker.NewCreated(this, id, " Duplicate");
+            }
         }
 
 #if DEBUG

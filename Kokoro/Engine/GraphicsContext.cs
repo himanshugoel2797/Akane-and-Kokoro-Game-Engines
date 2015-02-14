@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
+using System.Diagnostics;
 
 using Kokoro.Engine.HighLevel.Cameras;
 using Kokoro.Math;
+using Kokoro.Engine.Input;
 
 //Conditional compilation used to manage multiplatform support
 #if OPENGL
@@ -116,7 +119,14 @@ namespace Kokoro.Engine
             }
         }
 
+        /// <summary>
+        /// Set the Projection Matrix
+        /// </summary>
         public Matrix4 Projection { get; set; }
+
+        /// <summary>
+        /// Set the View Matrix
+        /// </summary>
         public Matrix4 View
         {
             get
@@ -128,7 +138,12 @@ namespace Kokoro.Engine
                 Camera.View = value;
             }
         }
+
+        /// <summary>
+        /// Set the current Camera
+        /// </summary>
         public Camera Camera { get; set; }
+
         /// <summary>
         /// Get/Set the rendering viewport
         /// </summary>
@@ -144,6 +159,9 @@ namespace Kokoro.Engine
             }
         }
 
+        /// <summary>
+        /// Set the Blend function
+        /// </summary>
         public BlendFunc Blending
         {
             get
@@ -203,93 +221,8 @@ namespace Kokoro.Engine
         }
 
         /// <summary>
-        /// Render Event
+        /// Set the Viewport Window Size
         /// </summary>
-        public Action<double, GraphicsContext> Render
-        {
-            get
-            {
-                return base.render;
-            }
-            set
-            {
-                base.render = value;
-            }
-        }
-
-        /// <summary>
-        /// Update Event
-        /// </summary>
-        public Action<double, GraphicsContext> Update
-        {
-            get
-            {
-                return base.update;
-            }
-            set
-            {
-                base.update = value;
-            }
-        }
-
-        /// <summary>
-        /// The current mouse position
-        /// </summary>
-        public Vector2 MousePosition
-        {
-            get
-            {
-                return base.aMousePosition;
-            }
-        }
-
-        /// <summary>
-        /// The change in mouse position since the last time the mouse moved
-        /// </summary>
-        public Vector2 MouseDelta
-        {
-            get
-            {
-                return base.aMouseDelta;
-            }
-        }
-
-        /// <summary>
-        /// Is the Left mouse button held?
-        /// </summary>
-        public bool MouseLeftButtonDown
-        {
-            get
-            {
-                return base.aMouseLeftButtonDown;
-            }
-        }
-
-        /// <summary>
-        /// Is the Right mouse button held?
-        /// </summary>
-        public bool MouseRightButtonDown
-        {
-            get
-            {
-                return base.aMouseRightButtonDown;
-            }
-        }
-
-        /// <summary>
-        /// List of Keys currently pressed
-        /// </summary>
-        public string[] Keys
-        {
-            get
-            {
-                return base.aKeys;
-            }
-        }
-        #endregion
-
-        internal void SetMSAABuffer() { base.SetMSAA(); }
-
         public Vector2 WindowSize
         {
             get
@@ -301,6 +234,12 @@ namespace Kokoro.Engine
                 SetWinSize(value);
             }
         }
+        #endregion
+
+        //TODO fix MSAA
+        #region MSAA
+        internal void SetMSAABuffer() { base.SetMSAA(); }
+        #endregion
 
         #region Clear
         public void Clear(float r, float g, float b, float a)
@@ -310,27 +249,148 @@ namespace Kokoro.Engine
         public void Clear(Vector4 col) { Clear(col.X, col.Y, col.Z, col.W); }
         #endregion
 
-        public GraphicsContext(Vector2 WindowSize)
-            : base((int)WindowSize.X, (int)WindowSize.Y)
-        {
-            Debug.DebuggerManager.ShowDebugger();
-            Debug.ErrorLogger.StartLogger(true);
-            ZNear = 0.1f;
-            ZFar = 1000f;
-            DepthWrite = true;
-            Viewport = new Vector4(0, 0, WindowSize.X, WindowSize.Y);
-            Debug.ObjectAllocTracker.NewCreated(this, 0, "GraphicsContext Created");
-        }
+        #region Game Loop
+
+        public Thread UpdateThread { get; private set; }
+        public Thread PhysicsThread { get; private set; }
+        public Thread AnimationThread { get; private set; }
+
+        public Action<double, GraphicsContext> Update { get; set; }
+        public Action<double, GraphicsContext> Render { get; set; }
+        public Action<double, GraphicsContext> Animation { get; set; }
+        public Action<double, GraphicsContext> Physics { get; set; }
+        public Action<GraphicsContext> Initialize { get; set; }
 
         /// <summary>
         /// Start the game loop
         /// </summary>
-        /// <param name="fps">Render calls per second</param>
-        /// <param name="ups">Updates per second</param>
-        public void Start(int fps, int ups)
+        public void Start(int tpf, int tpu)
         {
-            Debug.ErrorLogger.AddMessage(0, "Engine Started", Debug.DebugType.Marker, Debug.Severity.Notification);
-            base.aStart(fps, ups);
+            UpdateThread = new Thread(() =>
+            {
+                Stopwatch su = Stopwatch.StartNew();
+                bool skip = false;
+                while (true)
+                {
+                    if (Update != null)
+                    {
+                        lock (Update)
+                        {
+
+                            Keyboard.Update();
+                            Mouse.Update();
+                            Update(GetNormTicks(su), this);
+                        }
+                    }
+
+                    if (tpu != 0 && tpu > GetNormTicks(su))
+                    {
+                        Thread.Sleep(TimeSpan.FromTicks((long)tpu - (long)GetNormTicks(su)));
+                    }
+                    Kokoro.Debug.ObjectAllocTracker.PostUPS(GetNormTicks(su));
+                    su.Reset();
+                    su.Start();
+                }
+            });
+
+            PhysicsThread = new Thread(() =>
+            {
+                GameLooper(160000, Physics);
+            });
+
+            AnimationThread = new Thread(() =>
+            {
+                GameLooper(80000, Animation);
+            });
+
+            Stopwatch s = new Stopwatch();
+            ViewportControl.Paint += (a, b) =>
+            {
+                if (inited)
+                {
+                    if (!s.IsRunning) s.Start();
+                    Clear(0, 0, 0, 0);
+                    Window_RenderFrame(GetNormTicks(s));
+                    lock (Render)
+                    {
+                        Render(GetNormTicks(s), this);
+                    }
+                    SwapBuffers();
+                }
+
+                if (tpf != 0 && tpf > GetNormTicks(s))
+                {
+                    Thread.Sleep(TimeSpan.FromTicks((long)tpf - (long)GetNormTicks(s)));
+                    Debug.ErrorLogger.AddMessage(0, (GetNormTicks(s)).ToString(), Debug.DebugType.Performance, Debug.Severity.Notification);
+                }
+                Kokoro.Debug.ObjectAllocTracker.PostFPS(GetNormTicks(s)); //TODO setup some sort of smoothing, this gives us mostly crap data
+                s.Reset();
+                s.Start();
+                ViewportControl.Invalidate();
+            };
+
+            var tmp = Initialize;
+            Initialize = (GraphicsContext c) =>
+            {
+                Debug.ErrorLogger.StartLogger(true);
+                Debug.ErrorLogger.AddMessage(0, "Engine Started", Debug.DebugType.Marker, Debug.Severity.Notification);
+
+                ZNear = 0.1f;
+                ZFar = 1000f;
+                DepthWrite = true;
+                Viewport = new Vector4(0, 0, WindowSize.X, WindowSize.Y);
+
+            };
+            Initialize += tmp;
+            Initialize += (GraphicsContext c) =>
+            {
+
+                //Spawn threads for each: Update, Physics, Animation; Render is on the current thread (control.paint)
+                UpdateThread.Start();
+                PhysicsThread.Start();
+                AnimationThread.Start();
+            };
+        }
+
+        private void GameLooper(double timestep, Action<double, GraphicsContext> handler)
+        {
+            Stopwatch s = Stopwatch.StartNew();
+            bool skip = false;
+            while (true)
+            {
+                if (handler != null)
+                {
+                    lock (handler)
+                    {
+                        handler((timestep == 0) ? GetNormTicks(s) : timestep, this);
+                    }
+                }
+
+                if (timestep != 0 && timestep > GetNormTicks(s))
+                {
+                    try
+                    {
+                        Thread.Sleep(TimeSpan.FromTicks((long)timestep - (long)GetNormTicks(s)));
+                    }
+                    catch (InvalidOperationException) { }
+                }
+                s.Reset();
+                s.Start();
+            }
+        }
+
+        private double GetNormTicks(Stopwatch s)
+        {
+            return (double)(s.ElapsedTicks * 1000 * 10000) / (Stopwatch.Frequency);
+        }
+
+        #endregion
+
+        public GraphicsContext(Vector2 WindowSize)
+            : base((int)WindowSize.X, (int)WindowSize.Y)
+        {
+            Debug.DebuggerManager.ShowDebugger();
+            Debug.ObjectAllocTracker.NewCreated(this, 0, "GraphicsContext Created");
         }
 
 

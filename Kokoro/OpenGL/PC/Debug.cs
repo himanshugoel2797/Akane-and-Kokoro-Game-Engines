@@ -1,4 +1,6 @@
-﻿using OpenTK;
+﻿#if OPENGL
+
+using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Collections.Generic;
@@ -18,13 +20,16 @@ namespace Kokoro.OpenGL.PC
     {
         public static void EnableDebug()
         {
+#if DEBUG
             GL.Enable(EnableCap.DebugOutput);
+#endif
         }
 
         static Bitmap bmp;
         static bool texRetrieved = false;
         internal static void DLbmp(int id)
         {
+#if DEBUG
             GL.BindTexture(TextureTarget.Texture2D, id);
             int width, height;
             GL.GetTexLevelParameter(TextureTarget.Texture2D, 0, GetTextureParameter.TextureWidth, out width);
@@ -35,8 +40,10 @@ namespace Kokoro.OpenGL.PC
             bmp.UnlockBits(data);
             bmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
             texRetrieved = true;
+#endif
         }
 
+#if DEBUG
         public static Bitmap TexToBMP(int id)
         {
             GraphicsContextLL.RequestTexture(id);
@@ -44,9 +51,11 @@ namespace Kokoro.OpenGL.PC
             texRetrieved = false;
             return bmp;
         }
+#endif
 
         public static void InsertDebugMessage(int id, string message, Kokoro.Debug.DebugType dt, Kokoro.Debug.Severity severity)
         {
+#if DEBUG
             //DebugType converter
             DebugType type = DebugType.DebugTypeOther;
             if (dt == Kokoro.Debug.DebugType.Compatibility) type = DebugType.DebugTypePortability;
@@ -64,12 +73,14 @@ namespace Kokoro.OpenGL.PC
 
             DebugCallback(DebugSource.DebugSourceApplication, type, id, severeness, message.Length, Marshal.StringToHGlobalAnsi(message), IntPtr.Zero);
             //GL.DebugMessageInsert(DebugSourceExternal.DebugSourceApplication, type, id, severeness, message.Length, message);
+#endif
         }
 
         internal static DebugProc proc;
         static Action<string, Kokoro.Debug.DebugType, Kokoro.Debug.Severity> actionCallback;
         public static void DebugCallback(DebugSource src, DebugType type, int id, DebugSeverity severity, int length, IntPtr message, IntPtr usrData)
         {
+#if DEBUG
             string msg = "";
             if (src == DebugSource.DebugSourceApi) msg += "[API]";
             else if (src == DebugSource.DebugSourceApplication) msg += "[Application]";
@@ -96,15 +107,20 @@ namespace Kokoro.OpenGL.PC
             if (message != IntPtr.Zero) msg += System.Runtime.InteropServices.Marshal.PtrToStringAnsi(message, length);
 
             actionCallback(msg, EnumConverters.ODebugType(type), (Kokoro.Debug.Severity)Enum.Parse(typeof(Kokoro.Debug.Severity), severity.ToString().Replace("DebugSeverity", "")));
+#endif
         }
         public static void RegisterCallback(Action<string, Kokoro.Debug.DebugType, Kokoro.Debug.Severity> callback)
         {
+#if DEBUG
             actionCallback = callback;
             proc = DebugCallback;
             //GL.DebugMessageCallback(proc, IntPtr.Zero);
+#endif
         }
 
 
 
     }
 }
+
+#endif

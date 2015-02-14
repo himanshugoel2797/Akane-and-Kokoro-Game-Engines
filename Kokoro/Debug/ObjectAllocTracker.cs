@@ -13,6 +13,10 @@ namespace Kokoro.Debug
     public static class ObjectAllocTracker
     {
 #if DEBUG
+        static readonly object lockerA = new object();
+#endif
+
+#if DEBUG
         private static string GetParameterName2<T>(T item)
         {
             //if (item == null)
@@ -32,9 +36,12 @@ namespace Kokoro.Debug
         public static void NewCreated<T>(T obj, int id = -1, string info = "")
         {
 #if DEBUG
-            log += "[NEW][" + GetParameterName2(obj) + "][ID:" + id + "]" + info + "\n";
-            DebuggerManager.monitor.ObjectAllocated(typeof(T));
-            if (typeof(T).Name.Contains("Texture")) DebuggerManager.monitor.AddTexture(id.ToString() + info, id);
+            lock (lockerA)
+            {
+                log += "[NEW][" + GetParameterName2(obj) + "][ID:" + id + "]" + info + "\n";
+                DebuggerManager.monitor.ObjectAllocated(typeof(T));
+                if (typeof(T).Name.Contains("Texture")) DebuggerManager.monitor.AddTexture(id.ToString() + info, id);
+            }
 #endif
         }
 
@@ -46,12 +53,15 @@ namespace Kokoro.Debug
         public static void ObjectDestroyed<T>(T obj, int id = -1, string info = "")
         {
 #if DEBUG
-
-            //TODO Warn if id was supplied, suggests there may be memory leak, also start monitoring object disposal and implement logging to files
-            //Shader params as indexer implementation
-            //fix up rendering pipeline (with proper projection matrix code and view matrix camera) and implement Skeletal animation with Collada for now? XML based custom formats later?
-            log += "[DESTROY][" + GetParameterName2(obj) + "][ID:" + id + "]" + info + "\n";
-            DebuggerManager.monitor.ObjectFreed(typeof(T));
+            lock (lockerA)
+            {
+                //TODO Warn if id was supplied, suggests there may be memory leak, also start monitoring object disposal and implement logging to files
+                //Shader params as indexer implementation
+                //fix up rendering pipeline (with proper projection matrix code and view matrix camera) and implement Skeletal animation with Collada for now? XML based custom formats later?
+                log += "[DESTROY][" + GetParameterName2(obj) + "][ID:" + id + "]" + info + "\n";
+                DebuggerManager.monitor.ObjectFreed(typeof(T));
+                if (typeof(T).Name.Contains("Texture")) DebuggerManager.monitor.RemoveTexture(id.ToString() + info);
+            }
 #endif
         }
 
@@ -59,7 +69,7 @@ namespace Kokoro.Debug
         /// Mark the end of a single loop
         /// </summary>
         /// <param name="timeTaken">The time taken for this loop</param>
-        public static void MarkGameLoop(long timeTaken, GraphicsContext context)
+        public static void MarkGameLoop(double timeTaken, GraphicsContext context)
         {
 #if DEBUG
             log += "[LOOP]" + timeTaken;
@@ -71,14 +81,14 @@ namespace Kokoro.Debug
         public static void PostUPS(double ups)
         {
 #if DEBUG
-            DebuggerManager.monitor.PostMSPU((double)(1000 / ups));
+            DebuggerManager.monitor.PostMSPU(ups/10000d);
 #endif
         }
 
         public static void PostFPS(double fps)
         {
 #if DEBUG
-            DebuggerManager.monitor.PostMSPR((double)(1000 / fps));
+            DebuggerManager.monitor.PostMSPR(fps/10000d);
 #endif
         }
 

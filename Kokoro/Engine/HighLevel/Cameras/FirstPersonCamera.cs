@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Kokoro.Math;
+using Kokoro.Engine.Input;
 
 namespace Kokoro.Engine.HighLevel.Cameras
 {
@@ -44,43 +45,43 @@ namespace Kokoro.Engine.HighLevel.Cameras
 
         public override void Update(double interval, GraphicsContext Context)
         {
-            if (Context.MouseLeftButtonDown)
+            if (Mouse.ButtonsDown.Left)
             {
-                if (System.Math.Abs(mousePos.X - Context.MousePosition.X) > 0) leftrightRot -= (float)MathHelper.DegreesToRadians(rotationSpeed * (mousePos.X - Context.MousePosition.X) * interval);
-                if (System.Math.Abs(mousePos.Y - Context.MousePosition.Y) > 0) updownRot -= (float)MathHelper.DegreesToRadians(rotationSpeed * (mousePos.Y - Context.MousePosition.Y) * interval);
+                if (System.Math.Abs(mousePos.X - Mouse.MousePos.X) > 0) leftrightRot -= (float)MathHelper.DegreesToRadians(rotationSpeed * (mousePos.X - Mouse.MousePos.X) * interval/10000f);
+                if (System.Math.Abs(mousePos.Y - Mouse.MousePos.Y) > 0) updownRot -= (float)MathHelper.DegreesToRadians(rotationSpeed * (mousePos.Y - Mouse.MousePos.Y) * interval/10000f);
             }
             else
             {
-                mousePos = Context.MousePosition;
+                mousePos = Mouse.MousePos;
             }
             UpdateViewMatrix();
             Vector3 Right = Vector3.Cross(cameraRotatedUpVector, Direction);
 
-            if (Context.Keys.Contains("Up"))
+            if (Keyboard.IsKeyPressed(Key.Up))
             {
-                Position += Direction * (float)(moveSpeed * interval);
+                Position += Direction * (float)(moveSpeed * interval/10000f);
             }
-            else if (Context.Keys.Contains("Down"))
+            else if (Keyboard.IsKeyPressed(Key.Down))
             {
-                Position -= Direction * (float)(moveSpeed * interval);
-            }
-
-            if (Context.Keys.Contains("Left"))
-            {
-                Position -= Right * (float)(moveSpeed * interval);
-            }
-            else if (Context.Keys.Contains("Right"))
-            {
-                Position += Right * (float)(moveSpeed * interval);
+                Position -= Direction * (float)(moveSpeed * interval/10000f);
             }
 
-            if (Context.Keys.Contains("PageDown"))
+            if (Keyboard.IsKeyPressed(Key.Left))
             {
-                Position -= cameraRotatedUpVector * (float)(moveSpeed * interval);
+                Position -= Right * (float)(moveSpeed * interval/10000f);
             }
-            else if (Context.Keys.Contains("PageUp"))
+            else if (Keyboard.IsKeyPressed(Key.Right))
             {
-                Position += cameraRotatedUpVector * (float)(moveSpeed * interval);
+                Position += Right * (float)(moveSpeed * interval/10000f);
+            }
+
+            if (Keyboard.IsKeyPressed(Key.PageDown))
+            {
+                Position -= cameraRotatedUpVector * (float)(moveSpeed * interval/10000f);
+            }
+            else if (Keyboard.IsKeyPressed(Key.PageUp))
+            {
+                Position += cameraRotatedUpVector * (float)(moveSpeed * interval/10000f);
             }
 
             //View = UpdateViewMatrix();

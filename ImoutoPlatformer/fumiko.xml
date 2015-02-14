@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
+<!-- $TexturePacker:SmartUpdate:e9630348f278ea6cd38857949f741e53:39ed649120936b342f14bdaf348f8422:c77546da00f4d1bfe834bbaef6fd189d$ -->
+<!--Format:
+n  => name of the sprite
+x  => sprite x pos in texture
+y  => sprite y pos in texture
+w  => sprite width (may be trimmed)
+h  => sprite height (may be trimmed)
+oX => sprite's x-corner offset (only available if trimmed)
+oY => sprite's y-corner offset (only available if trimmed)
+oW => sprite's original width (only available if trimmed)
+oH => sprite's original height (only available if trimmed)
+r => 'y' only set if sprite is rotated
+-->
+<TextureAtlas imagePath="fumiko.png" width="256" height="512">
+  <sprite n="fumiko1" x="2" y="2" w="24" h="32"/>
+  <sprite n="fumiko10" x="28" y="2" w="24" h="32"/>
+  <sprite n="fumiko109" x="54" y="2" w="24" h="32"/>
+  <sprite n="fumiko11" x="80" y="2" w="24" h="32"/>
+  <sprite n="fumiko110" x="106" y="2" w="24" h="32"/>
+  <sprite n="fumiko111" x="132" y="2" w="24" h="32"/>
+  <sprite n="fumiko112" x="158" y="2" w="24" h="32"/>
+  <sprite n="fumiko113" x="184" y="2" w="24" h="32"/>
+  <sprite n="fumiko114" x="210" y="2" w="24" h="32"/>
+  <sprite n="fumiko115" x="2" y="36" w="24" h="32"/>
+  <sprite n="fumiko116" x="2" y="36" w="24" h="32"/>
+  <sprite n="fumiko117" x="2" y="36" w="24" h="32"/>
+  <sprite n="fumiko118" x="28" y="36" w="24" h="32"/>
+  <sprite n="fumiko119" x="54" y="36" w="24" h="32"/>
+  <sprite n="fumiko12" x="80" y="2" w="24" h="32"/>
+  <sprite n="fumiko120" x="54" y="36" w="24" h="32"/>
+  <sprite n="fumiko121" x="54" y="36" w="24" h="32"/>
+  <sprite n="fumiko122" x="80" y="36" w="24" h="32"/>
+  <sprite n="fumiko125" x="106" y="36" w="24" h="32"/>
+  <sprite n="fumiko13" x="80" y="2" w="24" h="32"/>
+  <sprite n="fumiko14" x="132" y="36" w="24" h="32"/>
+  <sprite n="fumiko145" x="158" y="36" w="24" h="32"/>
+  <sprite n="fumiko146" x="184" y="36" w="24" h="32"/>
+  <sprite n="fumiko147" x="210" y="36" w="24" h="32"/>
+  <sprite n="fumiko148" x="2" y="70" w="24" h="32"/>
+  <sprite n="fumiko149" x="28" y="70" w="24" h="32"/>
+  <sprite n="fumiko150" x="54" y="70" w="24" h="32"/>
+  <sprite n="fumiko151" x="80" y="70" w="24" h="32"/>
+  <sprite n="fumiko152" x="106" y="70" w="24" h="32"/>
+  <sprite n="fumiko153" x="132" y="70" w="24" h="32"/>
+  <sprite n="fumiko154" x="158" y="70" w="24" h="32"/>
+  <sprite n="fumiko155" x="184" y="70" w="24" h="32"/>
+  <sprite n="fumiko156" x="210" y="70" w="24" h="32"/>
+  <sprite n="fumiko157" x="2" y="104" w="24" h="32"/>
+  <sprite n="fumiko158" x="28" y="104" w="24" h="32"/>
+  <sprite n="fumiko159" x="54" y="104" w="24" h="32"/>
+  <sprite n="fumiko160" x="80" y="104" w="24" h="32"/>
+  <sprite n="fumiko17" x="106" y="104" w="24" h="32"/>
+  <sprite n="fumiko181" x="132" y="104" w="24" h="32"/>
+  <sprite n="fumiko182" x="158" y="104" w="24" h="32"/>
+  <sprite n="fumiko183" x="184" y="104" w="24" h="32"/>
+  <sprite n="fumiko184" x="210" y="104" w="24" h="32"/>
+  <sprite n="fumiko185" x="2" y="138" w="24" h="32"/>
+  <sprite n="fumiko186" x="28" y="138" w="24" h="32"/>
+  <sprite n="fumiko187" x="54" y="138" w="24" h="32"/>
+  <sprite n="fumiko188" x="80" y="138" w="24" h="32"/>
+  <sprite n="fumiko189" x="106" y="138" w="24" h="32"/>
+  <sprite n="fumiko190" x="132" y="138" w="24" h="32"/>
+  <sprite n="fumiko191" x="158" y="138" w="24" h="32"/>
+  <sprite n="fumiko192" x="184" y="138" w="24" h="32"/>
+  <sprite n="fumiko193" x="210" y="138" w="24" h="32"/>
+  <sprite n="fumiko194" x="2" y="172" w="24" h="32"/>
+  <sprite n="fumiko195" x="28" y="172" w="24" h="32"/>
+  <sprite n="fumiko196" x="54" y="172" w="24" h="32"/>
+  <sprite n="fumiko2" x="80" y="172" w="24" h="32"/>
+  <sprite n="fumiko217" x="106" y="172" w="24" h="32"/>
+  <sprite n="fumiko218" x="132" y="172" w="24" h="32"/>
+  <sprite n="fumiko219" x="158" y="172" w="24" h="32"/>
+  <sprite n="fumiko220" x="184" y="172" w="24" h="32"/>
+  <sprite n="fumiko221" x="210" y="172" w="24" h="32"/>
+  <sprite n="fumiko222" x="2" y="206" w="24" h="32"/>
+  <sprite n="fumiko223" x="28" y="206" w="24" h="32"/>
+  <sprite n="fumiko224" x="54" y="206" w="24" h="32"/>
+  <sprite n="fumiko225" x="80" y="206" w="24" h="32"/>
+  <sprite n="fumiko226" x="106" y="206" w="24" h="32"/>
+  <sprite n="fumiko227" x="132" y="206" w="24" h="32"/>
+  <sprite n="fumiko228" x="158" y="206" w="24" h="32"/>
+  <sprite n="fumiko229" x="184" y="206" w="24" h="32"/>
+  <sprite n="fumiko230" x="210" y="206" w="24" h="32"/>
+  <sprite n="fumiko231" x="2" y="240" w="24" h="32"/>
+  <sprite n="fumiko232" x="28" y="240" w="24" h="32"/>
+  <sprite n="fumiko253" x="54" y="240" w="24" h="32"/>
+  <sprite n="fumiko254" x="80" y="240" w="24" h="32"/>
+  <sprite n="fumiko255" x="106" y="240" w="24" h="32"/>
+  <sprite n="fumiko256" x="132" y="240" w="24" h="32"/>
+  <sprite n="fumiko257" x="158" y="240" w="24" h="32"/>
+  <sprite n="fumiko258" x="184" y="240" w="24" h="32"/>
+  <sprite n="fumiko259" x="210" y="240" w="24" h="32"/>
+  <sprite n="fumiko260" x="2" y="274" w="24" h="32"/>
+  <sprite n="fumiko261" x="28" y="274" w="24" h="32"/>
+  <sprite n="fumiko262" x="54" y="274" w="24" h="32"/>
+  <sprite n="fumiko263" x="80" y="274" w="24" h="32"/>
+  <sprite n="fumiko264" x="106" y="274" w="24" h="32"/>
+  <sprite n="fumiko266" x="132" y="274" w="24" h="32"/>
+  <sprite n="fumiko267" x="158" y="274" w="24" h="32"/>
+  <sprite n="fumiko268" x="184" y="274" w="24" h="32"/>
+  <sprite n="fumiko3" x="210" y="274" w="24" h="32"/>
+  <sprite n="fumiko37" x="2" y="308" w="24" h="32"/>
+  <sprite n="fumiko38" x="28" y="308" w="24" h="32"/>
+  <sprite n="fumiko39" x="54" y="308" w="24" h="32"/>
+  <sprite n="fumiko4" x="80" y="308" w="24" h="32"/>
+  <sprite n="fumiko40" x="106" y="308" w="24" h="32"/>
+  <sprite n="fumiko41" x="132" y="308" w="24" h="32"/>
+  <sprite n="fumiko42" x="158" y="308" w="24" h="32"/>
+  <sprite n="fumiko43" x="184" y="308" w="24" h="32"/>
+  <sprite n="fumiko44" x="210" y="308" w="24" h="32"/>
+  <sprite n="fumiko45" x="184" y="308" w="24" h="32"/>
+  <sprite n="fumiko46" x="2" y="342" w="24" h="32"/>
+  <sprite n="fumiko47" x="28" y="342" w="24" h="32"/>
+  <sprite n="fumiko48" x="54" y="342" w="24" h="32"/>
+  <sprite n="fumiko49" x="54" y="342" w="24" h="32"/>
+  <sprite n="fumiko5" x="80" y="342" w="24" h="32"/>
+  <sprite n="fumiko50" x="106" y="342" w="24" h="32"/>
+  <sprite n="fumiko52" x="132" y="342" w="24" h="32"/>
+  <sprite n="fumiko53" x="158" y="342" w="24" h="32"/>
+  <sprite n="fumiko6" x="80" y="2" w="24" h="32"/>
+  <sprite n="fumiko73" x="184" y="342" w="24" h="32"/>
+  <sprite n="fumiko74" x="210" y="342" w="24" h="32"/>
+  <sprite n="fumiko75" x="2" y="376" w="24" h="32"/>
+  <sprite n="fumiko76" x="28" y="376" w="24" h="32"/>
+  <sprite n="fumiko77" x="54" y="376" w="24" h="32"/>
+  <sprite n="fumiko78" x="80" y="376" w="24" h="32"/>
+  <sprite n="fumiko79" x="106" y="376" w="24" h="32"/>
+  <sprite n="fumiko8" x="132" y="376" w="24" h="32"/>
+  <sprite n="fumiko80" x="158" y="376" w="24" h="32"/>
+  <sprite n="fumiko81" x="106" y="376" w="24" h="32"/>
+  <sprite n="fumiko82" x="80" y="376" w="24" h="32"/>
+  <sprite n="fumiko83" x="80" y="376" w="24" h="32"/>
+  <sprite n="fumiko84" x="80" y="376" w="24" h="32"/>
+  <sprite n="fumiko85" x="80" y="376" w="24" h="32"/>
+  <sprite n="fumiko86" x="184" y="376" w="24" h="32"/>
+  <sprite n="fumiko88" x="210" y="376" w="24" h="32"/>
+  <sprite n="fumiko89" x="2" y="410" w="24" h="32"/>
+  <sprite n="fumiko9" x="28" y="410" w="24" h="32"/>
+</TextureAtlas>

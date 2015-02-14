@@ -49,16 +49,8 @@ namespace Akane.World
             }
         }
         public Vector2 ViewportOffset;
-
-
-        /*
-         * Algorithm Description:
-         * 
-         *  Load tile information into TileLayers (using GPU to write to textures using multiple render targets?)
-         *  Generate texture atlases for the ids and store the calculated offsets in the TileSets Dictionary
-         *  Finally, render a high res quad which represents the number of tiles which should be shown on screen, pass the Tile Layers information to it along with the texture atlases, pick and draw the proper tile in the shader
-         *  Store height data in TileLayers to be able to perform advanced lighting algorithms like ray tracing GI, render the information to an offscreen texture? second draw call shouldn't be very expensive either
-         */
+        public Matrix4 ProjectionMatrix { get; private set; }
+        public float AspectRatio { get { return viewportTileRes.X / viewportTileRes.Y; } }
 
         public Map(string path, AkaneManager akane)
         {
@@ -121,7 +113,8 @@ namespace Akane.World
             }
 
             //Restore the backed up matrix
-            //akane.context.Projection = projBackup;
+            this.ProjectionMatrix = akane.context.Projection;
+            akane.context.Projection = projBackup;
             #endregion
 
             quad = new FullScreenQuad();
@@ -181,7 +174,6 @@ namespace Akane.World
             FullScreenQuad quad = new FullScreenQuad();
             quad.Materials[0].Shader = new Kokoro.Engine.Shaders.ShaderProgram("Shaders/TransparentColor");
 
-            tileSetTmpBuffer.Bind(manager.context);
 
             for (int i = 0; i < map.Tilesets.Count; i++)
             {
@@ -189,6 +181,7 @@ namespace Akane.World
 
                 if ((t.Properties.ContainsKey("Visible") && t.Properties["Visible"] != "false") || !t.Properties.ContainsKey("Visible"))
                 {
+                    tileSetTmpBuffer.Bind(manager.context);
                     MinMaxTileset.Add(new Vector2(t.FirstGid, CalculateFinalGID(t.FirstGid, (int)t.Image.Width, (int)t.Image.Height, t.TileWidth, t.TileHeight)));
 
                     manager.context.Clear(0, 0, 0, 0);
@@ -201,6 +194,7 @@ namespace Akane.World
                     if (i < map.Tilesets.Count - 1) tileSetTmpBuffer.Add("Color",
                         new FrameBufferTexture((int)map.Tilesets[i + 1].Image.Width, (int)map.Tilesets[i + 1].Image.Height, PixelFormat.BGRA, PixelComponentType.RGBA8, PixelType.Float)
                         , FrameBufferAttachments.ColorAttachment0, manager.context);
+                    //if (i < map.Tilesets.Count - 1) tileSetTmpBuffer = new FrameBuffer((int)map.Tilesets[i + 1].Image.Width, (int)map.Tilesets[i + 1].Image.Height, PixelComponentType.RGBA8, manager.context);
 
                     quad.Materials[0].ColorMap.Dispose();
 
@@ -249,7 +243,7 @@ namespace Akane.World
             tileMapPhaseA.UnBind();
 
             var tmp = quad.Materials[0].Shader;
-            
+
             quad.Materials[0].Shader = DefaultShader;
             quad.Materials[0].ColorMap = tileMapPhaseA["Color"];
             quad.Draw(manager.context);

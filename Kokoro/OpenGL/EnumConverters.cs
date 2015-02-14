@@ -99,5 +99,15 @@ namespace Kokoro.OpenGL
 
             return Debug.DebugType.Other;
         }
+
+        public static Kokoro.Engine.Input.Key OKey(OpenTK.Input.Key k)
+        {
+            return (Kokoro.Engine.Input.Key)Enum.Parse(typeof(Kokoro.Engine.Input.Key), k.ToString());
+        }
+
+        public static OpenTK.Input.Key EKey(Kokoro.Engine.Input.Key k)
+        {
+            return (OpenTK.Input.Key)Enum.Parse(typeof(OpenTK.Input.Key), k.ToString());
+        }
     }
 }

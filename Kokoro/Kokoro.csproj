@@ -118,8 +118,12 @@
       <Private>True</Private>
       <HintPath>..\packages\IronPython.2.7.2-beta1\lib\Net40\Microsoft.Scripting.Metadata.dll</HintPath>
     </Reference>
-    <Reference Include="OpenTK">
-      <HintPath>..\packages\OpenTK.Next.1.1.1616.8959\lib\net20\OpenTK.dll</HintPath>
+    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\OpenTK.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.GLControl">
+      <HintPath>..\packages\OpenTK.GLControl.1.1.1589.5942\lib\NET40\OpenTK.GLControl.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable">
@@ -167,6 +171,9 @@
     <Compile Include="Engine\HighLevel\Rendering\LitMaterial.cs" />
     <Compile Include="Engine\HighLevel\Rendering\RayCaster.cs" />
     <Compile Include="Engine\HighLevel\Rendering\Voxelizer.cs" />
+    <Compile Include="Engine\Input\Key.cs" />
+    <Compile Include="Engine\Input\Keyboard.cs" />
+    <Compile Include="Engine\Input\Mouse.cs" />
     <Compile Include="Engine\Material.cs" />
     <Compile Include="Engine\Model.cs" />
     <Compile Include="Engine\Pipeline.cs" />
@@ -216,8 +223,10 @@
     <Compile Include="OpenGL\PC\Debug.cs" />
     <Compile Include="OpenGL\PC\FrameBufferLL.cs" />
     <Compile Include="OpenGL\PC\GraphicsContextLL.cs" />
+    <Compile Include="OpenGL\PC\Input.cs" />
     <Compile Include="OpenGL\PC\ShaderLL.cs" />
     <Compile Include="OpenGL\PC\ShaderProgramLL.cs" />
+    <Compile Include="OpenGL\PC\Sound.cs" />
     <Compile Include="OpenGL\PC\TextureLL.cs" />
     <Compile Include="OpenGL\PC\VertexBufferLL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

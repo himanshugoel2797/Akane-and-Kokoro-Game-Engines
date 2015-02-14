@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if OPENGL
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +8,8 @@ using System.Threading.Tasks;
 
 using OpenTK.Graphics.OpenGL4;
 using OpenTK;
+using OpenTK.Input;
+using System.Windows.Forms;
 
 namespace Kokoro.OpenGL.PC
 {
@@ -14,33 +18,34 @@ namespace Kokoro.OpenGL.PC
     /// </summary>
     public class GraphicsContextLL
     {
-        protected GameWindow Window;
-
-        private GraphicsContextLL() { }     //Block this class from normal construction
-        protected GraphicsContextLL(int windowWidth, int windowHeight, bool fullscreen = false)
+        protected bool inited, tmpCtrl;
+        private GLControl Window;
+        public Control ViewportControl
         {
-            Window = new GameWindow(windowWidth, windowHeight);
-            Window.RenderFrame += Window_RenderFrame;
-            Window.UpdateFrame += Window_UpdateFrame;
-            Window.Resize += Window_Resize;
-            Window.Closing += (a, b) =>
+            get
             {
-                Environment.Exit(0);
-            };
-            //Register the internal keyboard handlers
-            Window.Keyboard.KeyDown += Keyboard_KeyDown;
-            Window.Keyboard.KeyUp += Keyboard_KeyUp;
-            Window.Mouse.ButtonDown += Mouse_ButtonDown;
-            Window.Mouse.ButtonUp += Mouse_ButtonUp;
-
-            Window.VSync = VSyncMode.Off;
-
-            //Depth Test is always enabled, it's a matter of what the depth function is
-            GL.Enable(EnableCap.DepthTest);
-            //GL.Enable(EnableCap.Blend);
-
+                return Window;
+            }
         }
 
+        private GraphicsContextLL() { }     //Block this class from normal construction
+        protected GraphicsContextLL(int windowWidth, int windowHeight)
+        {
+            Window = new GLControl();
+            Window.Size = new System.Drawing.Size(windowWidth, windowHeight);
+            
+            Window.Resize += Window_Resize;
+            Window.Load += Window_Load;
+            
+        }
+
+        void Window_Load(object sender, EventArgs e)
+        {
+                inited = true;
+                //Depth Test is always enabled, it's a matter of what the depth function is
+                GL.Enable(EnableCap.DepthTest);
+
+        }
         void Window_Resize(object sender, EventArgs e)
         {
             //TODO Implement Resize handler
@@ -48,37 +53,29 @@ namespace Kokoro.OpenGL.PC
             InitializeMSAA(0);
         }
 
-        protected Action<double, Engine.GraphicsContext> update;
-        void Window_UpdateFrame(object sender, FrameEventArgs e)
+        
+        protected void Window_RenderFrame(double interval)
         {
+            if (tmpCtrl == false)
+            {
+                (this as Engine.GraphicsContext).Initialize(this as Engine.GraphicsContext);
+                tmpCtrl = true;
+            }
+
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 #if DEBUG
+            if (curRequestTexture != 0) Debug.DLbmp(curRequestTexture);
+            curRequestTexture = 0;
             Kokoro.Debug.ErrorLogger.AddMessage(0, "End Render Frame", Kokoro.Debug.DebugType.Other, Kokoro.Debug.Severity.Notification);
-            Kokoro.Debug.ObjectAllocTracker.MarkGameLoop((long)e.Time, (this as Engine.GraphicsContext));
-            Kokoro.Debug.ObjectAllocTracker.PostUPS(Window.UpdateFrequency);
-            Kokoro.Debug.ObjectAllocTracker.PostFPS(Window.RenderFrequency);
-            Window.Title = "Render : " + (Window.RenderPeriod).ToString() + "  Update : " + (Window.UpdatePeriod).ToString();
+            Kokoro.Debug.ObjectAllocTracker.MarkGameLoop(interval, (this as Engine.GraphicsContext));
 
             ErrorCode err = GL.GetError();
             if (err != ErrorCode.NoError) Kokoro.Debug.ErrorLogger.AddMessage(0, err.ToString(), Kokoro.Debug.DebugType.Error, Kokoro.Debug.Severity.High);
 #endif
-
-            update(e.Time, (this as Engine.GraphicsContext));
         }
-
-        protected Action<double, Engine.GraphicsContext> render;
-        void Window_RenderFrame(object sender, FrameEventArgs e)
+        protected void SwapBuffers()
         {
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
-            GL.ClearColor(0, 0, 1, 0);
-            //SetMSAA();
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            render(e.Time, (this as Engine.GraphicsContext));
-            //BlitMSAA();
             Window.SwapBuffers();
-#if DEBUG
-            if (curRequestTexture != 0) Debug.DLbmp(curRequestTexture);
-            curRequestTexture = 0;
-#endif
         }
 
 #if DEBUG
@@ -89,77 +86,13 @@ namespace Kokoro.OpenGL.PC
         }
 #endif
 
-        protected void aStart(int fps, int ups)
-        {
-            Window.Run(ups, fps);
-        }
-
-        protected void RegisterUpdateHandler(Action<double, Engine.GraphicsContext> act)
-        {
-            update += act;
-        }
-
-        protected void RegisterRenderHandler(Action<double, Engine.GraphicsContext> act)
-        {
-            render += act;
-        }
-
+        #region State Machine
         protected void aClear(float r, float g, float b, float a)
         {
             //TODO maybe it'll be faster to just disable depth testing and draw a fsq? This is currently one of the slowest parts of the engine
             GL.ClearColor(r, g, b, a);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
         }
-
-        #region Keyboard
-        protected string[] aKeys = new string[1];
-        protected bool aMouseLeftButtonDown { get; private set; }
-        protected bool aMouseRightButtonDown { get; private set; }
-        public Math.Vector2 aMousePosition
-        {
-            get
-            {
-                return new Math.Vector2(Window.Mouse.X, Window.Mouse.Y);
-            }
-        }
-        protected Math.Vector2 aMouseDelta
-        {
-            get
-            {
-                return new Math.Vector2(Window.Mouse.XDelta, Window.Mouse.YDelta);
-            }
-        }
-        List<string> keysDown = new List<string>();
-        bool alt, shift, control;
-        void Keyboard_KeyUp(object sender, OpenTK.Input.KeyboardKeyEventArgs e)
-        {
-            keysDown.Remove(e.Key.ToString());
-            aKeys = keysDown.ToArray();
-            alt = e.Alt;
-            shift = e.Shift;
-            control = e.Control;
-        }
-        void Mouse_ButtonDown(object sender, OpenTK.Input.MouseButtonEventArgs e)
-        {
-            aMouseLeftButtonDown = (e.Button == OpenTK.Input.MouseButton.Left);
-            aMouseRightButtonDown = (e.Button == OpenTK.Input.MouseButton.Right);
-        }
-        void Mouse_ButtonUp(object sender, OpenTK.Input.MouseButtonEventArgs e)
-        {
-            aMouseLeftButtonDown = !(e.Button == OpenTK.Input.MouseButton.Left);
-            aMouseRightButtonDown = !(e.Button == OpenTK.Input.MouseButton.Right);
-        }
-        void Keyboard_KeyDown(object sender, OpenTK.Input.KeyboardKeyEventArgs e)
-        {
-            if (!keysDown.Contains(e.Key.ToString())) keysDown.Add(e.Key.ToString());
-            aKeys = keysDown.ToArray();
-            alt = e.Alt;
-            shift = e.Shift;
-            control = e.Control;
-        }
-        #endregion
-
-        #region State Machine
 
         #region Depth Write
         bool depthWriteEnabled;
@@ -333,3 +266,5 @@ namespace Kokoro.OpenGL.PC
         #endregion
     }
 }
+
+#endif

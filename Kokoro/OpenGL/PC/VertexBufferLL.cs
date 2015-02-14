@@ -1,4 +1,6 @@
-﻿using OpenTK.Graphics.OpenGL4;
+﻿#if OPENGL
+
+using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -186,3 +188,4 @@ namespace Kokoro.OpenGL.PC
         }
     }
 }
+#endif
