@@ -1,0 +1,62 @@
+# Blender MTL File: 'room.blend'
+# Material Count: 6
+
+newmtl Door
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd C:\Users\Himanshu\Documents\Aperture Studios\Resources\Textures\doors\doors_wood_doors_0095_01.png
+
+newmtl Material.001
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\\Users\\Himanshu\\Documents\\Aperture Studios\\Resources\\Textures\\walls\\WhiteWall.png
+
+newmtl Wall
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\\Users\\Himanshu\\Documents\\Aperture Studios\\Resources\\Textures\\walls\\WhiteWall.png
+
+newmtl entrance
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd C:\Users\Himanshu\Documents\Aperture Studios\Resources\Textures\doors\doors_wood_doors_0095_01.png
+
+newmtl entrance_NONE
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd C:\\Users\\Himanshu\\Documents\\Aperture Studios\\Resources\\Textures\\walls\\WhiteWall.png
+
+newmtl floor
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\\Users\\Himanshu\\Documents\\Aperture Studios\\Resources\\Textures\\floors\\seamless_wood.jpg

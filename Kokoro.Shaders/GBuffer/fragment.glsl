@@ -17,7 +17,7 @@ uniform float Emissivity;
 
 void main()
 {
-		vec3 finalNormal = normalize(normPos) + cross( normalize(bitangent), normalize(2.0f * texture2D(NormalMap, UV).rgb - 1.0f));
+		vec3 finalNormal = normalize(normPos);// + cross( normalize(bitangent), normalize(2.0f * texture2D(NormalMap, UV).rgb - 1.0f));
 		Normal0 = vec4(normalize(0.5f * finalNormal + 0.5f), 1);
 		RGBA0 = texture2D(ColorMap, UV);
 		Depth0.r = depth/50;

@@ -178,6 +178,7 @@
     <Compile Include="Engine\Model.cs" />
     <Compile Include="Engine\Pipeline.cs" />
     <Compile Include="Engine\PixelInfo.cs" />
+    <Compile Include="Engine\Prefabs\BoundingBox.cs" />
     <Compile Include="Engine\Prefabs\FullScreenQuad.cs" />
     <Compile Include="Engine\Prefabs\HighResQuad.cs" />
     <Compile Include="Engine\Prefabs\Quad.cs" />
@@ -193,6 +194,9 @@
     <Compile Include="Engine\Shaders\TessellationShader.cs" />
     <Compile Include="Engine\Shaders\VertexShader.cs" />
     <Compile Include="Engine\Texture.cs" />
+    <Compile Include="KSL\KParams.cs" />
+    <Compile Include="KSL\KShader.cs" />
+    <Compile Include="KSL\KSLCompiler.cs" />
     <Compile Include="Math\BezierCurve.cs" />
     <Compile Include="Math\BezierCurveCubic.cs" />
     <Compile Include="Math\BezierCurveQuadric.cs" />
@@ -222,6 +226,7 @@
     <Compile Include="OpenGL\EnumConverters.cs" />
     <Compile Include="OpenGL\PC\Debug.cs" />
     <Compile Include="OpenGL\PC\FrameBufferLL.cs" />
+    <Compile Include="OpenGL\PC\GLSL\CodeGenerator.cs" />
     <Compile Include="OpenGL\PC\GraphicsContextLL.cs" />
     <Compile Include="OpenGL\PC\Input.cs" />
     <Compile Include="OpenGL\PC\ShaderLL.cs" />

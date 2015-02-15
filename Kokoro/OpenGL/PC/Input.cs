@@ -19,6 +19,17 @@ namespace Kokoro.OpenGL.PC
             msLocker = new object();
         }
 
+        static bool foc;
+        static Vector2 xy;
+        internal static void IsFocused(bool focused)
+        {
+            foc = focused;
+        }
+        internal static void SetWinXY(int x, int y)
+        {
+            xy = new Vector2(x, y);
+        }
+
         #region Keyboard
         static KeyboardState kbdState;
         static object locker;
@@ -32,6 +43,7 @@ namespace Kokoro.OpenGL.PC
 
         public static bool KeyDown(Engine.Input.Key k)
         {
+            if (!foc) return false;
             lock (locker)
             {
                 return kbdState[EnumConverters.EKey(k)];
@@ -47,19 +59,41 @@ namespace Kokoro.OpenGL.PC
             lock (msLocker)
             {
                 msState = Mouse.GetCursorState();
-                return new Vector2(msState.X, msState.Y);
+                return new Vector2(msState.X - xy.X, msState.Y - xy.Y);
             }
         }
-        public static bool LeftMouseButtonDown() { lock (msLocker) { return msState.IsButtonDown(MouseButton.Left); } }
-        public static bool RightMouseButtonDown() { lock (msLocker) { return msState.IsButtonDown(MouseButton.Right); } }
-        public static bool MiddleMouseButtonDown() { lock (msLocker) { return msState.IsButtonDown(MouseButton.Middle); } }
+        public static bool LeftMouseButtonDown()
+        {
+            if (!foc) return false; lock (msLocker) { return msState.IsButtonDown(MouseButton.Left); }
+        }
+        public static bool RightMouseButtonDown()
+        {
+            if (!foc) return false; lock (msLocker) { return msState.IsButtonDown(MouseButton.Right); }
+        }
+        public static bool MiddleMouseButtonDown()
+        {
+            if (!foc) return false; lock (msLocker) { return msState.IsButtonDown(MouseButton.Middle); }
+        }
 
-        public static bool LeftMouseButtonUp() { lock (msLocker) { return msState.IsButtonUp(MouseButton.Left); } }
-        public static bool RightMouseButtonUp() { lock (msLocker) { return msState.IsButtonUp(MouseButton.Right); } }
-        public static bool MiddleMouseButtonUp() { lock (msLocker) { return msState.IsButtonUp(MouseButton.Middle); } }
+        public static bool LeftMouseButtonUp()
+        {
+            if (!foc) return false; lock (msLocker) { return msState.IsButtonUp(MouseButton.Left); }
+        }
+        public static bool RightMouseButtonUp()
+        {
+            if (!foc) return false; lock (msLocker) { return msState.IsButtonUp(MouseButton.Right); }
+        }
+        public static bool MiddleMouseButtonUp()
+        {
+            if (!foc) return false; lock (msLocker) { return msState.IsButtonUp(MouseButton.Middle); }
+        }
 
-        public static float GetScroll() { lock (msLocker) { return msState.WheelPrecise; } }
+        public static float GetScroll()
+        {
+            if (!foc) return 0; lock (msLocker) { return msState.WheelPrecise; }
+        }
         public static void SetMousePos(Vector2 pos) { Mouse.SetPosition(pos.X, pos.Y); }
+
         #endregion
     }
 }

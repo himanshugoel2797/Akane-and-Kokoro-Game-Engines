@@ -285,7 +285,11 @@ namespace Kokoro.Engine
 
                     if (tpu != 0 && tpu > GetNormTicks(su))
                     {
-                        Thread.Sleep(TimeSpan.FromTicks((long)tpu - (long)GetNormTicks(su)));
+                        try
+                        {
+                            Thread.Sleep(TimeSpan.FromTicks((long)tpu - (long)GetNormTicks(su)));
+                        }
+                        catch (Exception) { }
                     }
                     Kokoro.Debug.ObjectAllocTracker.PostUPS(GetNormTicks(su));
                     su.Reset();
@@ -309,7 +313,7 @@ namespace Kokoro.Engine
                 if (inited)
                 {
                     if (!s.IsRunning) s.Start();
-                    Clear(0, 0, 0, 0);
+                    Clear(1, 05f, 0, 0);
                     Window_RenderFrame(GetNormTicks(s));
                     lock (Render)
                     {

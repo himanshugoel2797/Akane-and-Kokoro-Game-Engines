@@ -17,7 +17,7 @@ namespace Kokoro.Game
 {
     class TestA : IScene
     {
-        Model model, ground;
+        Model model, ground, aabb, tmp2;
         Texture tex;
         LightingEngine engine;
         ShaderProgram fur;
@@ -35,10 +35,13 @@ namespace Kokoro.Game
             };
 
 
-            model = Model.Load("Resources/scene.obj");
-            ground = Model.Load("Resources/ground.obj");
+            model = Model.Load("room.obj");
+            //ground = Model.Load("Resources/ground.obj");
+            tmp2 = Model.Load("roomItem.obj");
+            aabb = new AABB(tmp2.Bound);
+            
             model.Materials[0].Shader = new ShaderProgram("Shaders/Default");
-            model.World = Matrix4.CreateTranslation(0, 0, 0) * Matrix4.Scale(1);
+            //model.World = Matrix4.CreateTranslation(0, 0, 0) * Matrix4.Scale(1);
             tex = new Texture("Resources/seamless-green-grass-texture.jpg");
             model.Materials[0].ColorMap = tex;
 
@@ -54,10 +57,14 @@ namespace Kokoro.Game
                 if (model.Materials[i].ColorMap == null)
                 {
                     model.Materials[i].ColorMap = tex;
-                    model.Materials[i].NormalMap = new Texture("Resources/woodNormalMap.png");
+                    //model.Materials[i].NormalMap = new Texture("Resources/woodNormalMap.png");
                 }
             }
 
+            tmp2.Materials[0].Shader = engine.Shader;
+            aabb.Materials[0].Shader = engine.Shader;
+            
+            //aabb.World *= model.World;
             //Specify the draw function
             engine.Draw = Draw;
         }
@@ -71,7 +78,7 @@ namespace Kokoro.Game
         public void Draw(double interval, GraphicsContext context)
         {
             //context.Wireframe = true;
-            context.FaceCulling = CullMode.Back;
+            context.FaceCulling = CullMode.Off;
             context.Blending = new BlendFunc()
             {
                 Src = BlendingFactor.SrcAlpha,
@@ -80,7 +87,9 @@ namespace Kokoro.Game
 
             //model.Materials[5].Shader = engine.Shader;
             model.Draw(context);
-            model.Draw(context);
+            tmp2.Draw(context);
+            aabb.Draw(context);
+            //model.Draw(context);
 
             /*ground.World = Matrix4.CreateTranslation(0, 0.1f, 0) * Matrix4.Scale(1, 1f, 1);
 

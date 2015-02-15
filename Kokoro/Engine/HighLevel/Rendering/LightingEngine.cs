@@ -72,23 +72,23 @@ namespace Kokoro.Engine.HighLevel.Rendering
         {
             //Draw the front faces
             FrontFaces.Bind(context);
-            context.Clear(0, 0, 0, 0);
+            context.Clear(1, 0, 0, 0);
             context.FaceCulling = CullMode.Back;    //Cull back faces
             if (Draw != null) Draw(interval, context);
 
             //Perform hemisphere sampling on the rendered data, using both the front face buffer and the back face buffer
             hemisphericalSamples.Bind(context);
-            context.Clear(0, 0, 0, 0);
+            context.Clear(1, 0, 0, 0);
             fsq.Materials[0].Shader = hemisphereSampler;
             fsq.Draw(context);      //Perform the sampling
 
             radiositySamplesPassA.Bind(context);
-            context.Clear(0, 0, 0, 0);
+            context.Clear(1, 0, 0, 0);
             fsq.Materials[0].Shader = radiosityPassA;
             fsq.Draw(context);
 
             radiositySamplesPassB.Bind(context);
-            context.Clear(0, 0, 0, 0);
+            context.Clear(1, 0, 0, 0);
             fsq.Materials[0].Shader = radiosityPassB;
             fsq.Draw(context);
 

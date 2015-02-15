@@ -33,19 +33,27 @@ namespace Kokoro.OpenGL.PC
         {
             Window = new GLControl();
             Window.Size = new System.Drawing.Size(windowWidth, windowHeight);
-            
+
             Window.Resize += Window_Resize;
             Window.Load += Window_Load;
-            
         }
 
         void Window_Load(object sender, EventArgs e)
         {
-                inited = true;
-                //Depth Test is always enabled, it's a matter of what the depth function is
-                GL.Enable(EnableCap.DepthTest);
+            Window.GotFocus += ParentForm_GotFocus;
+            Window.LostFocus += ParentForm_LostFocus;
+            Window.ParentForm.Move += Window_Move;
+            Window.ParentForm.ResizeBegin += ParentForm_ResizeBegin;
+            Window.ParentForm.ResizeEnd += ParentForm_ResizeEnd;
+
+            inited = true;
+            //Depth Test is always enabled, it's a matter of what the depth function is
+            GL.Enable(EnableCap.DepthTest);
+            GL.Enable(EnableCap.LineSmooth);
+            GL.LineWidth(4);
 
         }
+
         void Window_Resize(object sender, EventArgs e)
         {
             //TODO Implement Resize handler
@@ -53,7 +61,6 @@ namespace Kokoro.OpenGL.PC
             InitializeMSAA(0);
         }
 
-        
         protected void Window_RenderFrame(double interval)
         {
             if (tmpCtrl == false)
@@ -85,6 +92,34 @@ namespace Kokoro.OpenGL.PC
             curRequestTexture = id;
         }
 #endif
+
+        #region Input Focus Handlers
+        void ParentForm_ResizeEnd(object sender, EventArgs e)
+        {
+            InputLL.IsFocused(Window.Focused);
+        }
+
+        void ParentForm_ResizeBegin(object sender, EventArgs e)
+        {
+            InputLL.IsFocused(Window.Focused);
+        }
+
+        void ParentForm_LostFocus(object sender, EventArgs e)
+        {
+            InputLL.IsFocused(false);
+        }
+
+        void ParentForm_GotFocus(object sender, EventArgs e)
+        {
+            InputLL.IsFocused(true);
+        }
+
+        void Window_Move(object sender, EventArgs e)
+        {
+            InputLL.SetWinXY(Window.ParentForm.DesktopLocation.X, Window.ParentForm.DesktopLocation.Y);
+        }
+
+        #endregion
 
         #region State Machine
         protected void aClear(float r, float g, float b, float a)

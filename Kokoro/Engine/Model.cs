@@ -31,6 +31,14 @@ namespace Kokoro.Engine
 
     public class Model : IDisposable
     {
+        public struct BoundingBox
+        {
+            public Vector3 Min;
+            public Vector3 Max;
+
+            public Vector3 Up;
+        };
+
         protected VertexBufferLL[] vbufs { get; set; }
 
         protected string filepath;
@@ -38,7 +46,9 @@ namespace Kokoro.Engine
         public Matrix4 World { get; set; }
         public Material[] Materials { get; set; }
         public DrawMode DrawMode { get; set; }
+        public BoundingBox Bound;
 
+        private static BoundingBox tmpBound;
         protected static Tuple<VertexBufferLL[], Texture[]> LoadModelVB(string filename, int frame)
         {
             AssimpContext context = new AssimpContext();
@@ -55,6 +65,7 @@ namespace Kokoro.Engine
                 Texture t;
                 Mesh m = model.Meshes[a];
 
+
                 if (m.MaterialIndex >= 0 && model.Materials[m.MaterialIndex].TextureDiffuse.FilePath != null) t = new Texture(Path.Combine(baseDir, model.Materials[m.MaterialIndex].TextureDiffuse.FilePath));
                 else
                 {
@@ -62,12 +73,25 @@ namespace Kokoro.Engine
                 }
                 texs.Add(t);
 
+                tmpBound.Min = new Vector3(m.Vertices[0].X, m.Vertices[0].Y, m.Vertices[0].Z);
+                tmpBound.Max = new Vector3(m.Vertices[0].X, m.Vertices[0].Y, m.Vertices[0].Z);
+
                 float[] vertices = new float[m.VertexCount * 3];
                 for (int v = 0; v < m.VertexCount * 3; v += 3)
                 {
                     vertices[v] = m.Vertices[(v - (v % 3)) / 3].X;
                     vertices[v + 1] = m.Vertices[(v - (v % 3)) / 3].Y;
                     vertices[v + 2] = m.Vertices[(v - (v % 3)) / 3].Z;
+
+                    if (vertices[v] < tmpBound.Min.X) tmpBound.Min.X = vertices[v];
+                    if (vertices[v + 1] < tmpBound.Min.Y) tmpBound.Min.Y = vertices[v + 1];
+                    if (vertices[v + 2] < tmpBound.Min.Z) tmpBound.Min.Z = vertices[v + 2];
+                    if (vertices[v] > tmpBound.Max.X) tmpBound.Max.X = vertices[v];
+                    if (vertices[v + 1] > tmpBound.Max.Y) tmpBound.Max.Y = vertices[v + 1];
+                    if (vertices[v + 2] > tmpBound.Max.Z) tmpBound.Max.Z = vertices[v + 2];
+
+                    //TODO Setup editor viewport, work on bounding box rendering, object selection
+
                 }
                 vbuf.SetVertices(vertices);
 
@@ -110,10 +134,10 @@ namespace Kokoro.Engine
                     }
                     vbuf.SetNormals(normals);
                 }
-                
-                
 
-                if(m.HasTangentBasis)
+
+
+                if (m.HasTangentBasis)
                 {
                     float[] tangents = new float[m.VertexCount * 3];
                     for (int v = 0; v < m.VertexCount * 3; v += 3)
@@ -147,6 +171,10 @@ namespace Kokoro.Engine
             }
             m.World = Matrix4.Identity;
 
+            m.Bound.Max = tmpBound.Max;
+            m.Bound.Min = tmpBound.Min;
+            
+
             return m;
         }
 
@@ -174,7 +202,7 @@ namespace Kokoro.Engine
             {
                 vbufs[a].DrawMode = this.DrawMode;
                 vbufs[a].Bind();
-                
+
                 if (PreDraw != null) PreDraw(context);
 
                 //Apply the Material
