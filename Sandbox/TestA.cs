@@ -12,6 +12,7 @@ using Kokoro.Engine.Prefabs;
 using Kokoro.Engine.Shaders;
 using Kokoro.Engine.HighLevel.Cameras;
 using Kokoro.Engine.HighLevel.Rendering;
+using Kokoro.Scripting;
 
 namespace Kokoro.Game
 {
@@ -21,9 +22,12 @@ namespace Kokoro.Game
         Texture tex;
         LightingEngine engine;
         ShaderProgram fur;
+        Script script;
 
         public TestA(GraphicsContext context)
         {
+            script = Script.Load("TestA.py", typeof(TestA).Assembly);
+
             engine = new LightingEngine(1920, 1080, context);
 
             context.Camera = new FirstPersonCamera(Vector3.Zero, Vector3.UnitZ);
@@ -34,8 +38,7 @@ namespace Kokoro.Game
                 Dst = BlendingFactor.OneMinusSrcAlpha
             };
 
-
-            model = Model.Load("room.obj");
+            model = script.Execute.Simple();
             //ground = Model.Load("Resources/ground.obj");
             tmp2 = Model.Load("roomItem.obj");
             aabb = new AABB(tmp2.Bound);
