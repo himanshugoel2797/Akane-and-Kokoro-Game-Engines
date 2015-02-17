@@ -48,7 +48,6 @@ namespace Kokoro.OpenGL.PC
         {
             int result = 0;
             GL.GetShader(id, ShaderParameter.CompileStatus, out result);
-            Console.WriteLine(fshader + "\n" + type.ToString() + " Shader Compilation Result: " + result.ToString("X8") + "\n");
             if (result != 1) throw new Exception(GL.GetShaderInfoLog(id));
         }
 

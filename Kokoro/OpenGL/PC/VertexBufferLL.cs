@@ -57,7 +57,6 @@ namespace Kokoro.OpenGL.PC
             GL.BufferData<T>(BufferTarget.ArrayBuffer, (IntPtr)(vertices.Length * Marshal.SizeOf(typeof(T))), vertices, BufferUsageHint.StaticDraw);
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
 
-            Console.WriteLine(vertices.Length);
             VertexCount = vertices.Length;
             GL.BindVertexArray(0);
         }

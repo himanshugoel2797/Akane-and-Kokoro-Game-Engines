@@ -269,7 +269,7 @@ namespace Kokoro.Engine
             UpdateThread = new Thread(() =>
             {
                 Stopwatch su = Stopwatch.StartNew();
-                bool skip = false;
+                //TODO: Implement skipping to prevent the spiral of death
                 while (true)
                 {
                     if (Update != null)
@@ -359,7 +359,7 @@ namespace Kokoro.Engine
         private void GameLooper(double timestep, Action<double, GraphicsContext> handler)
         {
             Stopwatch s = Stopwatch.StartNew();
-            bool skip = false;
+            //TODO: Implement skipping to avoid the spiral of death
             while (true)
             {
                 if (handler != null)
