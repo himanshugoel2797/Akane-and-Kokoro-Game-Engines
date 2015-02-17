@@ -68,6 +68,12 @@
     <Reference Include="BEPUutilities">
       <HintPath>..\packages\BEPUphysics.1.3.0\lib\net40\BEPUutilities.dll</HintPath>
     </Reference>
+    <Reference Include="DiscUtils">
+      <HintPath>..\packages\Discutils.0.11.0.2\lib\net40\DiscUtils.dll</HintPath>
+    </Reference>
+    <Reference Include="DiscUtils.Common">
+      <HintPath>..\packages\Discutils.0.11.0.2\lib\net40\DiscUtils.Common.dll</HintPath>
+    </Reference>
     <Reference Include="IronPython, Version=2.7.5.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\IronPython.2.7.5\lib\Net45\IronPython.dll</HintPath>
@@ -531,32 +537,17 @@
     <Compile Include="Engine\SceneGraph\SceneManager.cs" />
     <Compile Include="Engine\Shaders\FragmentShader.cs" />
     <Compile Include="Engine\Shaders\GeometryShader.cs" />
+    <Compile Include="Engine\Shaders\HLShader.cs" />
     <Compile Include="Engine\Shaders\Shader.cs" />
     <Compile Include="Engine\Shaders\ShaderProgram.cs" />
     <Compile Include="Engine\Shaders\TessellationShader.cs" />
     <Compile Include="Engine\Shaders\VertexShader.cs" />
     <Compile Include="Engine\Texture.cs" />
-    <Compile Include="KSL\KParams.cs" />
-    <Compile Include="KSL\KShader.cs" />
-    <Compile Include="KSL\KSLCompiler.cs" />
-    <Compile Include="KSL\Lib\General\Logic.cs" />
-    <Compile Include="KSL\Lib\General\Loop.cs" />
-    <Compile Include="KSL\Lib\IKShaderProgram.cs" />
-    <Compile Include="KSL\Lib\Math\INum.cs" />
-    <Compile Include="KSL\Lib\Math\KFloat.cs" />
-    <Compile Include="KSL\Lib\Math\KInt.cs" />
-    <Compile Include="KSL\Lib\Math\KMath.cs" />
-    <Compile Include="KSL\Lib\Math\Vec2.cs" />
-    <Compile Include="KSL\Lib\Math\Vec3.cs" />
-    <Compile Include="KSL\Lib\Math\Vec4.cs" />
-    <Compile Include="KSL\Lib\Texture\KTex.cs" />
-    <Compile Include="KSL\Lib\Texture\Texture.cs" />
-    <Compile Include="KSL\Lib\Texture\Texture1D.cs" />
-    <Compile Include="KSL\Lib\Texture\Texture2D.cs" />
     <Compile Include="Math\BezierCurve.cs" />
     <Compile Include="Math\BezierCurveCubic.cs" />
     <Compile Include="Math\BezierCurveQuadric.cs" />
     <Compile Include="Math\Box2.cs" />
+    <Compile Include="Math\FNV1a.cs" />
     <Compile Include="Math\Functions.cs" />
     <Compile Include="Math\Half.cs" />
     <Compile Include="Math\MathHelper.cs" />
@@ -1158,6 +1149,16 @@
     <Content Include="Lib\__future__.py" />
     <Content Include="Lib\__phello__.foo.py" />
     <Content Include="logo.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Kokoro.KSL\Kokoro.KSL.csproj">
+      <Project>{d2a4374b-97c9-4233-a071-bbe0126f74bf}</Project>
+      <Name>Kokoro.KSL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Kokoro.Shaders\Kokoro.Shaders.csproj">
+      <Project>{3cc9e16b-c337-420e-a9d2-d7203ce4abfe}</Project>
+      <Name>Kokoro.Shaders</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

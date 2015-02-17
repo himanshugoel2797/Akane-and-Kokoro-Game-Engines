@@ -116,7 +116,7 @@ namespace Kokoro.OpenGL.PC
 
         void Window_Move(object sender, EventArgs e)
         {
-            InputLL.SetWinXY(Window.ParentForm.DesktopLocation.X, Window.ParentForm.DesktopLocation.Y);
+            InputLL.SetWinXY(Window.ParentForm.DesktopLocation.X, Window.ParentForm.DesktopLocation.Y, Window.ParentForm.ClientSize.Width, Window.ParentForm.ClientSize.Height);
         }
 
         #endregion

@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Threading.Tasks;
 using Kokoro.Math;
+using Kokoro.KSL.Lib;
 
 #if OPENGL
 #if PC
@@ -18,22 +19,41 @@ namespace Kokoro.Engine.Shaders
     {
         public Action<GraphicsContext, ShaderProgram> PreApply { get; set; }
 
-        public ShaderProgram(params Shader[] shaders) : base(shaders) { }
+        public ShaderProgram(params HLShader[] shaders) : base(PreProcess(shaders)) { }
+        public ShaderProgram(IKShaderProgram shader) : base(PreProcess(shader)) { }
 
-        public ShaderProgram(string directory) : base(ProcessParams(directory)) { }
-
-        private static Shader[] ProcessParams(string file)
+        private static Shader[] PreProcess(HLShader[] shaders)
         {
-            List<Shader> shaders = new List<Shader>();
-            if (File.Exists(Path.Combine(file, "vertex.glsl"))) shaders.Add(new VertexShader(file));
-            if (File.Exists(Path.Combine(file, "fragment.glsl"))) shaders.Add(new FragmentShader(file));
-            if (File.Exists(Path.Combine(file, "geometry.glsl"))) shaders.Add(new GeometryShader(file));
-            return shaders.ToArray();
+            List<Shader> compiledshaders = new List<Shader>();
+
+            foreach (HLShader s in shaders)
+            {
+                switch (s.ShaderType)
+                {
+                    case ShaderTypes.Vertex:
+                        compiledshaders.Add(new VertexShader(KSL.KSLCompiler.Compile(s.Shader, (KSL.KSLCompiler.KShaderType)(int)s.ShaderType)));
+                        break;
+                    case ShaderTypes.Fragment:
+                        compiledshaders.Add(new FragmentShader(KSL.KSLCompiler.Compile(s.Shader, (KSL.KSLCompiler.KShaderType)(int)s.ShaderType)));
+                        break;
+                    case ShaderTypes.Geometry:
+                        compiledshaders.Add(new GeometryShader(KSL.KSLCompiler.Compile(s.Shader, (KSL.KSLCompiler.KShaderType)(int)s.ShaderType)));
+                        break;
+                }
+            }
+            return compiledshaders.ToArray();
+        }
+        private static Shader[] PreProcess(IKShaderProgram shader)
+        {
+            return new Shader[] {
+                new VertexShader(KSL.KSLCompiler.Compile(shader, KSL.KSLCompiler.KShaderType.Vertex)),
+                new FragmentShader(KSL.KSLCompiler.Compile(shader, KSL.KSLCompiler.KShaderType.Fragment))
+            };
         }
 
         public void Apply(GraphicsContext context)
         {
-            if(PreApply != null)PreApply(context, this);
+            if (PreApply != null) PreApply(context, this);
             base.sApply(context);
         }
 

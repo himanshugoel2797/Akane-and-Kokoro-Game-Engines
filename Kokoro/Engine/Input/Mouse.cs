@@ -43,6 +43,16 @@ namespace Kokoro.Engine.Input
         }
         public static Vector2 MouseDelta { get; private set; }
         public static MouseButtons ButtonsDown { get; private set; }
+        public static Vector2 NDMousePos
+        {
+            get; private set;
+        }
+        public static Matrix4 MouseProjection { get; private set; }
+
+        static Mouse()
+        {
+            MouseProjection = Matrix4.CreateOrthographicOffCenter(0, 1, 1, 0, 0.01f, 1);
+        }
 
         internal static void Update()
         {
@@ -59,6 +69,8 @@ namespace Kokoro.Engine.Input
                     Right = InputLL.RightMouseButtonDown(),
                     Middle = InputLL.MiddleMouseButtonDown()
                 };
+
+                NDMousePos = InputLL.GetNDMousePos(curMouse);
             }
 
         }

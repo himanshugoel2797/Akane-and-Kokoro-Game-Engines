@@ -73,6 +73,10 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Kokoro.KSL\Kokoro.KSL.csproj">
+      <Project>{d2a4374b-97c9-4233-a071-bbe0126f74bf}</Project>
+      <Name>Kokoro.KSL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Kokoro\Kokoro.csproj">
       <Project>{6d8eb8bd-f8ad-4fe1-995f-4eefbc2bc8f5}</Project>
       <Name>Kokoro</Name>

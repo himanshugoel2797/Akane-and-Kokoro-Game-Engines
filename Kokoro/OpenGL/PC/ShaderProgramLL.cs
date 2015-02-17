@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Kokoro.Engine.Shaders;
 using Kokoro.Math;
 using Kokoro.Engine;
-
 using OpenTK.Graphics.OpenGL4;
 
 namespace Kokoro.OpenGL.PC

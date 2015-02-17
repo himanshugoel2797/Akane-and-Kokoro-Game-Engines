@@ -103,7 +103,7 @@ namespace Kokoro.ColladaLL
 				ColladaLL col_scenes = null;
                 
 				XmlSerializer sr = new XmlSerializer(typeof(ColladaLL));
-                TextReader tr = new StreamReader(file_name);
+                TextReader tr = new StreamReader(VFS.FSReader.OpenFile(file_name));
                 col_scenes = (ColladaLL)(sr.Deserialize(tr));
 				
                 tr.Close();

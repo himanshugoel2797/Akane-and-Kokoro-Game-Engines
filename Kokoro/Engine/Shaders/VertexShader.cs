@@ -9,35 +9,6 @@ namespace Kokoro.Engine.Shaders
 {
     public class VertexShader : Shader
     {
-        private static Dictionary<string, int> vshaderDB = new Dictionary<string, int>();
-
-        public VertexShader(string fshader)
-        {
-            base.shaderType = ShaderTypes.Vertex;
-            if (!vshaderDB.ContainsKey(fshader + "/vertex.glsl"))
-            {
-                fshader += "/vertex.glsl";
-                string file = "#version 430 core \n " + File.ReadAllText(fshader);
-
-                id = base.aCreate(base.shaderType, file);
-                base.CheckForErrors(fshader, base.shaderType);
-
-                vshaderDB.Add(fshader, base.id);
-            }
-            else
-            {
-                fshader += "/vertex.glsl";
-                base.id = vshaderDB[fshader];
-            }
-            Kokoro.Debug.ObjectAllocTracker.NewCreated(this, id, "Vertex Shader");
-        }
-
-
-#if DEBUG
-        ~VertexShader()
-        {
-            Kokoro.Debug.ObjectAllocTracker.ObjectDestroyed(this, id, "Vertex Shader");
-        }
-#endif
+        public VertexShader(string fshader) : base(fshader, ShaderTypes.Vertex){ }
     }
 }

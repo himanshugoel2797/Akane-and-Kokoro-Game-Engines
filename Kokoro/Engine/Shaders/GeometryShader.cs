@@ -9,34 +9,6 @@ namespace Kokoro.Engine.Shaders
 {
     public class GeometryShader : Shader
     {
-        private static Dictionary<string, int> gshaderDB = new Dictionary<string, int>();
-
-        public GeometryShader(string fshader)
-        {
-            base.shaderType = ShaderTypes.Geometry;
-            if (!gshaderDB.ContainsKey(fshader + "/geometry.glsl"))
-            {
-                fshader += "/geometry.glsl";
-                string file = "#version 430 core \n " + File.ReadAllText(fshader);
-                
-                base.aCreate(base.shaderType, file);
-                base.CheckForErrors(fshader, base.shaderType);
-
-                gshaderDB.Add(fshader, base.id);
-            }
-            else
-            {
-                fshader += "/geometry.glsl";
-                base.id = gshaderDB[fshader];
-            }
-            Kokoro.Debug.ObjectAllocTracker.NewCreated(this, id, "Geometry Shader");
-        }
-        
-#if DEBUG
-        ~GeometryShader()
-        {
-            Kokoro.Debug.ObjectAllocTracker.ObjectDestroyed(this, id, "Geometry Shader");
-        }
-#endif
+        public GeometryShader(string fshader) : base(fshader, ShaderTypes.Geometry) { }
     }
 }

@@ -18,65 +18,22 @@ namespace Kokoro.Engine.Shaders
             base.aSetPatchSize(num);
         }
 
-        public TessellationShader(string controlShader, string evalShader)
+        public TessellationShader(string controlShader, string evalShader) : base("", ShaderTypes.TessellationComb)
         {
-            base.shaderType = ShaderTypes.TessellationControl;
             eval = new TessellationEvalShader(evalShader);
             control = new TessellationControlShader(controlShader);
             SetPatchSize(3);
         }
-
-        public TessellationShader(string name) : this(name, name) { }
     }
 
     class TessellationControlShader : Shader
     {
-        private static Dictionary<string, int> tcsShaderDB = new Dictionary<string, int>();
-
-        public TessellationControlShader(string fshader)
-        {
-            base.shaderType = ShaderTypes.TessellationControl;
-            if (!tcsShaderDB.ContainsKey(fshader + "/tessControl.glsl"))
-            {
-
-                fshader += "/tessControl.glsl";
-                string file = "#version 430 core \n " + File.ReadAllText(fshader);
-
-                id = base.aCreate(base.shaderType, file);
-                base.CheckForErrors(fshader, base.shaderType);
-                tcsShaderDB.Add(fshader, base.id);
-            }
-            else
-            {
-                fshader += "/tessControl.glsl";
-                base.id = tcsShaderDB[fshader];
-            }
-        }
+        public TessellationControlShader(string fshader) : base(fshader, ShaderTypes.TessellationControl) { }
 
     }
 
     class TessellationEvalShader : Shader
     {
-        private static Dictionary<string, int> tesShaderDB = new Dictionary<string, int>();
-
-        public TessellationEvalShader(string fshader)
-        {
-            base.shaderType = ShaderTypes.TessellationEval;
-            if (!tesShaderDB.ContainsKey(fshader + "/tessEval.glsl"))
-            {
-                fshader += "/tessEval.glsl";
-                string file = "#version 430 core \n " + File.ReadAllText(fshader);
-                id = base.aCreate(base.shaderType, file);
-
-                base.CheckForErrors(fshader, base.shaderType);
-                tesShaderDB.Add(fshader, base.id);
-            }
-            else
-            {
-                fshader += "/tessEval.glsl";
-                base.id = tesShaderDB[fshader];
-            }
-        }
-
+        public TessellationEvalShader(string fshader) : base(fshader, ShaderTypes.TessellationEval) { }
     }
 }

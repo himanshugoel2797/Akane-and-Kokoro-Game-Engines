@@ -20,14 +20,16 @@ namespace Kokoro.OpenGL.PC
         }
 
         static bool foc;
-        static Vector2 xy;
+        public static Vector2 xy;
+        public static Vector2 dim;
         internal static void IsFocused(bool focused)
         {
             foc = focused;
         }
-        internal static void SetWinXY(int x, int y)
+        internal static void SetWinXY(int x, int y, int width, int height)
         {
             xy = new Vector2(x, y);
+            dim = new Vector2(width, height);
         }
 
         #region Keyboard
@@ -94,6 +96,10 @@ namespace Kokoro.OpenGL.PC
         }
         public static void SetMousePos(Vector2 pos) { Mouse.SetPosition(pos.X, pos.Y); }
 
+        public static Vector2 GetNDMousePos(Vector2 mousePos)
+        {
+            return new Vector2((mousePos.X - xy.X) / dim.X, (mousePos.Y - xy.Y) / dim.Y);
+        }
         #endregion
     }
 }

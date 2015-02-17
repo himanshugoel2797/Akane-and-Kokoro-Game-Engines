@@ -168,7 +168,7 @@
   <Class Name="Kokoro.Engine.Input.Mouse" Collapsed="true">
     <Position X="14.75" Y="3.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>QEQAAAAAAAAAIAAAAQAAAAAAAAAAAAAAAQAAAAgAAAA=</HashCode>
+      <HashCode>QEQAAAAAAAAAIAAAAQAAAAAAAAACAAAEAQAAAAgAAAA=</HashCode>
       <FileName>Engine\Input\Mouse.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -218,28 +218,28 @@
   <Class Name="Kokoro.Engine.Shaders.FragmentShader" Collapsed="true">
     <Position X="10" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Engine\Shaders\FragmentShader.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kokoro.Engine.Shaders.GeometryShader" Collapsed="true">
     <Position X="12.25" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Engine\Shaders\GeometryShader.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kokoro.Engine.Shaders.Shader" Collapsed="true">
     <Position X="6.5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAEAgAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAEAAAAAAAAABAAEAgAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Engine\Shaders\Shader.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kokoro.Engine.Shaders.ShaderProgram" Collapsed="true">
     <Position X="3.5" Y="8.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AACIAAAAABAAAAAAiAAAAAAAACAAAAAAAMAAAEAAAAA=</HashCode>
+      <HashCode>AACAAAAAABAAAAAAiAAAAAAAACAAAAAAAMAAAEAAAAA=</HashCode>
       <FileName>Engine\Shaders\ShaderProgram.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -254,43 +254,22 @@
   <Class Name="Kokoro.Engine.Shaders.TessellationControlShader" Collapsed="true">
     <Position X="3.25" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Engine\Shaders\TessellationShader.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kokoro.Engine.Shaders.TessellationEvalShader" Collapsed="true">
     <Position X="5.5" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Engine\Shaders\TessellationShader.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kokoro.Engine.Shaders.VertexShader" Collapsed="true">
     <Position X="7.75" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Engine\Shaders\VertexShader.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Kokoro.KSL.KParams" Collapsed="true">
-    <Position X="21.75" Y="1.5" Width="1.5" />
-    <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>KSL\KParams.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Kokoro.KSL.KShader" Collapsed="true">
-    <Position X="23.5" Y="1.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAABAAAIARABAAAAAAAAAAAAAAAAAAAAAAAAAEAAhEA=</HashCode>
-      <FileName>KSL\KShader.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Kokoro.KSL.KSLCompiler" Collapsed="true">
-    <Position X="14.75" Y="2.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEA=</HashCode>
-      <FileName>KSL\KSLCompiler.cs</FileName>
+      <FileName>Engine\Shaders\VertexShader.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kokoro.Math.Functions" Collapsed="true">
@@ -338,7 +317,7 @@
   <Class Name="Kokoro.OpenGL.PC.InputLL" Collapsed="true">
     <Position X="18.25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAoAAAADCABBoIAAAAAgAAAAIBAAgCAAABIAAAAEAAg=</HashCode>
+      <HashCode>AAoAAAADCCBBoIAAAAAgAAAAIBBAgCAAABIAAAAEAAg=</HashCode>
       <FileName>OpenGL\PC\Input.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -662,7 +641,7 @@
   <Enum Name="Kokoro.Engine.Shaders.ShaderTypes" Collapsed="true">
     <Position X="21.75" Y="11.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AABAAAAAAQABAAAAAAAAAAAAAAACAAAAAAAAAAAAgAA=</HashCode>
+      <HashCode>AABAAAAAAQABAAAAAAAAAAAAAAACAAAAQAAAAAAAgAA=</HashCode>
       <FileName>Engine\Shaders\Shader.cs</FileName>
     </TypeIdentifier>
   </Enum>

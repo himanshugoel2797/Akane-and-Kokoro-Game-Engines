@@ -16,7 +16,7 @@ namespace Kokoro.Engine.Shaders
 {
     public enum ShaderTypes
     {
-        Vertex = 0, Fragment = 4, Geometry = 3, TessellationControl = 1, TessellationEval = 2
+        Vertex = 0, Fragment = 4, Geometry = 3, TessellationControl = 1, TessellationEval = 2, TessellationComb = 5
     }
 
     /// <summary>
@@ -24,6 +24,38 @@ namespace Kokoro.Engine.Shaders
     /// </summary>
     public class Shader : ShaderLL
     {
+        private static Dictionary<byte[], int> shaderDB = new Dictionary<byte[], int>();
+        private static FNV1a fnv = new FNV1a();
+
+        protected Shader(string shader, ShaderTypes type)
+        {
+            base.shaderType = type;
+            if (type != ShaderTypes.TessellationComb)
+            {
+                byte[] hash = fnv.ComputeHash(Encoding.UTF8.GetBytes(shader));
+
+                if (!shaderDB.ContainsKey(hash))
+                {
+                    id = base.aCreate(base.shaderType, shader);
+                    base.CheckForErrors(shader, base.shaderType);
+
+                    shaderDB.Add(hash, base.id);
+                }
+                else
+                {
+                    base.id = shaderDB[hash];
+                }
+                Kokoro.Debug.ObjectAllocTracker.NewCreated(this, id, type.ToString() + " Shader");
+            }
+        }
+
+#if DEBUG
+        ~Shader()
+        {
+            Kokoro.Debug.ObjectAllocTracker.ObjectDestroyed(this, id, base.shaderType.ToString() + " Shader");
+        }
+#endif
+
         internal ShaderTypes GetShaderType()
         {
             return pGetShaderType();
