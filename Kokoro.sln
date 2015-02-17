@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.22310.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kokoro", "Kokoro\Kokoro.csproj", "{6D8EB8BD-F8AD-4FE1-995F-4EEFBC2BC8F5}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -42,8 +42,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImoutoPlatformer", "ImoutoPlatformer\ImoutoPlatformer.csproj", "{A050D0CF-8E71-40B2-BCDC-765100464E19}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimationMaker", "AnimationMaker\AnimationMaker.csproj", "{89702D86-190A-4C0D-A751-EBBA9C3598D1}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kokoro.Editor", "Kokoro.Editor\Kokoro.Editor.csproj", "{F3393678-9660-4637-B160-282538120E56}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -95,10 +93,6 @@ Global
 		{89702D86-190A-4C0D-A751-EBBA9C3598D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89702D86-190A-4C0D-A751-EBBA9C3598D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89702D86-190A-4C0D-A751-EBBA9C3598D1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F3393678-9660-4637-B160-282538120E56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F3393678-9660-4637-B160-282538120E56}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F3393678-9660-4637-B160-282538120E56}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F3393678-9660-4637-B160-282538120E56}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -113,6 +107,5 @@ Global
 		{02262FDE-922E-41C3-9E29-C88D466522A4} = {B093D051-CCB5-40FA-8FA1-24B1D5C13AAB}
 		{A050D0CF-8E71-40B2-BCDC-765100464E19} = {6ED43B58-CBFE-45B3-B24A-AAC955F18CFE}
 		{89702D86-190A-4C0D-A751-EBBA9C3598D1} = {0306BFB8-4DB5-4877-8345-8A764A28E689}
-		{F3393678-9660-4637-B160-282538120E56} = {35FBC9E0-CFBE-493E-B208-B6C1CC9C6769}
 	EndGlobalSection
 EndGlobal

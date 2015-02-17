@@ -17,7 +17,8 @@ namespace Kokoro.Engine.Input
     /// <summary>
     /// Stores the states of the Mouse buttons
     /// </summary>
-    public struct MouseButtons{
+    public struct MouseButtons
+    {
         public bool Left;
         public bool Right;
         public bool Middle;
@@ -47,13 +48,10 @@ namespace Kokoro.Engine.Input
         {
             lock (locker)
             {
-                if (curMouse != null) prevMouse = curMouse;
+                prevMouse = curMouse;
                 curMouse = InputLL.UpdateMouse();
 
-                if (prevMouse != null)
-                {
-                    MouseDelta = prevMouse - curMouse;
-                }
+                MouseDelta = prevMouse - curMouse;
 
                 ButtonsDown = new MouseButtons()
                 {

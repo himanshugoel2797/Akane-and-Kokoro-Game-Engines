@@ -201,6 +201,20 @@
     <Compile Include="KSL\KParams.cs" />
     <Compile Include="KSL\KShader.cs" />
     <Compile Include="KSL\KSLCompiler.cs" />
+    <Compile Include="KSL\Lib\General\Logic.cs" />
+    <Compile Include="KSL\Lib\General\Loop.cs" />
+    <Compile Include="KSL\Lib\IKShaderProgram.cs" />
+    <Compile Include="KSL\Lib\Math\INum.cs" />
+    <Compile Include="KSL\Lib\Math\KFloat.cs" />
+    <Compile Include="KSL\Lib\Math\KInt.cs" />
+    <Compile Include="KSL\Lib\Math\KMath.cs" />
+    <Compile Include="KSL\Lib\Math\Vec2.cs" />
+    <Compile Include="KSL\Lib\Math\Vec3.cs" />
+    <Compile Include="KSL\Lib\Math\Vec4.cs" />
+    <Compile Include="KSL\Lib\Texture\KTex.cs" />
+    <Compile Include="KSL\Lib\Texture\Texture.cs" />
+    <Compile Include="KSL\Lib\Texture\Texture1D.cs" />
+    <Compile Include="KSL\Lib\Texture\Texture2D.cs" />
     <Compile Include="Math\BezierCurve.cs" />
     <Compile Include="Math\BezierCurveCubic.cs" />
     <Compile Include="Math\BezierCurveQuadric.cs" />
@@ -239,8 +253,8 @@
     <Compile Include="OpenGL\PC\TextureLL.cs" />
     <Compile Include="OpenGL\PC\VertexBufferLL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Scripting\CScript.cs" />
     <Compile Include="Scripting\PyScript.cs" />
+    <Compile Include="VFS\FSReader.cs" />
     <EmbeddedResource Include="Debug\LogViewer.resx">
       <DependentUpon>LogViewer.cs</DependentUpon>
     </EmbeddedResource>
@@ -257,6 +271,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram4.cd" />
     <None Include="Lib\ensurepip\_bundled\pip-1.5.6-py2.py3-none-any.whl" />
     <None Include="Lib\ensurepip\_bundled\setuptools-3.6-py2.py3-none-any.whl" />
     <None Include="packages.config" />

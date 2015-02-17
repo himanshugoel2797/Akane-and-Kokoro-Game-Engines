@@ -31,6 +31,8 @@ namespace Kokoro.Engine.Shaders
             }
             Kokoro.Debug.ObjectAllocTracker.NewCreated(this, id, "Vertex Shader");
         }
+
+
 #if DEBUG
         ~VertexShader()
         {
