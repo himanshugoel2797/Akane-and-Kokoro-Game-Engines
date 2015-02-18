@@ -6,11 +6,25 @@ using System.Threading.Tasks;
 
 namespace Kokoro.KSL.Lib.Math
 {
-    public class Vec4 : INum
+    public class Vec4 : Obj
     {
-        public Vec4(KInt i)
+        public void Assign(KInt k)
         {
-            //Call the base translation code
+            SyntaxTree.Instructions.Enqueue(new SyntaxTree.Instruction()
+            {
+                instructionType = SyntaxTree.InstructionType.Assign,
+                Parameters = new string[] { this.ObjName, k.ObjName }
+            });
         }
+
+        public void Assign(Vec4 k)
+        {
+            SyntaxTree.Instructions.Enqueue(new SyntaxTree.Instruction()
+            {
+                instructionType = SyntaxTree.InstructionType.Assign,
+                Parameters = new string[] { this.ObjName, k.ObjName }
+            });
+        }
+
     }
 }

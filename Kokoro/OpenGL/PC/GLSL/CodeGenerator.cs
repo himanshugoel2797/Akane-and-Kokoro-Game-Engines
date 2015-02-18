@@ -37,5 +37,10 @@ namespace Kokoro.OpenGL.PC.GLSL
             return tStr;
         }
 
+        internal static void TypeDeclaration(Type t, object val)
+        {
+            src += ConvertType(t) + "(" + val.ToString() + ")";
+        }
+
     }
 }

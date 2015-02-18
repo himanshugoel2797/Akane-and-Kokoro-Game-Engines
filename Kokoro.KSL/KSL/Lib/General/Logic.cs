@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kokoro.KSL.Lib.General
 {
-    public class Logic
+    class Logic
     {
     }
 }

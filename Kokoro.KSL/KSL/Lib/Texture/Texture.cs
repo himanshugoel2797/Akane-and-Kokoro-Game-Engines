@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kokoro.KSL.Lib.Texture
 {
-    public interface Texture
+    class Texture
     {
     }
 }

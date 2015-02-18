@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kokoro.KSL.Lib.Math
 {
-    public class Vec3 : INum
+    public class Vec3 : Obj
     {
     }
 }

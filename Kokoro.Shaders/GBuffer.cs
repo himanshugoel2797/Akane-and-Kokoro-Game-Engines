@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kokoro.KSL.Lib.Math
+namespace Kokoro.Shaders
 {
-    public abstract class INum
+    class GBuffer
     {
-        internal string VarName;
     }
 }

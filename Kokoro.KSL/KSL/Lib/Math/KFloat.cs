@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kokoro.KSL.Lib.Math
 {
-    public class KFloat : INum
+    public class KFloat : Obj
     {
     }
 }

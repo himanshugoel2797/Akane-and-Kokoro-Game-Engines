@@ -6,22 +6,96 @@ using System.Threading.Tasks;
 
 namespace Kokoro.KSL.Lib.Math
 {
-    public class KInt : INum
+    public class KInt : Obj
     {
-        private int value;
-
-
-        public static implicit operator int(KInt i)
+        public void Assign(KInt k)
         {
-            return i.value;
+            SyntaxTree.Instructions.Enqueue(new SyntaxTree.Instruction()
+            {
+                instructionType = SyntaxTree.InstructionType.Assign,
+                Parameters = new string[] { this.ObjName, k.ObjName }
+            });
         }
 
+        public override object GetDefaultValue()
+        {
+            return 0;
+        }
+
+        #region Operators
+        public static KInt operator *(KInt a, KInt b)
+        {
+            SyntaxTree.AssignmentBuffer.Enqueue(new SyntaxTree.Instruction()
+            {
+                instructionType = SyntaxTree.InstructionType.Math,
+                Parameters = new string[] { a.ObjName, "*", b.ObjName }
+            });
+
+
+            return (KInt)new Obj()
+            {
+                ObjName = "(" + a.ObjName + "*" + b.ObjName + ")"
+            };
+        }
+
+        public static KInt operator /(KInt a, KInt b)
+        {
+            SyntaxTree.AssignmentBuffer.Enqueue(new SyntaxTree.Instruction()
+            {
+                instructionType = SyntaxTree.InstructionType.Math,
+                Parameters = new string[] { a.ObjName, "/", b.ObjName }
+            });
+
+
+            return (KInt)new Obj()
+            {
+                ObjName = "(" + a.ObjName + "/" + b.ObjName + ")"
+            };
+        }
+
+        public static KInt operator +(KInt a, KInt b)
+        {
+            SyntaxTree.AssignmentBuffer.Enqueue(new SyntaxTree.Instruction()
+            {
+                instructionType = SyntaxTree.InstructionType.Math,
+                Parameters = new string[] { a.ObjName, "+", b.ObjName }
+            });
+
+
+            return new KInt()
+            {
+                ObjName = "(" + a.ObjName + "+" + b.ObjName + ")"
+            };
+        }
+
+        public static KInt operator -(KInt a, KInt b)
+        {
+            SyntaxTree.AssignmentBuffer.Enqueue(new SyntaxTree.Instruction()
+            {
+                instructionType = SyntaxTree.InstructionType.Math,
+                Parameters = new string[] { a.ObjName, "-", b.ObjName }
+            });
+
+            return (KInt)new Obj()
+            {
+                ObjName = "(" + a.ObjName + "-" + b.ObjName + ")"
+            };
+        }
+        #endregion
+
+        #region Converters
         public static implicit operator KInt(int i)
         {
-            KInt k = new KInt();
-            k.value = i;
-            return k;
-        }
+            SyntaxTree.AssignmentBuffer.Enqueue(new SyntaxTree.Instruction()
+            {
+                instructionType = SyntaxTree.InstructionType.Math,
+                Parameters = new string[] { i.ToString() }
+            });
 
+            return new KInt() {
+                ObjName = i.ToString()
+            };
+        }
+        #endregion
     }
 }

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 #if GLSL
-using Kokoro.KSL.GLSL;
+using CodeGenerator = Kokoro.KSL.GLSL.GLSLCodeGenerator;
 #if PC
 using Kokoro.KSL.GLSL.PC;
 #endif
@@ -23,17 +23,21 @@ namespace Kokoro.KSL
 
         public static string Compile(IKShaderProgram shader, KShaderType s)
         {
-            
+
             //Execute the object and collect the output code from the code generator
-            GLSLCodeGenerator.Init();
-            shader.Vertex();
-            string vshader = GLSLCodeGenerator.GetShader();
+            
+            switch (s)
+            {
+                case KShaderType.Vertex:
+                    shader.Vertex();
+                    break;
+            }
 
-            GLSLCodeGenerator.Init();
-            shader.Fragment();
-            string fshader = GLSLCodeGenerator.GetShader();
+            
 
-            return null;
+            string vshader = CodeGenerator.CompileFromSyntaxTree(s);
+
+            return vshader;
         }
 
     }
