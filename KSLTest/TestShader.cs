@@ -15,25 +15,31 @@ namespace KSLTest
     {
         public void Fragment()
         {
-            
+
         }
 
         public void Vertex()
         {
             dynamic Variables = Manager.ShaderStart();
-            Manager.StreamOut<Vec4>("color", 0);
+            Manager.StreamIn<Vec4>("vertexPos", 0);
+            Manager.StreamIn<Vec2>("UV", 1);
+            Manager.StreamIn<Vec3>("Normals", 2);
+            Manager.StreamIn<Vec3>("Tangents", 3);
+
+
             Manager.Uniform<KInt>("k");
+            Manager.Create<KInt>("l");
+            Manager.Create<Vec4>("pos");
 
-            Manager.Create<KInt>("l", Variables.k);
-
-            Variables.l += 5;
-            Variables.color = Variables.l ;
-
+            R(Variables);
         }
 
-        public void R()
+        public void R(dynamic Variables)
         {
-
+            Variables.l = (KInt)5;
+            Variables.k *= Variables.l;
+            Variables.color = (Vec4)Variables.k;
+            Variables.pos = Variables.color;
         }
     }
 }

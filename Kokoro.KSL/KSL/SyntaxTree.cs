@@ -37,5 +37,6 @@ namespace Kokoro.KSL
         internal static Dictionary<string, Variable> SharedVariables = new Dictionary<string, Variable>();
         internal static Queue<Instruction> Instructions = new Queue<Instruction>();
         internal static Queue<Instruction> AssignmentBuffer = new Queue<Instruction>();
+        internal static Dictionary<string, Variable> PreDefinedVariables = new Dictionary<string, Variable>();
     }
 }

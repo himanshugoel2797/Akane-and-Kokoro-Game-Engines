@@ -82,16 +82,22 @@ namespace Kokoro.KSL.GLSL
                 switch (instruction.instructionType)
                 {
                     case SyntaxTree.InstructionType.Assign:
-                        strBuilder.AppendFormat("{0} = {1};\n", instruction.Parameters[0], instruction.Parameters[1]);
+                        if (SyntaxTree.Variables.ContainsKey(instruction.Parameters[1]) && SyntaxTree.Variables[instruction.Parameters[0]].type == SyntaxTree.Variables[instruction.Parameters[1]].type)
+                        {
+                            strBuilder.AppendFormat("{0} = {1};\n", instruction.Parameters[0], instruction.Parameters[1]);
+                        }else if(SyntaxTree.Variables.ContainsKey(instruction.Parameters[1]) && SyntaxTree.Variables[instruction.Parameters[0]].type != SyntaxTree.Variables[instruction.Parameters[1]].type)
+                        {
+                            strBuilder.AppendFormat("{0} = {1}({2});\n", instruction.Parameters[0], ConvertType(SyntaxTree.Variables[instruction.Parameters[0]].type),  instruction.Parameters[1]);
+                        }
+                        else
+                        {
+                            strBuilder.AppendFormat("{0} = {1};\n", instruction.Parameters[0], instruction.Parameters[1]);
+                        }
                         break;
 
                     case SyntaxTree.InstructionType.Create:
                         SyntaxTree.Variable VAR = SyntaxTree.Variables[instruction.Parameters[0]];
                         strBuilder.AppendFormat("{0} {1};\n", ConvertType(VAR.type), VAR.name);
-                        break;
-
-                    case SyntaxTree.InstructionType.Math:
-                        strBuilder.AppendFormat("{0} = {1} {2} {3};\n", instruction.Parameters[0], instruction.Parameters[1], instruction.Parameters[2], instruction.Parameters[3]);
                         break;
                 }
             }

@@ -10,26 +10,68 @@ namespace Kokoro.KSL.Lib
 {
     public class Manager
     {
-        static dynamic VarDB;
+        internal static dynamic VarDB;
 
         private static void HandlePropertyChanges(
         object sender, PropertyChangedEventArgs e)
         {
-            if (((IDictionary<string, object>)VarDB)[e.PropertyName] as Obj != null)
+            if (((IDictionary<string, object>)VarDB)[e.PropertyName] as Obj != null && e.PropertyName != ((Obj)((IDictionary<string, object>)VarDB)[e.PropertyName]).ObjName)
             {
                 SyntaxTree.Instructions.Enqueue(new SyntaxTree.Instruction()
                 {
                     instructionType = SyntaxTree.InstructionType.Assign,
                     Parameters = new string[] { e.PropertyName, ((Obj)((IDictionary<string, object>)VarDB)[e.PropertyName]).ObjName }
                 });
+
+                ((Obj)((IDictionary<string, object>)VarDB)[e.PropertyName]).ObjName = e.PropertyName;
             }
         }
 
         public static dynamic ShaderStart()
         {
             VarDB = new ExpandoObject();
+
+            //Define predefined variables beforehand
+            SyntaxTree.PreDefinedVariables = new Dictionary<string, SyntaxTree.Variable>();
+            SyntaxTree.PreDefinedVariables.Add("VertexPosition", new SyntaxTree.Variable()
+            {
+                name = "VertexPosition",
+                paramType = SyntaxTree.ParameterType.Variable,
+                type = typeof(Math.Vec4),
+                value = null
+            });
+            SyntaxTree.PreDefinedVariables.Add("VertexID", new SyntaxTree.Variable()
+            {
+                name = "VertexID",
+                paramType = SyntaxTree.ParameterType.Variable,
+                type = typeof(Math.KInt),
+                value = null
+            });
+            SyntaxTree.PreDefinedVariables.Add("InstanceID", new SyntaxTree.Variable()
+            {
+                name = "InstanceID",
+                paramType = SyntaxTree.ParameterType.Variable,
+                type = typeof(Math.KInt),
+                value = null
+            });
+            SyntaxTree.PreDefinedVariables.Add("FragCoord", new SyntaxTree.Variable()
+            {
+                name = "FragCoord",
+                paramType = SyntaxTree.ParameterType.Variable,
+                type = typeof(Math.Vec4),
+                value = null
+            });
+            //TODO add more variables into the shader compiler?
+
+
             ((INotifyPropertyChanged)VarDB).PropertyChanged +=
             new PropertyChangedEventHandler(HandlePropertyChanges);
+
+            SyntaxTree.AssignmentBuffer = new Queue<SyntaxTree.Instruction>();
+            SyntaxTree.Instructions = new Queue<SyntaxTree.Instruction>();
+            SyntaxTree.Parameters = new Dictionary<string, SyntaxTree.Variable>();
+            SyntaxTree.SharedVariables = new Dictionary<string, SyntaxTree.Variable>();
+            SyntaxTree.Variables = new Dictionary<string, SyntaxTree.Variable>();
 
             return VarDB;
         }
@@ -130,14 +172,16 @@ namespace Kokoro.KSL.Lib
             ((IDictionary<string, object>)VarDB).Add(name, tmp);
         }
 
-        public static void Create<T>(string name, T val) where T : Obj, new()
+        public static void Create<T>(string name) where T : Obj, new()
         {
-            //TODO Implement type specific object value assigners
+            T tmp = new T();
+            tmp.ObjName = name;
 
+            //TODO Implement type specific object value assigners
             SyntaxTree.Variables.Add(name, new SyntaxTree.Variable()
             {
                 type = typeof(T),
-                value = val,
+                value = null,
                 paramType = SyntaxTree.ParameterType.Variable,
                 name = name
             });
@@ -148,25 +192,19 @@ namespace Kokoro.KSL.Lib
                 Parameters = new string[] { name }
             });
 
-            SyntaxTree.Instructions.Enqueue(new SyntaxTree.Instruction()
-            {
-                instructionType = SyntaxTree.InstructionType.Assign,
-                Parameters = new string[] { name, (val == null) ? "" : ((val.ToString() == "") ? val.ObjName : val.ToString()) }
-            });
-
-            ((IDictionary<string, object>)VarDB).Add(name, val);
+            ((IDictionary<string, object>)VarDB).Add(name, tmp);
         }
 
         static int tmpVarIDs = 0;
-        internal static string TemporaryVariable<T>(T val = null) where T : Obj, new()
+        internal static string TemporaryVariable<T>() where T : Obj, new()
         {
-            Create<T>("tmp" + tmpVarIDs++, val);
+            Create<T>("tmp" + tmpVarIDs++);
             return "tmp" + (tmpVarIDs - 1);
         }
 
         internal static void Assign(string name, object val)
         {
-            ((IDictionary<string, object>)VarDB).Add(name, val);
+            ((IDictionary<string, object>)VarDB)[name] = val;
         }
 
     }

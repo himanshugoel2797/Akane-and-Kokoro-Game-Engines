@@ -8,15 +8,6 @@ namespace Kokoro.KSL.Lib.Math
 {
     public class KInt : Obj
     {
-        public void Assign(KInt k)
-        {
-            SyntaxTree.Instructions.Enqueue(new SyntaxTree.Instruction()
-            {
-                instructionType = SyntaxTree.InstructionType.Assign,
-                Parameters = new string[] { this.ObjName, k.ObjName }
-            });
-        }
-
         public override object GetDefaultValue()
         {
             return 0;
@@ -25,73 +16,80 @@ namespace Kokoro.KSL.Lib.Math
         #region Operators
         public static KInt operator *(KInt a, KInt b)
         {
-            SyntaxTree.AssignmentBuffer.Enqueue(new SyntaxTree.Instruction()
-            {
-                instructionType = SyntaxTree.InstructionType.Math,
-                Parameters = new string[] { a.ObjName, "*", b.ObjName }
-            });
-
-
-            return (KInt)new Obj()
+            KInt k = new KInt()
             {
                 ObjName = "(" + a.ObjName + "*" + b.ObjName + ")"
             };
+
+            SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
+            {
+                type = typeof(KInt),
+                value = null,
+                paramType = SyntaxTree.ParameterType.Variable,
+                name = k.ObjName
+            });
+
+            return k;
         }
 
         public static KInt operator /(KInt a, KInt b)
         {
-            SyntaxTree.AssignmentBuffer.Enqueue(new SyntaxTree.Instruction()
-            {
-                instructionType = SyntaxTree.InstructionType.Math,
-                Parameters = new string[] { a.ObjName, "/", b.ObjName }
-            });
-
-
-            return (KInt)new Obj()
+            KInt k = new KInt()
             {
                 ObjName = "(" + a.ObjName + "/" + b.ObjName + ")"
             };
+
+            SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
+            {
+                type = typeof(KInt),
+                value = null,
+                paramType = SyntaxTree.ParameterType.Variable,
+                name = k.ObjName
+            });
+
+            return k;
         }
 
         public static KInt operator +(KInt a, KInt b)
         {
-            SyntaxTree.AssignmentBuffer.Enqueue(new SyntaxTree.Instruction()
-            {
-                instructionType = SyntaxTree.InstructionType.Math,
-                Parameters = new string[] { a.ObjName, "+", b.ObjName }
-            });
-
-
-            return new KInt()
+            KInt k = new KInt()
             {
                 ObjName = "(" + a.ObjName + "+" + b.ObjName + ")"
             };
+
+            SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
+            {
+                type = typeof(KInt),
+                value = null,
+                paramType = SyntaxTree.ParameterType.Variable,
+                name = k.ObjName
+            });
+
+            return k;
         }
 
         public static KInt operator -(KInt a, KInt b)
         {
-            SyntaxTree.AssignmentBuffer.Enqueue(new SyntaxTree.Instruction()
-            {
-                instructionType = SyntaxTree.InstructionType.Math,
-                Parameters = new string[] { a.ObjName, "-", b.ObjName }
-            });
-
-            return (KInt)new Obj()
+            KInt k = new KInt()
             {
                 ObjName = "(" + a.ObjName + "-" + b.ObjName + ")"
             };
+
+            SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
+            {
+                type = typeof(KInt),
+                value = null,
+                paramType = SyntaxTree.ParameterType.Variable,
+                name = k.ObjName
+            });
+
+            return k;
         }
         #endregion
 
         #region Converters
         public static implicit operator KInt(int i)
         {
-            SyntaxTree.AssignmentBuffer.Enqueue(new SyntaxTree.Instruction()
-            {
-                instructionType = SyntaxTree.InstructionType.Math,
-                Parameters = new string[] { i.ToString() }
-            });
-
             return new KInt() {
                 ObjName = i.ToString()
             };
