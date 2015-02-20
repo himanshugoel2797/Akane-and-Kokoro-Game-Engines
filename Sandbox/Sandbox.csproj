@@ -56,7 +56,6 @@
   <ItemGroup>
     <Compile Include="Game.cs" />
     <Compile Include="TestA.cs" />
-    <Compile Include="TestShader.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="BEPUik">

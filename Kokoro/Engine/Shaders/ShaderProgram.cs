@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using System.Threading.Tasks;
 using Kokoro.Math;
-using Kokoro.KSL.Lib;
+using Kokoro.KSL;
 
 #if OPENGL
 #if PC

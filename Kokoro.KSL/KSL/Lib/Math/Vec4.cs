@@ -8,10 +8,73 @@ namespace Kokoro.KSL.Lib.Math
 {
     public class Vec4 : Obj
     {
+
+        #region Indexer Hack
+        public object this[string swizzleMask]
+        {
+            get
+            {
+                if (swizzleMask.Length == 4)
+                {
+                    return new Vec4()
+                    {
+                        ObjName = this.ObjName + "." + swizzleMask
+                    };
+                }
+                else if (swizzleMask.Length == 3)
+                {
+                    return new Vec3()
+                    {
+                        ObjName = this.ObjName + "." + swizzleMask
+                    };
+                }
+                else if (swizzleMask.Length == 2)
+                {
+                    return new Vec2()
+                    {
+                        ObjName = this.ObjName + "." + swizzleMask
+                    };
+                }
+                else if (swizzleMask.Length == 1)
+                {
+                    return new KFloat()
+                    {
+                        ObjName = this.ObjName + "." + swizzleMask
+                    };
+                }
+
+                return new Vec4()
+                {
+                    ObjName = this.ObjName
+                };
+            }
+            set
+            {
+                if (swizzleMask.Length == 4)
+                {
+                    Manager.Assign<Vec4>(this.ObjName + "." + swizzleMask, value);
+                }
+                else if (swizzleMask.Length == 3)
+                {
+                    Manager.Assign<Vec3>(this.ObjName + "." + swizzleMask, value);
+                }
+                else if (swizzleMask.Length == 2)
+                {
+                    Manager.Assign<Vec2>(this.ObjName + "." + swizzleMask, value);
+                }
+                else if (swizzleMask.Length == 1)
+                {
+                    Manager.Assign<KFloat>(this.ObjName + "." + swizzleMask, value);
+                }
+            }
+        }
+        #endregion
+
         public override object GetDefaultValue()
         {
             return 0;
         }
+
         #region Operators
         public static Vec4 operator *(KInt a, Vec4 b)
         {
@@ -50,6 +113,24 @@ namespace Kokoro.KSL.Lib.Math
         }
 
         public static Vec4 operator /(Vec4 a, Vec4 b)
+        {
+            Vec4 k = new Vec4()
+            {
+                ObjName = "(" + a.ObjName + "/" + b.ObjName + ")"
+            };
+
+            SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
+            {
+                type = typeof(Vec4),
+                value = null,
+                paramType = SyntaxTree.ParameterType.Variable,
+                name = k.ObjName
+            });
+
+            return k;
+        }
+
+        public static Vec4 operator /(KInt a, Vec4 b)
         {
             Vec4 k = new Vec4()
             {
@@ -121,5 +202,14 @@ namespace Kokoro.KSL.Lib.Math
             };
         }
         #endregion
+
+        #region Non-Static Converters
+        public void Construct(Vec3 vec, KInt i)
+        {
+            this["xyz"] = vec;
+            this["w"] = i;
+        }
+        #endregion
+
     }
 }

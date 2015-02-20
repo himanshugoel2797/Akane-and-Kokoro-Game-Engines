@@ -18,10 +18,18 @@ namespace Kokoro.KSL.GLSL
     {
         static string src;
         static StringBuilder strBuilder;
+        static Dictionary<string, string> PreDefinedVariablesMap = new Dictionary<string, string>()
+        {
+            ["VertexPosition"] = "gl_Position",
+            ["VertexID"] = "gl_VertexID",
+            ["InstanceID"] = "gl_InstanceID",
+            ["FragCoord"] = "gl_FragCoord"
+        };
+
 
         internal static string CompileFromSyntaxTree(KSL.KSLCompiler.KShaderType shaderType)
         {
-            src = "#version 440 core\n";
+            src = "#version 440 core\n";    //Use attribute to specify version number?
             strBuilder = new StringBuilder(src);
 
             List<SyntaxTree.Variable> StreamVars = new List<SyntaxTree.Variable>();
@@ -43,6 +51,8 @@ namespace Kokoro.KSL.GLSL
                     SharedVars.Add(pair.Value);
                 }
             }
+
+
 
             foreach (SyntaxTree.Variable variable in StreamVars)
             {
@@ -84,14 +94,15 @@ namespace Kokoro.KSL.GLSL
                     case SyntaxTree.InstructionType.Assign:
                         if (SyntaxTree.Variables.ContainsKey(instruction.Parameters[1]) && SyntaxTree.Variables[instruction.Parameters[0]].type == SyntaxTree.Variables[instruction.Parameters[1]].type)
                         {
-                            strBuilder.AppendFormat("{0} = {1};\n", instruction.Parameters[0], instruction.Parameters[1]);
-                        }else if(SyntaxTree.Variables.ContainsKey(instruction.Parameters[1]) && SyntaxTree.Variables[instruction.Parameters[0]].type != SyntaxTree.Variables[instruction.Parameters[1]].type)
+                            strBuilder.AppendFormat("{0} = {1};\n", SubstitutePredefinedVars(instruction.Parameters[0]), SubstitutePredefinedVars(instruction.Parameters[1]));
+                        }
+                        else if (SyntaxTree.Variables.ContainsKey(instruction.Parameters[1]) && SyntaxTree.Variables[instruction.Parameters[0]].type != SyntaxTree.Variables[instruction.Parameters[1]].type)
                         {
-                            strBuilder.AppendFormat("{0} = {1}({2});\n", instruction.Parameters[0], ConvertType(SyntaxTree.Variables[instruction.Parameters[0]].type),  instruction.Parameters[1]);
+                            strBuilder.AppendFormat("{0} = {1}({2});\n", SubstitutePredefinedVars(instruction.Parameters[0]), ConvertType(SyntaxTree.Variables[instruction.Parameters[0]].type), SubstitutePredefinedVars(instruction.Parameters[1]));
                         }
                         else
                         {
-                            strBuilder.AppendFormat("{0} = {1};\n", instruction.Parameters[0], instruction.Parameters[1]);
+                            strBuilder.AppendFormat("{0} = {1};\n", SubstitutePredefinedVars(instruction.Parameters[0]), SubstitutePredefinedVars(instruction.Parameters[1]));
                         }
                         break;
 
@@ -115,10 +126,13 @@ namespace Kokoro.KSL.GLSL
 
         static string currentDeclaration = "";
 
-        internal static string GenerateOperation(SyntaxTree.Instruction inst)
+        internal static string SubstitutePredefinedVars(string varName)
         {
-
-            return "";
+            if (PreDefinedVariablesMap.ContainsKey(varName))
+            {
+                return PreDefinedVariablesMap[varName];
+            }
+            else return varName;
         }
         internal static string ConvertType(Type t)
         {

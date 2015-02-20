@@ -573,7 +573,6 @@
     <Compile Include="OpenGL\EnumConverters.cs" />
     <Compile Include="OpenGL\PC\Debug.cs" />
     <Compile Include="OpenGL\PC\FrameBufferLL.cs" />
-    <Compile Include="OpenGL\PC\GLSL\CodeGenerator.cs" />
     <Compile Include="OpenGL\PC\GraphicsContextLL.cs" />
     <Compile Include="OpenGL\PC\Input.cs" />
     <Compile Include="OpenGL\PC\ShaderLL.cs" />

@@ -31,15 +31,8 @@ namespace KSLTest
             Manager.Create<KInt>("l");
             Manager.Create<Vec4>("pos");
 
-            R(Variables);
-        }
-
-        public void R(dynamic Variables)
-        {
-            Variables.l = (KInt)5;
-            Variables.k *= Variables.l;
-            Variables.color = (Vec4)Variables.k;
-            Variables.pos = Variables.color;
+            Variables.vertexPos.Construct(Variables.pos["xyz"], Variables.l);
+            Variables.VertexPosition = Variables.vertexPos["xyzw"];
         }
     }
 }

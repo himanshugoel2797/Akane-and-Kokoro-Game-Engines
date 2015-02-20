@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Dynamic;
 using System.ComponentModel;
+using Kokoro.KSL.Lib.General;
 
 namespace Kokoro.KSL.Lib
 {
@@ -32,34 +33,53 @@ namespace Kokoro.KSL.Lib
             VarDB = new ExpandoObject();
 
             //Define predefined variables beforehand
-            SyntaxTree.PreDefinedVariables = new Dictionary<string, SyntaxTree.Variable>();
-            SyntaxTree.PreDefinedVariables.Add("VertexPosition", new SyntaxTree.Variable()
+            SyntaxTree.Variables = new Dictionary<string, SyntaxTree.Variable>();
+            SyntaxTree.Variables.Add("VertexPosition", new SyntaxTree.Variable()
             {
                 name = "VertexPosition",
                 paramType = SyntaxTree.ParameterType.Variable,
                 type = typeof(Math.Vec4),
                 value = null
             });
-            SyntaxTree.PreDefinedVariables.Add("VertexID", new SyntaxTree.Variable()
+            ((IDictionary<string, object>)VarDB).Add("VertexPosition", new Math.Vec4()
+            {
+                ObjName = "VertexPosition"
+            });
+
+            SyntaxTree.Variables.Add("VertexID", new SyntaxTree.Variable()
             {
                 name = "VertexID",
                 paramType = SyntaxTree.ParameterType.Variable,
                 type = typeof(Math.KInt),
                 value = null
             });
-            SyntaxTree.PreDefinedVariables.Add("InstanceID", new SyntaxTree.Variable()
+            ((IDictionary<string, object>)VarDB).Add("VertexID", new Math.KInt()
+            {
+                ObjName = "VertexID"
+            });
+            
+            SyntaxTree.Variables.Add("InstanceID", new SyntaxTree.Variable()
             {
                 name = "InstanceID",
                 paramType = SyntaxTree.ParameterType.Variable,
                 type = typeof(Math.KInt),
                 value = null
             });
-            SyntaxTree.PreDefinedVariables.Add("FragCoord", new SyntaxTree.Variable()
+            ((IDictionary<string, object>)VarDB).Add("InstanceID", new Math.KInt()
+            {
+                ObjName = "InstanceID"
+            });
+
+            SyntaxTree.Variables.Add("FragCoord", new SyntaxTree.Variable()
             {
                 name = "FragCoord",
                 paramType = SyntaxTree.ParameterType.Variable,
-                type = typeof(Math.Vec4),
+                type = typeof(Math.Vec2),
                 value = null
+            });
+            ((IDictionary<string, object>)VarDB).Add("FragCoord", new Math.Vec2()
+            {
+                ObjName = "FragCoord"
             });
             //TODO add more variables into the shader compiler?
 
@@ -71,7 +91,6 @@ namespace Kokoro.KSL.Lib
             SyntaxTree.Instructions = new Queue<SyntaxTree.Instruction>();
             SyntaxTree.Parameters = new Dictionary<string, SyntaxTree.Variable>();
             SyntaxTree.SharedVariables = new Dictionary<string, SyntaxTree.Variable>();
-            SyntaxTree.Variables = new Dictionary<string, SyntaxTree.Variable>();
 
             return VarDB;
         }
@@ -132,7 +151,7 @@ namespace Kokoro.KSL.Lib
 
             SyntaxTree.Variables.Add(name, SyntaxTree.Parameters[name]);
 
-            ((IDictionary<string, object>)VarDB).Add(name, location);
+            ((IDictionary<string, object>)VarDB).Add(name, tmp);
         }
 
         public static void StreamOut<T>(string name, int location) where T : Obj, new()
@@ -202,8 +221,15 @@ namespace Kokoro.KSL.Lib
             return "tmp" + (tmpVarIDs - 1);
         }
 
-        internal static void Assign(string name, object val)
+        internal static void Assign<T>(string name, object val)
         {
+            SyntaxTree.Variables.Add(name, new SyntaxTree.Variable()
+            {
+                type = typeof(T),
+                value = val,
+                paramType = SyntaxTree.ParameterType.Variable,
+                name = name
+            });
             ((IDictionary<string, object>)VarDB)[name] = val;
         }
 
