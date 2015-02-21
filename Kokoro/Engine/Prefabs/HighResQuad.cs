@@ -13,8 +13,19 @@ using Kokoro.OpenGL.PC;
 
 namespace Kokoro.Engine.Prefabs
 {
+    /// <summary>
+    /// Represents a Tesselated quad
+    /// </summary>
     public class HighResQuad : Model
     {
+        /// <summary>
+        /// Create a new instance of a High Resolution Quad
+        /// </summary>
+        /// <param name="x0">The X position</param>
+        /// <param name="y0">The Y position</param>
+        /// <param name="terrainWidth">The width of the quad</param>
+        /// <param name="terrainHeight">The heigth of the quad</param>
+        /// <param name="tex">The optional texture to be applied to the quad</param>
         public HighResQuad(float x0, float y0, int terrainWidth, int terrainHeight, Texture tex = null) : base()
         {
             filepath = "";

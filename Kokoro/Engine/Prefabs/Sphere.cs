@@ -13,8 +13,16 @@ using Kokoro.OpenGL.PC;
 
 namespace Kokoro.Engine.Prefabs
 {
+    /// <summary>
+    /// Creates a new Sphere object
+    /// </summary>
     public class Sphere : Model
     {
+        /// <summary>
+        /// Create a new instance of a sphere object
+        /// </summary>
+        /// <param name="radius">The radius of the sphere</param>
+        /// <param name="step">The amount of detail to put in the sphere</param>
         public Sphere(float radius, int step = 10) : base()
         {
 

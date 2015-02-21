@@ -9,6 +9,6 @@ namespace Kokoro.Engine.Prefabs
     public class VertexMesh : Model
     {
         //NOTE: Once this is finished, remove Model.Load and Assimp dependancy
-
+        //TODO: Finish this class
     }
 }

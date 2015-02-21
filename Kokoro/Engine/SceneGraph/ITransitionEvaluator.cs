@@ -8,5 +8,6 @@ namespace Kokoro.Engine.SceneGraph
 {
     interface ITransitionEvaluator
     {
+        //TODO implement transition evaluators
     }
 }

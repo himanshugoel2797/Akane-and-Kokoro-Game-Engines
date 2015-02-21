@@ -13,8 +13,19 @@ using Kokoro.OpenGL.PC;
 
 namespace Kokoro.Engine.Prefabs
 {
+    /// <summary>
+    /// Represents a Unit quad
+    /// </summary>
     public class Quad : Model
     {
+        /// <summary>
+        /// Create a new unit quad
+        /// </summary>
+        /// <param name="x">The X position</param>
+        /// <param name="y">The Y position</param>
+        /// <param name="width">The width of the unit quad</param>
+        /// <param name="height">The height of the unit quad</param>
+        /// <param name="tex">An optional texture to be applied to the quad</param>
         public Quad(float x, float y, float width, float height, Texture tex = null) : base()
         {
             filepath = "";

@@ -13,8 +13,14 @@ using Kokoro.OpenGL.PC;
 
 namespace Kokoro.Engine.Prefabs
 {
+    /// <summary>
+    /// Represents a Full Screen Quad
+    /// </summary>
     public class FullScreenQuad : Model
     {
+        /// <summary>
+        /// Creates a new FullScreenQuad object
+        /// </summary>
         public FullScreenQuad() : base()
         {
             vbufs = new VertexBufferLL[1];

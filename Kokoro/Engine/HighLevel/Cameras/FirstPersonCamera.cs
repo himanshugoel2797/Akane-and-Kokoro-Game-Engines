@@ -9,10 +9,15 @@ using Kokoro.Engine.Input;
 
 namespace Kokoro.Engine.HighLevel.Cameras
 {
+    /// <summary>
+    /// Represents a First Person Camera
+    /// </summary>
     public class FirstPersonCamera : Camera
     {//TODO setup collisions
+
         public Vector3 Direction;
         public Vector3 Up;
+
         float leftrightRot = MathHelper.PiOver2;
         float updownRot = -MathHelper.Pi / 10.0f;
         const float rotationSpeed = 0.02f;
@@ -20,6 +25,11 @@ namespace Kokoro.Engine.HighLevel.Cameras
         Vector2 mousePos;
         Vector3 cameraRotatedUpVector;
 
+        /// <summary>
+        /// Create a new First Person Camera
+        /// </summary>
+        /// <param name="Position">The Position of the Camera</param>
+        /// <param name="Direction">The Direction the Camera initially faces</param>
         public FirstPersonCamera(Vector3 Position, Vector3 Direction)
         {
             this.Position = Position;
@@ -43,6 +53,11 @@ namespace Kokoro.Engine.HighLevel.Cameras
             return Matrix4.LookAt(Position, cameraFinalTarget, cameraRotatedUpVector);
         }
 
+        /// <summary>
+        /// Update the camera instance
+        /// </summary>
+        /// <param name="interval">The time elapsed in ticks since the last update</param>
+        /// <param name="Context">The current GraphicsContext</param>
         public override void Update(double interval, GraphicsContext Context)
         {
             if (Mouse.ButtonsDown.Left)
