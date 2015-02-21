@@ -126,6 +126,26 @@ namespace Kokoro.KSL.GLSL
 
         static string currentDeclaration = "";
 
+        internal static string TranslateSDKFunctionCalls(SyntaxTree.FunctionCalls function, params string[] parameters)
+        {
+            string str = "";
+
+            switch(function)
+            {
+                case SyntaxTree.FunctionCalls.Tex3D:
+                    str = "texture3D(" + parameters[0] + "," + parameters[1] + ")";
+                    break;
+                case SyntaxTree.FunctionCalls.Tex2D:
+                    str = "texture2D(" + parameters[0] + ", " + parameters[1] + ")";
+                    break;
+                case SyntaxTree.FunctionCalls.Tex1D:
+                    str = "texture1D(" + parameters[0] + ", " + parameters[1] + ")";
+                    break;
+            }
+
+            return str;
+        }
+
         internal static string SubstitutePredefinedVars(string varName)
         {
             if (PreDefinedVariablesMap.ContainsKey(varName))
@@ -146,6 +166,12 @@ namespace Kokoro.KSL.GLSL
             else if (t == typeof(Vec2)) tStr = "vec2";
             else if (t == typeof(Vec3)) tStr = "vec3";
             else if (t == typeof(Vec4)) tStr = "vec4";
+            else if (t == typeof(Mat4)) tStr = "mat4";
+            else if (t == typeof(Mat3)) tStr = "mat3";
+            else if (t == typeof(Mat2)) tStr = "mat2";
+            else if (t == typeof(Sampler1D)) tStr = "sampler1D";
+            else if (t == typeof(Sampler2D)) tStr = "sampler2D";
+            else if (t == typeof(Sampler3D)) tStr = "sampler3D";
 
             return tStr;
         }

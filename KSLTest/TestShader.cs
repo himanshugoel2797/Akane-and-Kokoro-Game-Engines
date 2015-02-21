@@ -26,13 +26,22 @@ namespace KSLTest
             Manager.StreamIn<Vec3>("Normals", 2);
             Manager.StreamIn<Vec3>("Tangents", 3);
 
+            Manager.StreamOut<Vec4>("Color", 0);
+
+            Manager.Uniform<Mat4>("World");
+            Manager.Uniform<Mat4>("View");
+            Manager.Uniform<Mat4>("Projection");
+            Manager.Uniform<Sampler2D>("ColorMap");
+
 
             Manager.Uniform<KInt>("k");
             Manager.Create<KInt>("l");
             Manager.Create<Vec4>("pos");
+            Manager.Create<Mat4>("WVP");
 
-            Variables.vertexPos.Construct(Variables.pos["xyz"], Variables.l);
-            Variables.VertexPosition = Variables.vertexPos["xyzw"];
+            Variables.WVP = Variables.Projection * Variables.View * Variables.World;
+            Variables.VertexPosition = Variables.vertexPos * Variables.WVP;
+            Variables.Color = Texture.Read2D(Variables.ColorMap, Variables.UV);
         }
     }
 }

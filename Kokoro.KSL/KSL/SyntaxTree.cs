@@ -26,6 +26,11 @@ namespace Kokoro.KSL
             Assign, Math, Create
         }
 
+        internal enum FunctionCalls
+        {
+            Tex1D, Tex2D, Tex3D
+        }
+
         internal struct Instruction
         {
             public InstructionType instructionType;

@@ -75,7 +75,43 @@ namespace Kokoro.KSL.Lib.Math
             return 0;
         }
 
-        #region Operators
+        #region Math Operators
+        public static Vec4 operator *(Vec4 a, Mat4 b)
+        {
+            var k = new Vec4()
+            {
+                ObjName = "(" + a.ObjName + "*" + b.ObjName + ")"
+            };
+
+            SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
+            {
+                type = k.GetType(),
+                value = null,
+                paramType = SyntaxTree.ParameterType.Variable,
+                name = k.ObjName
+            });
+
+            return k;
+        }
+
+        public static Vec4 operator /(Vec4 a, Mat4 b)
+        {
+            Vec4 k = new Vec4()
+            {
+                ObjName = "(" + a.ObjName + "/" + b.ObjName + ")"
+            };
+
+            SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
+            {
+                type = typeof(Mat4),
+                value = null,
+                paramType = SyntaxTree.ParameterType.Variable,
+                name = k.ObjName
+            });
+
+            return k;
+        }
+
         public static Vec4 operator *(KInt a, Vec4 b)
         {
             var k = new Vec4()
@@ -182,6 +218,18 @@ namespace Kokoro.KSL.Lib.Math
             });
 
             return k;
+        }
+        #endregion
+
+        #region Logic Operators
+        public static Vec4 operator <(Vec4 a, Vec4 b)
+        {
+            //Implement these properly, specifically, generate function calls for these (like GLSL builtins?) or manual comparison generation?
+            return a;
+        }
+        public static Vec4 operator >(Vec4 a, Vec4 b)
+        {
+            return a;
         }
         #endregion
 
