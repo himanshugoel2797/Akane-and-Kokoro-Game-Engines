@@ -10,6 +10,8 @@ using Kokoro.KSL;
 #if OPENGL
 #if PC
 using Kokoro.OpenGL.PC;
+using Kokoro.KSL.Lib.Math;
+using Kokoro.KSL.Lib.Texture;
 #endif
 #endif
 
@@ -17,6 +19,20 @@ namespace Kokoro.Engine.Shaders
 {
     public class ShaderProgram : ShaderProgramLL, IDisposable
     {
+        static ShaderProgram()
+        {
+            KSL.KSLCompiler.RegisterPreDefinedUniform<Sampler2D>("ColorMap");
+            KSL.KSLCompiler.RegisterPreDefinedUniform<Sampler2D>("LightingMap");
+            KSL.KSLCompiler.RegisterPreDefinedUniform<Sampler2D>("NormalMap");
+
+            KSL.KSLCompiler.RegisterPreDefinedUniform<Mat4>("World");
+            KSL.KSLCompiler.RegisterPreDefinedUniform<Mat4>("View");
+            KSL.KSLCompiler.RegisterPreDefinedUniform<Mat4>("Projection");
+
+            KSL.KSLCompiler.RegisterPreDefinedUniform<KFloat>("ZNear");
+            KSL.KSLCompiler.RegisterPreDefinedUniform<KFloat>("ZFar");
+        }
+
         public Action<GraphicsContext, ShaderProgram> PreApply { get; set; }
 
         public ShaderProgram(params HLShader[] shaders) : base(PreProcess(shaders)) { }
@@ -76,9 +92,10 @@ namespace Kokoro.Engine.Shaders
                 else if (t == typeof(Vector3)) SetShaderVector(name, (Vector3)value);
                 else if (t == typeof(Vector2)) SetShaderVector(name, (Vector2)value);
                 else if (t == typeof(float)) SetShaderFloat(name, (float)value);
+                else if (t == typeof(int)) SetShaderFloat(name, (int)(float)value);
                 else if (t == typeof(Texture)) SetTexture(name, (Texture)value);
                 else if (t == typeof(FrameBufferTexture)) SetTexture(name, (Texture)value);
-                else throw new Exception();
+                else throw new Exception("Unknown type " + name);
             }
         }
 

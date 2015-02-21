@@ -64,7 +64,8 @@ namespace Kokoro.KSL.Lib.Math
         }
 
         #region Operators
-        public static Vec3 operator *(KInt a, Vec3 b)
+        public static Vec3 operator *(Vec3 b, KFloat a) { return a * b; }
+        public static Vec3 operator *(KFloat a, Vec3 b)
         {
             var k = new Vec3()
             {
@@ -118,7 +119,7 @@ namespace Kokoro.KSL.Lib.Math
             return k;
         }
 
-        public static Vec3 operator /(KInt a, Vec3 b)
+        public static Vec3 operator /(KFloat a, Vec3 b)
         {
             Vec3 k = new Vec3()
             {
@@ -174,7 +175,7 @@ namespace Kokoro.KSL.Lib.Math
         #endregion
 
         #region Converters
-        public static implicit operator Vec3(int i)
+        public static explicit operator Vec3(int i)
         {
             return new Vec3()
             {
@@ -182,7 +183,7 @@ namespace Kokoro.KSL.Lib.Math
             };
         }
 
-        public static implicit operator Vec3(KInt i)
+        public static implicit operator Vec3(KFloat i)
         {
             return new Vec3()
             {
@@ -192,7 +193,7 @@ namespace Kokoro.KSL.Lib.Math
         #endregion
 
         #region Non-Static Converters
-        public void Construct(Vec2 vec, KInt i)
+        public void Construct(Vec2 vec, KFloat i)
         {
             this["xy"] = vec;
             this["z"] = i;

@@ -163,7 +163,7 @@ namespace Kokoro.KSL.Lib.Math
         #endregion
 
         #region Converters
-        public static implicit operator Vec2(int i)
+        public static explicit operator Vec2(int i)
         {
             return new Vec2()
             {

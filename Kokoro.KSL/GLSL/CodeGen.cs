@@ -130,7 +130,7 @@ namespace Kokoro.KSL.GLSL
         {
             string str = "";
 
-            switch(function)
+            switch (function)
             {
                 case SyntaxTree.FunctionCalls.Tex3D:
                     str = "texture3D(" + parameters[0] + "," + parameters[1] + ")";
@@ -141,6 +141,27 @@ namespace Kokoro.KSL.GLSL
                 case SyntaxTree.FunctionCalls.Tex1D:
                     str = "texture1D(" + parameters[0] + ", " + parameters[1] + ")";
                     break;
+
+                case SyntaxTree.FunctionCalls.Cross2D:
+                    str = "cross(" + parameters[0] + ", " + parameters[1] + ")";
+                    break;
+                case SyntaxTree.FunctionCalls.Cross3D:
+                    str = "cross(" + parameters[0] + ", " + parameters[1] + ")";
+                    break;
+                case SyntaxTree.FunctionCalls.Cross4D:
+                    str = "cross(" + parameters[0] + ", " + parameters[1] + ")";
+                    break;
+
+                case SyntaxTree.FunctionCalls.Normalize2D:
+                    str = "normalize(" + parameters[0] + ")";
+                    break;
+                case SyntaxTree.FunctionCalls.Normalize3D:
+                    str = "normalize(" + parameters[0] + ")";
+                    break;
+                case SyntaxTree.FunctionCalls.Normalize4D:
+                    str = "normalize(" + parameters[0] + ")";
+                    break;
+
             }
 
             return str;
@@ -148,11 +169,12 @@ namespace Kokoro.KSL.GLSL
 
         internal static string SubstitutePredefinedVars(string varName)
         {
-            if (PreDefinedVariablesMap.ContainsKey(varName))
+            foreach(KeyValuePair<string, string> substitutions in PreDefinedVariablesMap)
             {
-                return PreDefinedVariablesMap[varName];
+                varName = varName.Replace(substitutions.Key, substitutions.Value);
             }
-            else return varName;
+
+            return varName;
         }
         internal static string ConvertType(Type t)
         {

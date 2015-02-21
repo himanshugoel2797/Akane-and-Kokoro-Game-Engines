@@ -88,11 +88,20 @@ namespace Kokoro.KSL.Lib.Math
         #endregion
 
         #region Converters
-        public static implicit operator KFloat(int i)
+        public static implicit operator KFloat(float i)
         {
             return new KFloat()
             {
                 ObjName = i.ToString()
+            };
+        }
+
+
+        public static implicit operator KFloat(KInt i)
+        {
+            return new KFloat()
+            {
+                ObjName = i.ObjName
             };
         }
         #endregion

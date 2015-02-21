@@ -23,7 +23,7 @@ namespace Kokoro.Engine.Prefabs
             this.DrawMode = DrawMode.Triangles;
 
             vbufs[0].SetIndices(new ushort[] { 3, 2, 0, 0, 2, 1 });
-            vbufs[0].SetUVs(new float[] { 
+            vbufs[0].SetUVs(new float[] {
                 0,1,
                 1,1,
                 1,0,
@@ -38,7 +38,7 @@ namespace Kokoro.Engine.Prefabs
             });
 
             World = Math.Matrix4.Identity;
-            Materials[0].Shader = new ShaderProgram(new VertexShader("Shaders/FrameBuffer"), new FragmentShader("Shaders/Default"));
+            Materials[0].Shader = new ShaderProgram(ShaderLib.FrameBufferShader.Create(ShaderTypes.Vertex), ShaderLib.DefaultShader.Create(ShaderTypes.Fragment));
         }
     }
 }

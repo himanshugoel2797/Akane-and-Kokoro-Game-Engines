@@ -76,20 +76,20 @@ namespace Kokoro.KSL.Lib.Math
         }
 
         #region Math Operators
-        public static Vec4 operator *(Vec4 a, Mat4 b)
+        public static Vec4 operator *(Mat4 a, Vec4 b)
         {
             var k = new Vec4()
             {
                 ObjName = "(" + a.ObjName + "*" + b.ObjName + ")"
             };
 
-            SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
+            SyntaxTree.Variables[k.ObjName] = new SyntaxTree.Variable()
             {
                 type = k.GetType(),
                 value = null,
                 paramType = SyntaxTree.ParameterType.Variable,
                 name = k.ObjName
-            });
+            };
 
             return k;
         }
@@ -234,7 +234,7 @@ namespace Kokoro.KSL.Lib.Math
         #endregion
 
         #region Converters
-        public static implicit operator Vec4(int i)
+        public static explicit operator Vec4(int i)
         {
             return new Vec4()
             {

@@ -582,6 +582,9 @@
     <Compile Include="OpenGL\PC\VertexBufferLL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripting\PyScript.cs" />
+    <Compile Include="ShaderLib\Default.cs" />
+    <Compile Include="ShaderLib\FrameBuffer.cs" />
+    <Compile Include="ShaderLib\GBufferShader.cs" />
     <Compile Include="VFS\FSReader.cs" />
     <Compile Include="VFS\LocalFSReader.cs" />
     <EmbeddedResource Include="Debug\LogViewer.resx">

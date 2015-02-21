@@ -47,6 +47,7 @@
     <Compile Include="KSL\Lib\Manager.cs" />
     <Compile Include="KSL\Lib\Math\KFloat.cs" />
     <Compile Include="KSL\Lib\Math\KInt.cs" />
+    <Compile Include="KSL\Lib\Math\KMath.cs" />
     <Compile Include="KSL\Lib\Math\Mat2.cs" />
     <Compile Include="KSL\Lib\Math\Mat3.cs" />
     <Compile Include="KSL\Lib\Math\Mat4.cs" />

@@ -166,7 +166,7 @@ namespace Kokoro.Engine
                 m.Materials[i] = new Material
                 {
                     ColorMap = tmp.Item2[i],
-                    Shader = new ShaderProgram(new VertexShader("Shaders/GBuffer"), new FragmentShader("Shaders/GBuffer"))
+                    Shader = new ShaderProgram(new ShaderLib.GBufferShader())
                 };
             }
             m.World = Matrix4.Identity;
