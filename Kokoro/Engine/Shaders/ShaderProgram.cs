@@ -17,6 +17,9 @@ using Kokoro.KSL.Lib.Texture;
 
 namespace Kokoro.Engine.Shaders
 {
+    /// <summary>
+    /// A Program consisting of shader stages
+    /// </summary>
     public class ShaderProgram : ShaderProgramLL, IDisposable
     {
         static ShaderProgram()
@@ -33,11 +36,29 @@ namespace Kokoro.Engine.Shaders
             KSL.KSLCompiler.RegisterPreDefinedUniform<KFloat>("ZFar");
         }
 
+        /// <summary>
+        /// Called before the application of the shader program
+        /// </summary>
         public Action<GraphicsContext, ShaderProgram> PreApply { get; set; }
 
+        /// <summary>
+        /// Create a new instance of a ShaderProgram using the platform specific language
+        /// </summary>
+        /// <param name="shaders">The shaders</param>
+        public ShaderProgram(params Shader[] shaders) : base(shaders) { }
+
+        /// <summary>
+        /// Create a new instance of a ShaderProgram using the provided KSL shader stages
+        /// </summary>
+        /// <param name="shaders"></param>
         public ShaderProgram(params HLShader[] shaders) : base(PreProcess(shaders)) { }
+        /// <summary>
+        /// Create a new instance of a ShaderProgram using all the stages of the provided KSL shader object
+        /// </summary>
+        /// <param name="shader"></param>
         public ShaderProgram(IKShaderProgram shader) : base(PreProcess(shader)) { }
 
+        //Preprocess arguments before passing them to the base constructor
         private static Shader[] PreProcess(HLShader[] shaders)
         {
             List<Shader> compiledshaders = new List<Shader>();
@@ -67,17 +88,30 @@ namespace Kokoro.Engine.Shaders
             };
         }
 
+        /// <summary>
+        /// Apply the shader program
+        /// </summary>
+        /// <param name="context">The current GraphicsContext</param>
         public void Apply(GraphicsContext context)
         {
             if (PreApply != null) PreApply(context, this);
             base.sApply(context);
         }
 
+        /// <summary>
+        /// Clean up after applying the shader program
+        /// </summary>
+        /// <param name="context">The current GraphicsContext</param>
         public void Cleanup(GraphicsContext context)
         {
             base.sCleanup(context);
         }
 
+        /// <summary>
+        /// Set the value of a shader uniform
+        /// </summary>
+        /// <param name="name">The uniform name</param>
+        /// <returns>The value of the uniform</returns>
         public object this[string name]
         {
             set

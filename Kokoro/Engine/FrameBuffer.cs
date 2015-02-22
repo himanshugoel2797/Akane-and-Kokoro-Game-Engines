@@ -13,6 +13,9 @@ using Kokoro.OpenGL.PC;
 
 namespace Kokoro.Engine
 {
+    /// <summary>
+    /// The available FrameBuffer attachments
+    /// </summary>
     public enum FrameBufferAttachments
     {
         ColorAttachment0,
@@ -36,9 +39,18 @@ namespace Kokoro.Engine
         StencilAttachment
     }
 
+    /// <summary>
+    /// Represents a FrameBuffer object
+    /// </summary>
     public class FrameBuffer : FrameBufferLL, IDisposable
     {
-        public Vector2 Size;
+        /// <summary>
+        /// The resolution of the framebuffer
+        /// </summary>
+        public Vector2 Size { get; internal set; }
+        /// <summary>
+        /// The IDs of the associated RenderTargets
+        /// </summary>
         public List<string> RenderTargets { get; set; }
 
         private Dictionary<string, FrameBufferTexture> fbufTextures;
@@ -46,6 +58,13 @@ namespace Kokoro.Engine
         private Dictionary<string, FrameBufferAttachments> attachments;
         private int id;
 
+        /// <summary>
+        /// Create a new instance of a FrameBuffer Object and add a Depth Buffer and Color RenderTarget
+        /// </summary>
+        /// <param name="width">The Width of the FrameBuffer RenderTarget</param>
+        /// <param name="height">The Height of the FrameBuffer RenderTarget</param>
+        /// <param name="pct">The PixelComponentType of the FrameBuffer RenderTarget</param>
+        /// <param name="context">The current GraphicsContext</param>
         public FrameBuffer(int width, int height, PixelComponentType pct, GraphicsContext context)
         {
             RenderTargets = new List<string>();
@@ -67,8 +86,17 @@ namespace Kokoro.Engine
             Kokoro.Debug.ObjectAllocTracker.NewCreated(this, id, "Framebuffer");
         }
 
+        /// <summary>
+        /// Add a new RenderTarget to the FrameBuffer
+        /// </summary>
+        /// <param name="id">The ID to assign to the RenderTarget</param>
+        /// <param name="fbufTex">The FrameBufferTexture to set as the RenderTarget</param>
+        /// <param name="attachment">The FrameBufferAttachment to attach it to</param>
+        /// <param name="context">The current GraphicsContext</param>
         public void Add(string id, FrameBufferTexture fbufTex, FrameBufferAttachments attachment, GraphicsContext context)
         {
+            if (fbufTex.Size != this.Size) throw new Exception("The dimensions of the FrameBufferTexture must be the same as the dimensions of the FrameBuffer");
+
             this.Bind(context);
             RenderTargets.Add(id);
             
@@ -86,6 +114,11 @@ namespace Kokoro.Engine
             base.CheckError();
         }
 
+        /// <summary>
+        /// Get/Set the RenderTargets bound to this FrameBuffer
+        /// </summary>
+        /// <param name="key">The ID of the RenderTarget</param>
+        /// <returns>The RenderTarget</returns>
         public FrameBufferTexture this[string key]
         {
             get
@@ -98,12 +131,21 @@ namespace Kokoro.Engine
             }
         }
 
+        /// <summary>
+        /// Set the Blend Function for a RenderTarget
+        /// </summary>
+        /// <param name="func">The blend function</param>
+        /// <param name="attachment">The FrameBufferAttachment to set the blend function to</param>
         public void SetBlendFunc(BlendFunc func, FrameBufferAttachments attachment)
         {
             int index = int.Parse(attachment.ToString().Replace("ColorAttachment", ""));
             base.BlendFunction(func, index);
         }
 
+        /// <summary>
+        /// Bind the FrameBuffer to the pipeline
+        /// </summary>
+        /// <param name="context">The current GraphicsContext</param>
         public void Bind(GraphicsContext context)
         {
             if (id != -1)
@@ -115,17 +157,28 @@ namespace Kokoro.Engine
             }
         }
 
+        /// <summary>
+        /// Delete the FrameBuffer Object
+        /// </summary>
+        /// <remarks>This does not delete the bound RenderTargets</remarks>
         public void Dispose()
         {
             base.Delete(id);
         }
 
         private static FrameBuffer currentFBUF;
+        /// <summary>
+        /// Get the currently set FrameBuffer
+        /// </summary>
+        /// <returns>The current FrameBuffer</returns>
         public static FrameBuffer GetCurrentFrameBuffer()
         {
             return currentFBUF;
         }
 
+        /// <summary>
+        /// Unbind the FrameBuffer from the pipeline
+        /// </summary>
         public void UnBind()
         {
             base.Bind(0);

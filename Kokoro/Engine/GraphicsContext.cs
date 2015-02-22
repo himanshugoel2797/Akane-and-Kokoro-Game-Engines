@@ -20,8 +20,14 @@ using Kokoro.OpenGL.PC;     //If building for OpenGL on PC (Windows, Linux, Mac)
 
 namespace Kokoro.Engine
 {
+    /// <summary>
+    /// The Face Culling Modes
+    /// </summary>
     public enum CullMode { Off, Back, Front }
 
+    /// <summary>
+    /// The Blending Factors
+    /// </summary>
     public enum BlendingFactor
     {
         Zero = 0,
@@ -47,6 +53,9 @@ namespace Kokoro.Engine
         OneMinusSrc1Alpha
     }
 
+    /// <summary>
+    /// The Blend Function
+    /// </summary>
     public struct BlendFunc
     {
         public BlendingFactor Src;
@@ -242,23 +251,57 @@ namespace Kokoro.Engine
         #endregion
 
         #region Clear
+        /// <summary>
+        /// Clear the screen
+        /// </summary>
+        /// <param name="r">The red component from 0 to 1</param>
+        /// <param name="g">The green component from 0 to 1</param>
+        /// <param name="b">The blue component from 0 to 1</param>
+        /// <param name="a">The alpha component from 0 to 1</param>
         public void Clear(float r, float g, float b, float a)
         {
             base.aClear(r, g, b, a);
         }
+        /// <summary>
+        /// Clear the screen
+        /// </summary>
+        /// <param name="col">The color to clear the screen with (all 0 to 1)</param>
         public void Clear(Vector4 col) { Clear(col.X, col.Y, col.Z, col.W); }
         #endregion
 
         #region Game Loop
-
+        /// <summary>
+        /// The thread running the Update Loop
+        /// </summary>
         public Thread UpdateThread { get; private set; }
+        /// <summary>
+        /// The thread running the Physics Loop
+        /// </summary>
         public Thread PhysicsThread { get; private set; }
+        /// <summary>
+        /// The thread running the Animation loop
+        /// </summary>
         public Thread AnimationThread { get; private set; }
 
+        /// <summary>
+        /// The Update handler
+        /// </summary>
         public Action<double, GraphicsContext> Update { get; set; }
+        /// <summary>
+        /// The Render handler
+        /// </summary>
         public Action<double, GraphicsContext> Render { get; set; }
+        /// <summary>
+        /// The animation handler
+        /// </summary>
         public Action<double, GraphicsContext> Animation { get; set; }
+        /// <summary>
+        /// The physics handler
+        /// </summary>
         public Action<double, GraphicsContext> Physics { get; set; }
+        /// <summary>
+        /// The initialization handler
+        /// </summary>
         public Action<GraphicsContext> Initialize { get; set; }
 
         /// <summary>
@@ -390,6 +433,10 @@ namespace Kokoro.Engine
 
         #endregion
 
+        /// <summary>
+        /// Create a new GraphicsContext
+        /// </summary>
+        /// <param name="WindowSize">The size of the Window</param>
         public GraphicsContext(Vector2 WindowSize)
             : base((int)WindowSize.X, (int)WindowSize.Y)
         {

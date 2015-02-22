@@ -64,11 +64,21 @@ namespace Kokoro.Engine.SceneGraph
             curScene = scenes[scene];
         }
 
+        /// <summary>
+        /// Update the scene
+        /// </summary>
+        /// <param name="interval">The time in ticks since the last update</param>
+        /// <param name="context">The current GraphicsContext</param>
         public void Update(double interval, GraphicsContext context)
         {
             if (curScene != null) curScene.Update(interval, context);
         }
 
+        /// <summary>
+        /// Render the scene
+        /// </summary>
+        /// <param name="interval">The time in ticks since the last render</param>
+        /// <param name="context">The current GraphicsContext</param>
         public void Render(double interval, GraphicsContext context)
         {
             if (curScene != null) curScene.Render(interval, context);
