@@ -1,4 +1,5 @@
-﻿
+﻿#version 440 core
+
 
 // Interpolated values from the vertex shaders
 in vec2 UV;

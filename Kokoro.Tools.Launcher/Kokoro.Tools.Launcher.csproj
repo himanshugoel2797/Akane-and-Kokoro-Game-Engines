@@ -1,18 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2C15B0E5-565B-450C-B25D-2745A8B0E9E2}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{BEF08237-331E-414D-83D4-72BA0B76A98A}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Akane</RootNamespace>
-    <AssemblyName>Akane</AssemblyName>
+    <RootNamespace>Kokoro.Tools.Launcher</RootNamespace>
+    <AssemblyName>Kokoro.Tools.Launcher</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -39,47 +41,41 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="TiledSharp">
-      <HintPath>..\packages\TiledSharp.0.11.1\lib\net40\TiledSharp.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Akane.cs" />
     <Compile Include="Form1.cs">
-      <SubType>Form</SubType>
+      <SubType>form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Graphics\Sprite.cs" />
-    <Compile Include="Physics\AABB.cs" />
-    <Compile Include="Physics\BaseCollisionSolver.cs" />
-    <Compile Include="Physics\Circle.cs" />
-    <Compile Include="Physics\CollisionResolvers.cs" />
-    <Compile Include="Physics\PhysicsObject.cs" />
-    <Compile Include="Physics\PhysicsWorld.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="World\CharacterController.cs" />
-    <Compile Include="World\Input.cs" />
-    <Compile Include="World\Map.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Kokoro.KSL\Kokoro.KSL.csproj">
-      <Project>{d2a4374b-97c9-4233-a071-bbe0126f74bf}</Project>
-      <Name>Kokoro.KSL</Name>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Kokoro.FSWriter\Kokoro.FSWriter.csproj">
+      <Project>{0e6b4980-4a7e-4e4a-a2f9-615e5602f2c7}</Project>
+      <Name>Kokoro.FSWriter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Kokoro.IDE\Kokoro.IDE.csproj">
+      <Project>{3a712a26-21e5-4fbb-ab0b-16c1be7af44b}</Project>
+      <Name>Kokoro.IDE</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Kokoro.Irradiate\Kokoro.Irradiate.csproj">
+      <Project>{701dfb6d-7953-460f-a8a9-fb347e9ec72c}</Project>
+      <Name>Kokoro.Irradiate</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Kokoro.Voxelizer\Kokoro.Voxelizer.csproj">
+      <Project>{071a8fd8-6749-4c34-99ea-7b964a0d3477}</Project>
+      <Name>Kokoro.Voxelizer</Name>
     </ProjectReference>
     <ProjectReference Include="..\Kokoro\Kokoro.csproj">
       <Project>{6d8eb8bd-f8ad-4fe1-995f-4eefbc2bc8f5}</Project>
       <Name>Kokoro</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

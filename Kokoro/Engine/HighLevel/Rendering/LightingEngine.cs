@@ -1,4 +1,4 @@
-﻿/*using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -43,24 +43,24 @@ namespace Kokoro.Engine.HighLevel.Rendering
             
             radiositySamplesPassB = new FrameBuffer(width / 4, height / 4, PixelComponentType.RGBA16f, context);
 
-            hemisphereSampler = new ShaderProgram("Shaders/HemisphereSampler");
+            hemisphereSampler = new ShaderProgram(VertexShader.Load("Shaders/HemisphereSampler"), FragmentShader.Load("Shaders/HemisphereSampler"));
             hemisphereSampler["FNormal"] = FrontFaces["Normal0"];
             hemisphereSampler["FRGBA"] = FrontFaces["RGBA0"];
             hemisphereSampler["FDepth"] = FrontFaces["Depth0"];
 
-            radiosityPassA = new ShaderProgram("Shaders/Radiosity PassA");
+            radiosityPassA = new ShaderProgram(VertexShader.Load("Shaders/Radiosity PassA"), FragmentShader.Load("Shaders/Radiosity PassA"));
             radiosityPassA["FNormal"] = FrontFaces["Normal0"];
             radiosityPassA["FRGBA"] = FrontFaces["RGBA0"];
             radiosityPassA["FDepth"] = FrontFaces["Depth0"];
 
-            radiosityPassB = new ShaderProgram("Shaders/Radiosity PassB");
+            radiosityPassB = new ShaderProgram(VertexShader.Load("Shaders/Radiosity PassB"), FragmentShader.Load("Shaders/Radiosity PassB"));
             radiosityPassB["FNormal"] = FrontFaces["Normal0"];
             radiosityPassB["FRGBA"] = FrontFaces["RGBA0"];
             radiosityPassB["FDepth"] = FrontFaces["Depth0"];
             radiosityPassB["RadiosityPassA"] = radiositySamplesPassA["Color"];
             radiosityPassB["VPLPositions"] = radiositySamplesPassA["LightPositions"];
-
-            compositor = new ShaderProgram("Shaders/Compositor");
+            
+            compositor = new ShaderProgram(VertexShader.Load("Shaders/Compositor"), FragmentShader.Load("Shaders/Compositor"));
             compositor["RGBA0"] = FrontFaces["RGBA0"];      //The front facing colors
             compositor["Depth0"] = FrontFaces["Depth0"];
             compositor["Normal0"] = FrontFaces["Normal0"];
@@ -104,4 +104,3 @@ namespace Kokoro.Engine.HighLevel.Rendering
 
     }
 }
-*/

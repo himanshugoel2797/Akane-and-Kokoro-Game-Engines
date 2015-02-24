@@ -41,7 +41,7 @@ namespace Akane.Graphics
             Visible = true;
             LoadAnimations(animations);
 
-            spriteShader = new ShaderProgram("Shaders/Sprite");
+            spriteShader = new ShaderProgram(VertexShader.Load("Shaders/Sprite"), FragmentShader.Load("Shaders/Sprite"));
             //spriteQuad = new Quad(0, 0, 10, 10);
             spriteQuad = new FullScreenQuad();
             Scale = new Vector2(1, 1);

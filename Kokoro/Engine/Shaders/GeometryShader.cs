@@ -10,5 +10,10 @@ namespace Kokoro.Engine.Shaders
     public class GeometryShader : Shader
     {
         public GeometryShader(string fshader) : base(fshader, ShaderTypes.Geometry) { }
+
+        public static GeometryShader Load(string dir)
+        {
+            return new GeometryShader(new StreamReader(VFS.FSReader.OpenFile(Path.Combine(dir, "geometry.glsl"))).ReadToEnd());
+        }
     }
 }

@@ -77,7 +77,7 @@ namespace Akane.World
             //Each pixel is one tile
             FrameBuffer renderTarget = new FrameBuffer(map.Width, map.Height, PixelComponentType.RGBA16f, akane.context);
             Model tileRenderer = new FullScreenQuad();
-            tileRenderer.Materials[0].Shader = new Kokoro.Engine.Shaders.ShaderProgram("Shaders/TileLayer");
+            tileRenderer.Materials[0].Shader = new Kokoro.Engine.Shaders.ShaderProgram(VertexShader.Load("Shaders/TileLayer"), FragmentShader.Load("Shaders/TileLayer"));
 
             Matrix4 TileLayersOrthoMatrix = Matrix4.CreateOrthographicOffCenter(0, map.Width, -map.Height, 0, -1.0f, 1.0f);
             akane.context.Projection = TileLayersOrthoMatrix;
@@ -118,8 +118,8 @@ namespace Akane.World
             #endregion
 
             quad = new FullScreenQuad();
-            quad.Materials[0].Shader = new Kokoro.Engine.Shaders.ShaderProgram("Shaders/LayerDrawer");
-            DefaultShader = new ShaderProgram("Shaders/FrameBuffer");
+            quad.Materials[0].Shader = new Kokoro.Engine.Shaders.ShaderProgram(VertexShader.Load("Shaders/LayerDrawer"), FragmentShader.Load("Shaders/LayerDrawer"));
+            DefaultShader = new ShaderProgram(VertexShader.Load("Shaders/FrameBuffer"), FragmentShader.Load("Shaders/FrameBuffer"));
 
             LoadResources(akane);
         }
@@ -172,7 +172,7 @@ namespace Akane.World
         {
             FrameBuffer tileSetTmpBuffer = new FrameBuffer((int)map.Tilesets[0].Image.Width, (int)map.Tilesets[0].Image.Height, PixelComponentType.RGBA8, manager.context);
             FullScreenQuad quad = new FullScreenQuad();
-            quad.Materials[0].Shader = new Kokoro.Engine.Shaders.ShaderProgram("Shaders/TransparentColor");
+            quad.Materials[0].Shader = new Kokoro.Engine.Shaders.ShaderProgram(VertexShader.Load("Shaders/TransparentColor"), FragmentShader.Load("Shaders/TransparentColor"));
 
 
             for (int i = 0; i < map.Tilesets.Count; i++)
@@ -191,9 +191,10 @@ namespace Akane.World
                     quad.Draw(manager.context);
 
                     TextureAtlases.Add(tileSetTmpBuffer["Color"]);
-                    if (i < map.Tilesets.Count - 1) tileSetTmpBuffer.Add("Color",
-                        new FrameBufferTexture((int)map.Tilesets[i + 1].Image.Width, (int)map.Tilesets[i + 1].Image.Height, PixelFormat.BGRA, PixelComponentType.RGBA8, PixelType.Float)
-                        , FrameBufferAttachments.ColorAttachment0, manager.context);
+                    if (i < map.Tilesets.Count - 1)
+                        tileSetTmpBuffer.Add("Color",
+new FrameBufferTexture((int)map.Tilesets[i + 1].Image.Width, (int)map.Tilesets[i + 1].Image.Height, PixelFormat.BGRA, PixelComponentType.RGBA8, PixelType.Float)
+, FrameBufferAttachments.ColorAttachment0, manager.context);
                     //if (i < map.Tilesets.Count - 1) tileSetTmpBuffer = new FrameBuffer((int)map.Tilesets[i + 1].Image.Width, (int)map.Tilesets[i + 1].Image.Height, PixelComponentType.RGBA8, manager.context);
 
                     quad.Materials[0].ColorMap.Dispose();

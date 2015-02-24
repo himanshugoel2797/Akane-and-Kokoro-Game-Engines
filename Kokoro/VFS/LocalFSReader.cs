@@ -19,6 +19,8 @@ namespace Kokoro.VFS
         {
             Archives = new Dictionary<string, string>();
             AllFiles = new List<string>();
+
+            LoadFileSystem(Environment.CurrentDirectory);
         }
 
         public static void LoadFileSystem(string archive)
@@ -31,7 +33,7 @@ namespace Kokoro.VFS
         {
             if (Archives.ContainsKey(archive))
             {
-                string[] tmp = Directory.EnumerateFileSystemEntries(archive).ToArray();
+                string[] tmp = Directory.EnumerateFileSystemEntries(archive, "*", SearchOption.AllDirectories).ToArray();
                 AllFiles.RemoveRange(AllFiles.IndexOf(tmp[0]), tmp.Length);
                 Archives.Remove(archive);
             }
@@ -54,6 +56,9 @@ namespace Kokoro.VFS
         /// <returns>The File Stream</returns>
         public static Stream OpenFile(string file, bool decompress = false)
         {
+            //TODO: temporary hack for annoying emulated filesystem bug
+            return new FileStream(file, FileMode.Open);
+
             //Check if the file exists
             if (AllFiles.Contains(file))
             {
