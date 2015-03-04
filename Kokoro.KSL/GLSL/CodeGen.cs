@@ -29,7 +29,22 @@ namespace Kokoro.KSL.GLSL
 
         internal static string CompileFromSyntaxTree(KSL.KSLCompiler.KShaderType shaderType)
         {
-            src = "#version 440 core\n";    //Use attribute to specify version number?
+			//Specify version as per Logic.AvailableSM
+			switch(KSL.Lib.General.Logic.AvailableSM){
+
+			case ShadingModel.SM4:
+				src = "#version 440 core\n";    //Use attribute to specify version number?
+				break;
+			case ShadingModel.SM3:
+				src = "#version 330 core\n";
+				break;
+			case ShadingModel.SM2:
+				src = "#version 200 core\n";
+				break;
+			case ShadingModel.SM1:
+				src = "";		//TODO look up about whether #version was even available back then
+				break;
+			}
             strBuilder = new StringBuilder(src);
 
             List<SyntaxTree.Variable> StreamVars = new List<SyntaxTree.Variable>();

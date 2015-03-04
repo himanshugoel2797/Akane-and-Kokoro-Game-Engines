@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -44,11 +44,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Akane\Akane.csproj">
-      <Project>{2c15b0e5-565b-450c-b25d-2745a8b0e9e2}</Project>
+      <Project>{2C15B0E5-565B-450C-B25D-2745A8B0E9E2}</Project>
       <Name>Akane</Name>
     </ProjectReference>
     <ProjectReference Include="..\Kokoro\Kokoro.csproj">
-      <Project>{6d8eb8bd-f8ad-4fe1-995f-4eefbc2bc8f5}</Project>
+      <Project>{6D8EB8BD-F8AD-4FE1-995F-4EEFBC2BC8F5}</Project>
       <Name>Kokoro</Name>
     </ProjectReference>
   </ItemGroup>

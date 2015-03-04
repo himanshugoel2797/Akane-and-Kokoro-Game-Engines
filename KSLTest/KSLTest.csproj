@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -50,7 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Kokoro.KSL\Kokoro.KSL.csproj">
-      <Project>{d2a4374b-97c9-4233-a071-bbe0126f74bf}</Project>
+      <Project>{D2A4374B-97C9-4233-A071-BBE0126F74BF}</Project>
       <Name>Kokoro.KSL</Name>
     </ProjectReference>
   </ItemGroup>

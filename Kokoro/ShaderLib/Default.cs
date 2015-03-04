@@ -20,6 +20,8 @@ namespace Kokoro.ShaderLib
             Manager.StreamOut<Vec4>("Color", 0);
 
             Vars.Color = Texture.Read2D(Vars.ColorMap, Vars.UV);
+
+			Manager.ShaderEnd();
         }
 
         public void Vertex()
@@ -35,6 +37,8 @@ namespace Kokoro.ShaderLib
             Vars.VertexPosition.Construct(Vars.VertexPos, 1);
             Vars.VertexPosition *= Vars.MVP;
             Vars.UV = Vars.UV0;
+
+			Manager.ShaderEnd();
         }
 
         public static HLShader Create(ShaderTypes t)

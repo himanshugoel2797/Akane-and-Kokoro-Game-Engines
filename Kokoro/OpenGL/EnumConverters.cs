@@ -55,7 +55,7 @@ namespace Kokoro.OpenGL
 
         public static DrawBuffersEnum EDrawBufferAttachment(Engine.FrameBufferAttachments attachment)
         {
-            return (DrawBuffersEnum)Enum.Parse(typeof(DrawBuffersEnum), attachment.ToString());
+			return (DrawBuffersEnum)Enum.Parse(typeof(DrawBuffersEnum), attachment.ToString());
         }
 
         public static CullFaceMode ECullMode(Engine.CullMode cullMode)

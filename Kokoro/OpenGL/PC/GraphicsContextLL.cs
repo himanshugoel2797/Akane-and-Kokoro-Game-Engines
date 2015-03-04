@@ -63,6 +63,9 @@ namespace Kokoro.OpenGL.PC
 
         protected void Window_RenderFrame(double interval)
         {
+			ErrorCode err = GL.GetError();
+			if (err != ErrorCode.NoError) Kokoro.Debug.ErrorLogger.AddMessage(0, err.ToString(), Kokoro.Debug.DebugType.Error, Kokoro.Debug.Severity.High);
+
             if (tmpCtrl == false)
             {
                 (this as Engine.GraphicsContext).Initialize(this as Engine.GraphicsContext);
@@ -76,8 +79,6 @@ namespace Kokoro.OpenGL.PC
             Kokoro.Debug.ErrorLogger.AddMessage(0, "End Render Frame", Kokoro.Debug.DebugType.Other, Kokoro.Debug.Severity.Notification);
             Kokoro.Debug.ObjectAllocTracker.MarkGameLoop(interval, (this as Engine.GraphicsContext));
 
-            ErrorCode err = GL.GetError();
-            if (err != ErrorCode.NoError) Kokoro.Debug.ErrorLogger.AddMessage(0, err.ToString(), Kokoro.Debug.DebugType.Error, Kokoro.Debug.Severity.High);
 #endif
         }
         protected void SwapBuffers()
@@ -161,6 +162,7 @@ namespace Kokoro.OpenGL.PC
         int msaaTexID, fbufID, msaaLevel;
         protected void InitializeMSAA(int sampleCount)
         {
+			return; //TODO Fixme
             msaaTexID = GL.GenTexture();
             GL.BindTexture(TextureTarget.Texture2DMultisample, msaaTexID);
             GL.TexImage2DMultisample(TextureTargetMultisample.Texture2DMultisample, sampleCount, PixelInternalFormat.Rgba8, Window.ClientSize.Width, Window.ClientSize.Height, false);

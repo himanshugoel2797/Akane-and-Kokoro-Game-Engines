@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -62,14 +62,16 @@
     <Compile Include="World\CharacterController.cs" />
     <Compile Include="World\Input.cs" />
     <Compile Include="World\Map.cs" />
+    <Compile Include="Graphics\ShaderLib\DefaultShader.cs" />
+    <Compile Include="Graphics\ShaderLib\LayerDrawShader.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Kokoro.KSL\Kokoro.KSL.csproj">
-      <Project>{d2a4374b-97c9-4233-a071-bbe0126f74bf}</Project>
+      <Project>{D2A4374B-97C9-4233-A071-BBE0126F74BF}</Project>
       <Name>Kokoro.KSL</Name>
     </ProjectReference>
     <ProjectReference Include="..\Kokoro\Kokoro.csproj">
-      <Project>{6d8eb8bd-f8ad-4fe1-995f-4eefbc2bc8f5}</Project>
+      <Project>{6D8EB8BD-F8AD-4FE1-995F-4EEFBC2BC8F5}</Project>
       <Name>Kokoro</Name>
     </ProjectReference>
   </ItemGroup>
@@ -89,4 +91,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Folder Include="Graphics\ShaderLib\" />
+  </ItemGroup>
 </Project>

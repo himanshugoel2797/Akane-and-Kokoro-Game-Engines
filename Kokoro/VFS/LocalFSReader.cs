@@ -1,4 +1,4 @@
-﻿#if DEBUG && !CHECK_FILESYSTEMS
+﻿//#if (DEBUG && !CHECK_FILESYSTEMS) || RELEASE
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -88,4 +88,4 @@ namespace Kokoro.VFS
 
     }
 }
-#endif
+//#endif

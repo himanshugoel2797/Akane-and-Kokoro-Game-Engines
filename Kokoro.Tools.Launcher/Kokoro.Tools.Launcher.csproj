@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -57,23 +57,19 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Kokoro.FSWriter\Kokoro.FSWriter.csproj">
-      <Project>{0e6b4980-4a7e-4e4a-a2f9-615e5602f2c7}</Project>
+      <Project>{0E6B4980-4A7E-4E4A-A2F9-615E5602F2C7}</Project>
       <Name>Kokoro.FSWriter</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Kokoro.IDE\Kokoro.IDE.csproj">
-      <Project>{3a712a26-21e5-4fbb-ab0b-16c1be7af44b}</Project>
-      <Name>Kokoro.IDE</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Kokoro.Irradiate\Kokoro.Irradiate.csproj">
-      <Project>{701dfb6d-7953-460f-a8a9-fb347e9ec72c}</Project>
+      <Project>{701DFB6D-7953-460F-A8A9-FB347E9EC72C}</Project>
       <Name>Kokoro.Irradiate</Name>
     </ProjectReference>
     <ProjectReference Include="..\Kokoro.Voxelizer\Kokoro.Voxelizer.csproj">
-      <Project>{071a8fd8-6749-4c34-99ea-7b964a0d3477}</Project>
+      <Project>{071A8FD8-6749-4C34-99EA-7B964A0D3477}</Project>
       <Name>Kokoro.Voxelizer</Name>
     </ProjectReference>
     <ProjectReference Include="..\Kokoro\Kokoro.csproj">
-      <Project>{6d8eb8bd-f8ad-4fe1-995f-4eefbc2bc8f5}</Project>
+      <Project>{6D8EB8BD-F8AD-4FE1-995F-4EEFBC2BC8F5}</Project>
       <Name>Kokoro</Name>
     </ProjectReference>
   </ItemGroup>

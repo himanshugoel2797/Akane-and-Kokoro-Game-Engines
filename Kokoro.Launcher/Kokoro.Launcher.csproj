@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -57,11 +57,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Kokoro\Kokoro.csproj">
-      <Project>{6d8eb8bd-f8ad-4fe1-995f-4eefbc2bc8f5}</Project>
+      <Project>{6D8EB8BD-F8AD-4FE1-995F-4EEFBC2BC8F5}</Project>
       <Name>Kokoro</Name>
     </ProjectReference>
     <ProjectReference Include="..\Sandbox\Sandbox.csproj">
-      <Project>{f288127f-87a4-4ba7-aac9-9f3eccb1dc4b}</Project>
+      <Project>{F288127F-87A4-4BA7-AAC9-9F3ECCB1DC4B}</Project>
       <Name>Sandbox</Name>
     </ProjectReference>
   </ItemGroup>

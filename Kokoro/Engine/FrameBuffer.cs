@@ -77,9 +77,9 @@ namespace Kokoro.Engine
             id = base.Generate();
             base.Bind(id);
 
-            Add("DepthBuffer", new FrameBufferTexture(width, height, PixelFormat.Depth, PixelComponentType.D32, PixelType.Float), FrameBufferAttachments.DepthAttachment, context); //Attach the depth buffer to the framebuffer
-            Add("Color", new FrameBufferTexture(width, height, PixelFormat.BGRA, pct, PixelType.Float), FrameBufferAttachments.ColorAttachment0, context);
-
+			Add("Color", new FrameBufferTexture(width, height, PixelFormat.BGRA, pct, PixelType.Float), FrameBufferAttachments.ColorAttachment0, context);
+			Add("DepthBuffer", new FrameBufferTexture(width, height, PixelFormat.Depth, PixelComponentType.D32, PixelType.Float), FrameBufferAttachments.DepthAttachment, context); //Attach the depth buffer to the framebuffer
+            
             base.CheckError();
             base.Bind(0);
 

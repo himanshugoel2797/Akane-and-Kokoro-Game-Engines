@@ -17,8 +17,17 @@ namespace Kokoro.KSL.Lib.General
         public Comparisons Operation;
     }
 
+	/// <summary>
+	/// Shading model. NOTE: These do not comply with the GPU Shading Model term, instead they are based off of GLSL version numbers
+	/// </summary>
+	public enum ShadingModel{
+		SM1, SM2, SM3, SM4
+	}
+
     public static class Logic
     {
+
+		public static ShadingModel AvailableSM = ShadingModel.SM3;	//By default assume SM3 - GLSL 330 support
 
         private static string GenerateComparisonString(Comparison comparison)
         {

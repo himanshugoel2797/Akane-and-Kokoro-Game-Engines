@@ -1,4 +1,4 @@
-﻿#if RELEASE || (DEBUG && CHECK_FILESYSTEMS)
+﻿#if (DEBUG && CHECK_FILESYSTEMS)
 using System;
 using System.Collections.Generic;
 using System.Linq;

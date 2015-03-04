@@ -113,7 +113,7 @@ namespace Kokoro.OpenGL.PC
         protected void BindToFBuffer(Engine.FrameBufferAttachments texUnit, int id)
         {
             FramebufferAttachment attach = EnumConverters.EFrameBufferAttachment(texUnit);
-            GL.FramebufferTexture(FramebufferTarget.Framebuffer, attach, id, 0);
+			GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, attach, TextureTarget.Texture2D, id, 0);
         }
 
         protected Bitmap FetchTextureData(int id)
