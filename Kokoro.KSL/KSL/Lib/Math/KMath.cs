@@ -13,8 +13,17 @@ using Kokoro.KSL.GLSL.PC;
 
 namespace Kokoro.KSL.Lib.Math
 {
+    /// <summary>
+    /// Implements globally available Math functions
+    /// </summary>
     public class KMath
     {
+        /// <summary>
+        /// Calculate the cross product of the two vectors
+        /// </summary>
+        /// <param name="a">Vector a</param>
+        /// <param name="b">Vector b</param>
+        /// <returns>The cross product a x b</returns>
         public static Vec3 Cross(Vec3 a, Vec3 b)
         {
             var k = new Vec3()
@@ -33,6 +42,12 @@ namespace Kokoro.KSL.Lib.Math
             return k;
         }
 
+        /// <summary>
+        /// Calculate the cross product of the two vectors
+        /// </summary>
+        /// <param name="a">Vector a</param>
+        /// <param name="b">Vector b</param>
+        /// <returns>The cross product a x b</returns>
         public static Vec2 Cross(Vec2 a, Vec2 b)
         {
             var k = new Vec2()
@@ -51,6 +66,12 @@ namespace Kokoro.KSL.Lib.Math
             return k;
         }
 
+        /// <summary>
+        /// Calculate the cross product of the two vectors
+        /// </summary>
+        /// <param name="a">Vector a</param>
+        /// <param name="b">Vector b</param>
+        /// <returns>The cross product a x b</returns>
         public static Vec4 Cross(Vec4 a, Vec4 b)
         {
             var k = new Vec4()
@@ -69,6 +90,11 @@ namespace Kokoro.KSL.Lib.Math
             return k;
         }
 
+        /// <summary>
+        /// Normalize the vector
+        /// </summary>
+        /// <param name="a">The vector to normalize</param>
+        /// <returns>The normalized vector</returns>
         public static Vec2 Normalize(Vec2 a)
         {
             var k = new Vec2()
@@ -87,6 +113,11 @@ namespace Kokoro.KSL.Lib.Math
             return k;
         }
 
+        /// <summary>
+        /// Normalize the vector
+        /// </summary>
+        /// <param name="a">The vector to normalize</param>
+        /// <returns>The normalized vector</returns>
         public static Vec3 Normalize(Vec3 a)
         {
             var k = new Vec3()
@@ -105,6 +136,11 @@ namespace Kokoro.KSL.Lib.Math
             return k;
         }
 
+        /// <summary>
+        /// Normalize the vector
+        /// </summary>
+        /// <param name="a">The vector to normalize</param>
+        /// <returns>The normalized vector</returns>
         public static Vec4 Normalize(Vec4 a)
         {
             var k = new Vec4()

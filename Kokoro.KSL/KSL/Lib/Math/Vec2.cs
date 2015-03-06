@@ -9,6 +9,12 @@ namespace Kokoro.KSL.Lib.Math
     public class Vec2 : Obj
     {
         #region Indexer Hack
+
+        /// <summary>
+        /// Get/Set swizzle masks
+        /// </summary>
+        /// <param name="swizzleMask">The swizzle mask</param>
+        /// <returns>The object with the swizzle mask applied</returns>
         public object this[string swizzleMask]
         {
             get
@@ -47,6 +53,10 @@ namespace Kokoro.KSL.Lib.Math
         }
         #endregion
 
+        /// <summary>
+        /// Get the default value of this object
+        /// </summary>
+        /// <returns>The default value</returns>
         public override object GetDefaultValue()
         {
             return 0;
@@ -181,7 +191,12 @@ namespace Kokoro.KSL.Lib.Math
         #endregion
 
         #region Non-Static Converters
-        public void Construct(KInt a, KInt b)
+        /// <summary>
+        /// Construct a Vec2 objecct from 2 KFloat objects
+        /// </summary>
+        /// <param name="a">X Component KFloat</param>
+        /// <param name="b">Y Component KFloat</param>
+        public void Construct(KFloat a, KFloat b)
         {
             this["x"] = a;
             this["y"] = b;

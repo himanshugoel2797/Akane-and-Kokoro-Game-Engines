@@ -9,5 +9,6 @@ namespace Kokoro.KSL
     //KParams stores compile time fixed parameters to be placed into the shader
     public class KParams
     {
+        //TODO implement KParams
     }
 }

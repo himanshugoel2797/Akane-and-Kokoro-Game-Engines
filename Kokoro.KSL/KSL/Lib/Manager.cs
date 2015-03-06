@@ -9,6 +9,9 @@ using Kokoro.KSL.Lib.General;
 
 namespace Kokoro.KSL.Lib
 {
+    /// <summary>
+    /// Manages variable creation
+    /// </summary>
     public class Manager
     {
         internal static dynamic VarDB;
@@ -16,6 +19,7 @@ namespace Kokoro.KSL.Lib
         private static void HandlePropertyChanges(
         object sender, PropertyChangedEventArgs e)
         {
+            //Handle assignment operations so we can generate equivalent shading language instructions
             if (((IDictionary<string, object>)VarDB)[e.PropertyName] as Obj != null && e.PropertyName != ((Obj)((IDictionary<string, object>)VarDB)[e.PropertyName]).ObjName)
             {
                 SyntaxTree.Instructions.Enqueue(new SyntaxTree.Instruction()
@@ -28,6 +32,10 @@ namespace Kokoro.KSL.Lib
             }
         }
 
+        /// <summary>
+        /// Marks the start of a new shader
+        /// </summary>
+        /// <returns>Provides a dynamic object which will contain all the shader's variables</returns>
         public static dynamic ShaderStart()
         {
             VarDB = new ExpandoObject();
@@ -84,6 +92,7 @@ namespace Kokoro.KSL.Lib
             //TODO add more variables into the shader compiler?
 
 
+            //Reset the engine state
             ((INotifyPropertyChanged)VarDB).PropertyChanged +=
             new PropertyChangedEventHandler(HandlePropertyChanges);
 
@@ -114,11 +123,19 @@ namespace Kokoro.KSL.Lib
             return VarDB;
         }
 
+        /// <summary>
+        /// Marks the end of a shader object
+        /// </summary>
         public static void ShaderEnd()
         {
 
         }
 
+        /// <summary>
+        /// Define a new shader shared input value
+        /// </summary>
+        /// <typeparam name="T">The type of the input</typeparam>
+        /// <param name="name">The name of the variable</param>
         public static void SharedIn<T>(string name) where T : Obj, new()
         {
             T tmp = new T();
@@ -137,6 +154,11 @@ namespace Kokoro.KSL.Lib
             ((IDictionary<string, object>)VarDB).Add(name, tmp);
         }
 
+        /// <summary>
+        /// Define a new shader shared output value
+        /// </summary>
+        /// <typeparam name="T">The type of the output</typeparam>
+        /// <param name="name">The name of the variable</param>
         public static void SharedOut<T>(string name) where T : Obj, new()
         {
             T tmp = new T();
@@ -155,6 +177,12 @@ namespace Kokoro.KSL.Lib
             ((IDictionary<string, object>)VarDB).Add(name, null);
         }
 
+        /// <summary>
+        /// Define a new Stream In location variable
+        /// </summary>
+        /// <typeparam name="T">The Type of the variable</typeparam>
+        /// <param name="name">The name of the variable</param>
+        /// <param name="location">The location of the variable</param>
         public static void StreamIn<T>(string name, int location) where T : Obj, new()
         {
             T tmp = new T();
@@ -173,6 +201,12 @@ namespace Kokoro.KSL.Lib
             ((IDictionary<string, object>)VarDB).Add(name, tmp);
         }
 
+        /// <summary>
+        /// Define a new Stream Out location variable
+        /// </summary>
+        /// <typeparam name="T">The type of the variable</typeparam>
+        /// <param name="name">The name of the variable</param>
+        /// <param name="location">The location of the variable</param>
         public static void StreamOut<T>(string name, int location) where T : Obj, new()
         {
             T tmp = new T();
@@ -191,7 +225,11 @@ namespace Kokoro.KSL.Lib
             ((IDictionary<string, object>)VarDB).Add(name, tmp);
         }
 
-
+        /// <summary>
+        /// Define a new uniform variable
+        /// </summary>
+        /// <typeparam name="T">The type of the variable</typeparam>
+        /// <param name="name">The name of the variable</param>
         public static void Uniform<T>(string name) where T : Obj, new()
         {
             T tmp = new T();
@@ -210,6 +248,11 @@ namespace Kokoro.KSL.Lib
             ((IDictionary<string, object>)VarDB).Add(name, tmp);
         }
 
+        /// <summary>
+        /// Define a new variable
+        /// </summary>
+        /// <typeparam name="T">The type of the variable</typeparam>
+        /// <param name="name">The name of the variable</param>
         public static void Create<T>(string name) where T : Obj, new()
         {
             T tmp = new T();

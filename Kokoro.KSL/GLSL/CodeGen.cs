@@ -18,17 +18,20 @@ namespace Kokoro.KSL.GLSL
     {
         static string src;
         static StringBuilder strBuilder;
-        static Dictionary<string, string> PreDefinedVariablesMap = new Dictionary<string, string>()
-        {
-            ["VertexPosition"] = "gl_Position",
-            ["VertexID"] = "gl_VertexID",
-            ["InstanceID"] = "gl_InstanceID",
-            ["FragCoord"] = "gl_FragCoord"
-        };
+        static Dictionary<string, string> PreDefinedVariablesMap = new Dictionary<string, string>();
+        
 
-
+        //Generate code from the syntax tree created from its execution
         internal static string CompileFromSyntaxTree(KSL.KSLCompiler.KShaderType shaderType)
         {
+            
+            //Map some predefined variables for GLSL
+            PreDefinedVariablesMap["VertexPosition"] = "gl_Position";
+            PreDefinedVariablesMap["VertexID"] = "gl_VertexID";
+            PreDefinedVariablesMap["InstanceID"] = "gl_InstanceID";
+            PreDefinedVariablesMap["FragCoord"] = "gl_FragCoord";
+
+
 			//Specify version as per Logic.AvailableSM
 			switch(KSL.Lib.General.Logic.AvailableSM){
 
@@ -47,6 +50,7 @@ namespace Kokoro.KSL.GLSL
 			}
             strBuilder = new StringBuilder(src);
 
+            //Get variable declarations from the syntax tree and organize them
             List<SyntaxTree.Variable> StreamVars = new List<SyntaxTree.Variable>();
             List<SyntaxTree.Variable> UniformVars = new List<SyntaxTree.Variable>();
             List<SyntaxTree.Variable> SharedVars = new List<SyntaxTree.Variable>();
@@ -68,7 +72,7 @@ namespace Kokoro.KSL.GLSL
             }
 
 
-
+            //Generate code for the stream variables
             foreach (SyntaxTree.Variable variable in StreamVars)
             {
                 strBuilder.AppendFormat("layout(location = {0}) {1} {2} {3};\n",
@@ -79,6 +83,7 @@ namespace Kokoro.KSL.GLSL
 
             strBuilder.AppendLine();
 
+            //Generate code for the uniform variables
             foreach (SyntaxTree.Variable variable in UniformVars)
             {
                 strBuilder.AppendFormat("uniform {0} {1};\n",
@@ -88,6 +93,7 @@ namespace Kokoro.KSL.GLSL
 
             strBuilder.AppendLine();
 
+            //Generate code for the shader variables
             foreach (SyntaxTree.Variable variable in SharedVars)
             {
                 strBuilder.AppendFormat("{0} {1} {2};\n",
@@ -96,9 +102,11 @@ namespace Kokoro.KSL.GLSL
                     variable.name);
             }
 
+            //Generate the main method signature
             strBuilder.AppendLine();
             strBuilder.AppendLine("void main(){");
 
+            //Build the code body using the fundamental operations available to the language
             while (SyntaxTree.Instructions.Count >= 1)
             {
                 //Start going through Instruction queue to generate shader body
@@ -141,6 +149,7 @@ namespace Kokoro.KSL.GLSL
 
         static string currentDeclaration = "";
 
+        //Translate KSL function calls to GLSL equivalents
         internal static string TranslateSDKFunctionCalls(SyntaxTree.FunctionCalls function, params string[] parameters)
         {
             string str = "";
@@ -182,6 +191,7 @@ namespace Kokoro.KSL.GLSL
             return str;
         }
 
+        //Substitute reserved predefined variables with the GLSL specifc name
         internal static string SubstitutePredefinedVars(string varName)
         {
             foreach(KeyValuePair<string, string> substitutions in PreDefinedVariablesMap)
@@ -191,6 +201,8 @@ namespace Kokoro.KSL.GLSL
 
             return varName;
         }
+
+        //Convert the C# Type object to its equivalent GLSL string
         internal static string ConvertType(Type t)
         {
             string tStr = "";
@@ -212,6 +224,8 @@ namespace Kokoro.KSL.GLSL
 
             return tStr;
         }
+
+        //Generate a type declaration
         internal static string TypeDeclaration(Type t, object val)
         {
             string tmp = ConvertType(t) + "(" + val.ToString() + ")";
@@ -219,6 +233,7 @@ namespace Kokoro.KSL.GLSL
             return tmp;
         }
 
+        //Generate a return statement
         internal static void Return()
         {
             src += "return " + currentDeclaration;

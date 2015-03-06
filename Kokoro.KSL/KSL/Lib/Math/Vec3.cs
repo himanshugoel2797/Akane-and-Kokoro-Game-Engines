@@ -9,6 +9,11 @@ namespace Kokoro.KSL.Lib.Math
     public class Vec3 : Obj
     {
         #region Indexer Hack
+        /// <summary>
+        /// Get/Set swizzle masks
+        /// </summary>
+        /// <param name="swizzleMask">The swizzle mask</param>
+        /// <returns>The object with the swizzle mask applied</returns>
         public object this[string swizzleMask]
         {
             get
@@ -58,6 +63,10 @@ namespace Kokoro.KSL.Lib.Math
         }
         #endregion
 
+        /// <summary>
+        /// Get the default value of this object
+        /// </summary>
+        /// <returns>The default value</returns>
         public override object GetDefaultValue()
         {
             return 0;
@@ -193,10 +202,28 @@ namespace Kokoro.KSL.Lib.Math
         #endregion
 
         #region Non-Static Converters
+        /// <summary>
+        /// Construct a Vec3 object from a Vec2 object and a KFloat object
+        /// </summary>
+        /// <param name="vec">XY Component Vec2</param>
+        /// <param name="i">Z Component KFloat</param>
         public void Construct(Vec2 vec, KFloat i)
         {
             this["xy"] = vec;
             this["z"] = i;
+        }
+
+        /// <summary>
+        /// Construct a Vec3 object from 3 KFloat objects
+        /// </summary>
+        /// <param name="x">X Component KFloat</param>
+        /// <param name="y">Y Component KFloat</param>
+        /// <param name="z">Z Component KFloat</param>
+        public void Construct(KFloat x, KFloat y, KFloat z)
+        {
+            this["x"] = x;
+            this["y"] = y;
+            this["z"] = z;
         }
         #endregion
     }

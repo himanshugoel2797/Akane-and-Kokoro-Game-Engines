@@ -23,16 +23,31 @@ namespace Kokoro.KSL
             Vertex = 0, Fragment = 4, Geometry = 3, TessellationControl = 1, TessellationEval = 2, TessellationComb = 5
         }
 
+        /// <summary>
+        /// Register a predefined uniform name to be made available to shaders
+        /// </summary>
+        /// <typeparam name="T">The type of the uniform</typeparam>
+        /// <param name="name">The name of the uniform</param>
         public static void RegisterPreDefinedUniform<T>(string name) where T : Obj, new()
         {
             preDefUniforms.Add(name, new T());
         }
 
+        /// <summary>
+        /// Unregister a predefined uniform
+        /// </summary>
+        /// <param name="name">The name of the uniform to unregister</param>
         public static void UnRegisterPreDefinedUniform(string name)
         {
             preDefUniforms.Remove(name);
         }
 
+        /// <summary>
+        /// Compile a shader program into its platform dependent equivalent
+        /// </summary>
+        /// <param name="shader">The shader to compile</param>
+        /// <param name="s">The shader type to compile</param>
+        /// <returns>The string representation of the shader in the language specified during build</returns>
         public static string Compile(IKShaderProgram shader, KShaderType s)
         {
 

@@ -6,8 +6,15 @@ using System.Threading.Tasks;
 
 namespace Kokoro.KSL.Lib.Math
 {
+    /// <summary>
+    /// Define a KSL Float object
+    /// </summary>
     public class KFloat : Obj
     {
+        /// <summary>
+        /// Get the default value of this object
+        /// </summary>
+        /// <returns>The default value</returns>
         public override object GetDefaultValue()
         {
             return 0;

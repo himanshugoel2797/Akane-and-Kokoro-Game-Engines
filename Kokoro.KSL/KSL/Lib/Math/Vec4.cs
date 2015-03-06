@@ -10,6 +10,11 @@ namespace Kokoro.KSL.Lib.Math
     {
 
         #region Indexer Hack
+        /// <summary>
+        /// Get/Set swizzle masks
+        /// </summary>
+        /// <param name="swizzleMask">The swizzle mask</param>
+        /// <returns>The object with the swizzle mask applied</returns>
         public object this[string swizzleMask]
         {
             get
@@ -70,6 +75,10 @@ namespace Kokoro.KSL.Lib.Math
         }
         #endregion
 
+        /// <summary>
+        /// Get the default value of this object
+        /// </summary>
+        /// <returns>The defualt value</returns>
         public override object GetDefaultValue()
         {
             return 0;
@@ -252,10 +261,41 @@ namespace Kokoro.KSL.Lib.Math
         #endregion
 
         #region Non-Static Converters
-        public void Construct(Vec3 vec, KInt i)
+        /// <summary>
+        /// Construct a new Vec4 from a Vec3 object and a KFloat object
+        /// </summary>
+        /// <param name="vec">XYZ Component Vec3</param>
+        /// <param name="i">W Component KFloat</param>
+        public void Construct(Vec3 vec, KFloat i)
         {
             this["xyz"] = vec;
             this["w"] = i;
+        }
+
+        /// <summary>
+        /// Construct a new Vec4 from 2 Vec2 objects
+        /// </summary>
+        /// <param name="xy">XY Component Vec2</param>
+        /// <param name="zw">ZW Component Vec2</param>
+        public void Construct(Vec2 xy, Vec2 zw)
+        {
+            this["xy"] = xy;
+            this["zw"] = zw;
+        }
+
+        /// <summary>
+        /// Construct a new Vec4 from 4 KFloat objects
+        /// </summary>
+        /// <param name="x">X Component KFloat</param>
+        /// <param name="y">Y Component KFloat</param>
+        /// <param name="z">Z Component KFloat</param>
+        /// <param name="w">W Component KFloat</param>
+        public void Construct(KFloat x, KFloat y, KFloat z, KFloat w)
+        {
+            this["x"] = x;
+            this["y"] = y;
+            this["z"] = z;
+            this["w"] = w;
         }
         #endregion
 
