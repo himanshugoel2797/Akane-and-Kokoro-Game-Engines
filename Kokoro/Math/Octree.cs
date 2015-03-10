@@ -50,5 +50,10 @@ namespace Kokoro.Math
         /// BottomBackRight Cell
         /// </summary>
         public Octree<T> BottomBackRight;
+
+        /// <summary>
+        /// The Parent of this octree node
+        /// </summary>
+        public Octree<T> Parent;
     }
 }

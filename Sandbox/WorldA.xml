@@ -5,12 +5,12 @@
   <WorldItem FilePath="path" UpdateMode="Static" ObjectType="LightSource" ScriptPath="None" Position="5,0,0"></WorldItem>
   <WorldItem FilePath="path" UpdateMode="Static" ObjectType="SoundSource" ScriptPath="None" Position="0,0,1"></WorldItem>
 
-  <CubeMap Top="top" Bottom="btm" Left="lft" Right="rght" Front="frnt" Back="bck" Convolved="conv"  Depth="dpth"
-  
-  <WorldOctree>
-    <Child Name="BottomForwardLeft" Index="0">
-      <Child Name="TopForwardLeft" Index="1"></Child>
+  <CubeMap Top="top" Bottom="btm" Left="lft" Right="rght" Front="frnt" Back="bck" Convolved="conv"  Depth="dpth"></CubeMap>
+
+  <WorldOctree Min="-10,-10,-10" Max="10,10,10">
+    <Child Name="BottomForwardLeft" Items="0,2" CubeMapIndex = "0">
+      <Child Name="TopForwardLeft" Items="1,3" CubeMapIndex="0"></Child>
     </Child>
   </WorldOctree>
-  
+
 </World>

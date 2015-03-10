@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Kokoro.Engine
 {
@@ -115,7 +116,12 @@ namespace Kokoro.Engine
         /// <summary>
         /// Describes the Preconvolved low resolution cubemap used for lighting
         /// </summary>
-        public Texture PreConvolvedCubeMap;
+        public Texture ConvolvedCubeMap;
+
+        /// <summary>
+        /// Describes the Depth cubemap of the scene, for fast ray traced effects
+        /// </summary>
+        public Texture Depth;
     }
 
     public class World
@@ -130,10 +136,144 @@ namespace Kokoro.Engine
         /// </summary>
         public Octree<WorldCell> Cells;
 
+        /// <summary>
+        /// The Bounding Box for the entire world
+        /// </summary>
+        public Model.BoundingBox Bounds;
+
+        /// <summary>
+        /// Load a world from file
+        /// </summary>
+        /// <param name="path">The path to the file</param>
+        /// <returns></returns>
         public static World Load(string path)
         {
             World world = new World();
+            world.Cells = new Octree<WorldCell>();
 
+            List<WorldItem> WorldItems = new List<WorldItem>();
+            List<string[]> CubeMaps = new List<string[]>();
+
+            Octree<WorldCell> CurrentCell = world.Cells;
+
+            #region XML Parser
+            //Parse the document and load all data
+            using (XmlReader doc = XmlReader.Create(path))
+            {
+                while (doc.Read())
+                {
+                    if (doc.IsStartElement())
+                    {
+                        switch (doc.Name)
+                        {
+                            case "WorldItem":
+                                WorldItems.Add(new WorldItem()
+                                {
+                                    FilePath = doc["FilePath"],
+                                    ObjType = (ObjectType)Enum.Parse(typeof(ObjectType), doc["ObjectType"]),
+                                    ScriptPath = doc["ScriptPath"],
+                                    UpdateMode = (DrawMode)Enum.Parse(typeof(DrawMode), doc["UpdateMode"]),
+                                    Position = new Vector3(doc["Position"])
+                                });
+                                break;
+                            case "CubeMap":
+                                CubeMaps.Add(new string[] { 
+                                        doc["Top"],
+                                        doc["Bottom"],
+                                        doc["Left"],
+                                        doc["Right"],
+                                        doc["Front"],
+                                        doc["Back"],
+                                        doc["Convolved"],
+                                        doc["Depth"]
+                                    });
+                                break;
+                            case "WorldOctree":
+                                world.Bounds = new Model.BoundingBox()
+                                {
+                                    Max = new Vector3(doc["Max"]),
+                                    Min = new Vector3(doc["Min"])
+                                };
+                                break;
+                            case "Child":
+                                //Move down the node heirarchy
+                                switch (doc["Name"])
+                                {
+                                    case "BottomForwardLeft":
+                                        CurrentCell.BottomForwardLeft = new Octree<WorldCell>();
+                                        CurrentCell.BottomForwardLeft.Parent = CurrentCell;
+                                        CurrentCell = CurrentCell.BottomForwardLeft;
+                                        break;
+                                    case "BottomForwardRight":
+                                        CurrentCell.BottomForwardRight = new Octree<WorldCell>();
+                                        CurrentCell.BottomForwardRight.Parent = CurrentCell;
+                                        CurrentCell = CurrentCell.BottomForwardRight;
+                                        break;
+                                    case "BottomBackLeft":
+                                        CurrentCell.BottomBackLeft = new Octree<WorldCell>();
+                                        CurrentCell.BottomBackLeft.Parent = CurrentCell;
+                                        CurrentCell = CurrentCell.BottomBackLeft;
+                                        break;
+                                    case "BottomBackRight":
+                                        CurrentCell.BottomBackRight = new Octree<WorldCell>();
+                                        CurrentCell.BottomBackRight.Parent = CurrentCell;
+                                        CurrentCell = CurrentCell.BottomBackRight;
+                                        break;
+
+                                    case "TopForwardLeft":
+                                        CurrentCell.TopForwardLeft = new Octree<WorldCell>();
+                                        CurrentCell.TopForwardLeft.Parent = CurrentCell;
+                                        CurrentCell = CurrentCell.TopForwardLeft;
+                                        break;
+                                    case "TopForwardRight":
+                                        CurrentCell.TopForwardRight = new Octree<WorldCell>();
+                                        CurrentCell.TopForwardRight.Parent = CurrentCell;
+                                        CurrentCell = CurrentCell.TopForwardRight;
+                                        break;
+                                    case "TopBackLeft":
+                                        CurrentCell.TopBackLeft = new Octree<WorldCell>();
+                                        CurrentCell.TopBackLeft.Parent = CurrentCell;
+                                        CurrentCell = CurrentCell.TopBackLeft;
+                                        break;
+                                    case "TopBackRight":
+                                        CurrentCell.TopBackRight = new Octree<WorldCell>();
+                                        CurrentCell.TopBackRight.Parent = CurrentCell;
+                                        CurrentCell = CurrentCell.TopBackRight;
+                                        break;
+                                }
+
+                                string[] currentItems = doc["Items"].Split(',');
+                                int cubeMapIndex = int.Parse(doc["CubeMapIndex"]);
+
+                                CurrentCell.Information.Items = Array.ConvertAll(currentItems, s => int.Parse(s));
+                                CurrentCell.Information.Top = new Texture(CubeMaps[cubeMapIndex][0], true);
+                                CurrentCell.Information.Bottom = new Texture(CubeMaps[cubeMapIndex][1], true);
+                                CurrentCell.Information.Left = new Texture(CubeMaps[cubeMapIndex][2], true);
+                                CurrentCell.Information.Right = new Texture(CubeMaps[cubeMapIndex][3], true);
+                                CurrentCell.Information.Front = new Texture(CubeMaps[cubeMapIndex][4], true);
+                                CurrentCell.Information.Back = new Texture(CubeMaps[cubeMapIndex][5], true);
+                                CurrentCell.Information.ConvolvedCubeMap = new Texture(CubeMaps[cubeMapIndex][6], true);
+                                CurrentCell.Information.Depth = new Texture(CubeMaps[cubeMapIndex][7], true);
+
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        //Move up the node heirarchy
+                        if (doc.Name == "Child")
+                        {
+                            if (CurrentCell.Parent != null) CurrentCell = CurrentCell.Parent;
+                        }
+                    }
+
+
+
+                }
+            }
+            #endregion
+            //Set all the world items
+            world.AllItems = WorldItems.ToArray();
 
             return world;
         }

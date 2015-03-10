@@ -59,6 +59,16 @@ namespace Kokoro.Math
 
         #region Constructors
 
+        public Vector3(string value)
+        {
+            value = value.Replace("{", "").Replace("}", "").Trim();
+            string[] parts = value.Split(',');
+
+            X = float.Parse(parts[0]);
+            Y = float.Parse(parts[1]);
+            Z = float.Parse(parts[2]);
+        }
+
         /// <summary>
         /// Constructs a new instance.
         /// </summary>
