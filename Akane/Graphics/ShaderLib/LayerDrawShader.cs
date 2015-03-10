@@ -7,27 +7,62 @@ using Kokoro.KSL.Lib.Texture;
 
 namespace Akane
 {
-	public class LayerDrawShader : IKShaderProgram
-	{
-		public LayerDrawShader ()
-		{
-		}
+    public class LayerDrawShader : IKShaderProgram
+    {
+        public LayerDrawShader()
+        {
+        }
 
-		#region IKShaderProgram implementation
+        #region IKShaderProgram implementation
 
-		public void Fragment ()
-		{
-			throw new NotImplementedException ();
-		}
+        public void Fragment()
+        {
+            dynamic Vars = Manager.ShaderStart();
 
-		public void Vertex ()
-		{
-			var Vars = Manager.ShaderStart();
+            //Define Uniform parameters
+            Manager.Uniform<KFloat>("maxGid");
+            Manager.Uniform<KFloat>("firstGid");
+            Manager.Uniform<Vec2>("textureSize");
+            Manager.Uniform<Vec2>("mapSize");
+            Manager.Uniform<Vec2>("tileSize");
+            Manager.Uniform<Vec2>("viewportTileRes");
+            Manager.Uniform<Vec2>("viewportOffset");
+            Manager.Uniform<KFloat>("layerNum");
+            Manager.Uniform<KFloat>("maxLayer");
 
-			Manager.ShaderEnd();
-		}
+            //Define Output streams
+            Manager.StreamOut<Vec4>("Color", 0);
+            Manager.StreamOut<Vec4>("Height", 1);
 
-		#endregion
-	}
+            //Define input data
+            Manager.SharedIn<Vec2>("UV");
+
+            Manager.Create<Vec2>("TileCounts");
+            Manager.Create<Vec2>("UVStep");
+            Manager.Create<Vec2>("CurPos");
+            Manager.Create<Vec2>("TileBaseCoords");
+            Manager.Create<Vec2>("NextTilePos");
+            Manager.Create<Vec2>("MapInfo");
+            Manager.Create<Vec2>("CurPixelPos");
+            Manager.Create<KFloat>("TileID");
+            Manager.Create<Vec2>("Offset");
+            Manager.Create<Vec2>("UVCoords");
+
+            Vars.TileCounts = Vars.textureSize / Vars.tileSize;
+            Vars.UVStep = 1 / Vars.viewportTileRes;
+            Vars.CurPos = KMath.Mod(Vars.UV, Vars.UVStep);
+
+            Manager.ShaderEnd();
+        }
+
+        public void Vertex()
+        {
+            var Vars = Manager.ShaderStart();
+
+            Manager.ShaderEnd();
+        }
+
+        #endregion
+    }
 }
 

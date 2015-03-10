@@ -64,7 +64,7 @@ namespace Kokoro.Engine
                 VertexBufferLL vbuf = new VertexBufferLL();
                 Texture t;
                 Mesh m = model.Meshes[a];
-
+                
 
                 if (m.MaterialIndex >= 0 && model.Materials[m.MaterialIndex].TextureDiffuse.FilePath != null) t = new Texture(Path.Combine(baseDir, model.Materials[m.MaterialIndex].TextureDiffuse.FilePath));
                 else

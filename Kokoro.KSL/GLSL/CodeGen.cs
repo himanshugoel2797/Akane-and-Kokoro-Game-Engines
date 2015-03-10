@@ -186,6 +186,9 @@ namespace Kokoro.KSL.GLSL
                     str = "normalize(" + parameters[0] + ")";
                     break;
 
+                case SyntaxTree.FunctionCalls.Mod:
+                    str = "mod(" + parameters[0] + ", " + parameters[1] + ")";
+                    break;
             }
 
             return str;

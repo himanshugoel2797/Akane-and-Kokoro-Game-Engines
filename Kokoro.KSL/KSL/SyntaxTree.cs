@@ -30,7 +30,8 @@ namespace Kokoro.KSL
         {
             Tex1D, Tex2D, Tex3D,
             Cross2D, Cross3D, Cross4D,
-            Normalize2D, Normalize3D, Normalize4D
+            Normalize2D, Normalize3D, Normalize4D,
+            Mod, Clamp
         }
 
         internal struct Instruction

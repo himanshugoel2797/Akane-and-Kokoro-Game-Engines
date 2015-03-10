@@ -18,6 +18,7 @@ namespace Kokoro.KSL.Lib.Math
     /// </summary>
     public class KMath
     {
+        #region Cross
         /// <summary>
         /// Calculate the cross product of the two vectors
         /// </summary>
@@ -89,7 +90,9 @@ namespace Kokoro.KSL.Lib.Math
 
             return k;
         }
+        #endregion
 
+        #region Normalize
         /// <summary>
         /// Normalize the vector
         /// </summary>
@@ -158,6 +161,86 @@ namespace Kokoro.KSL.Lib.Math
 
             return k;
         }
+        #endregion
 
+        #region Mod
+        /// <summary>
+        /// Calculate the modulus of the two vectors
+        /// </summary>
+        /// <param name="a">Vector a</param>
+        /// <param name="b">Vector b</param>
+        /// <returns>The modulus a % b</returns>
+        public static Vec3 Mod(Vec3 a, Vec3 b)
+        {
+            var k = new Vec3()
+            {
+                ObjName = CodeGenerator.TranslateSDKFunctionCalls(SyntaxTree.FunctionCalls.Mod, a.ObjName, b.ObjName)
+            };
+
+            SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
+            {
+                type = k.GetType(),
+                value = null,
+                paramType = SyntaxTree.ParameterType.Variable,
+                name = k.ObjName
+            });
+
+            return k;
+        }
+
+
+        /// <summary>
+        /// Calculate the modulus of the two vectors
+        /// </summary>
+        /// <param name="a">Vector a</param>
+        /// <param name="b">Vector b</param>
+        /// <returns>The modulus a % b</returns>
+        public static Vec2 Mod(Vec2 a, Vec2 b)
+        {
+            var k = new Vec2()
+            {
+                ObjName = CodeGenerator.TranslateSDKFunctionCalls(SyntaxTree.FunctionCalls.Mod, a.ObjName, b.ObjName)
+            };
+
+            SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
+            {
+                type = k.GetType(),
+                value = null,
+                paramType = SyntaxTree.ParameterType.Variable,
+                name = k.ObjName
+            });
+
+            return k;
+        }
+
+
+        /// <summary>
+        /// Calculate the modulus of the two vectors
+        /// </summary>
+        /// <param name="a">Vector a</param>
+        /// <param name="b">Vector b</param>
+        /// <returns>The modulus a % b</returns>
+        public static Vec4 Mod(Vec4 a, Vec4 b)
+        {
+            var k = new Vec4()
+            {
+                ObjName = CodeGenerator.TranslateSDKFunctionCalls(SyntaxTree.FunctionCalls.Mod, a.ObjName, b.ObjName)
+            };
+
+            SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
+            {
+                type = k.GetType(),
+                value = null,
+                paramType = SyntaxTree.ParameterType.Variable,
+                name = k.ObjName
+            });
+
+            return k;
+        }
+        #endregion
+
+        #region Clamp
+
+        #endregion
     }
 }

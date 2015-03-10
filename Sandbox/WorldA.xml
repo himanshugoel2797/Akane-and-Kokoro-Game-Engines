@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<World>
+  <WorldItem FilePath="path" UpdateMode="Static" ObjectType="Mesh" ScriptPath="None" Position="0,0,0"></WorldItem>
+  <WorldItem FilePath="path" UpdateMode="Dynamic" ObjectType="PhysicsObject" ScriptPath="None" Position="0,10,0"></WorldItem>
+  <WorldItem FilePath="path" UpdateMode="Static" ObjectType="LightSource" ScriptPath="None" Position="5,0,0"></WorldItem>
+  <WorldItem FilePath="path" UpdateMode="Static" ObjectType="SoundSource" ScriptPath="None" Position="0,0,1"></WorldItem>
+
+  <CubeMap Top="top" Bottom="btm" Left="lft" Right="rght" Front="frnt" Back="bck" Convolved="conv"  Depth="dpth"
+  
+  <WorldOctree>
+    <Child Name="BottomForwardLeft" Index="0">
+      <Child Name="TopForwardLeft" Index="1"></Child>
+    </Child>
+  </WorldOctree>
+  
+</World>
