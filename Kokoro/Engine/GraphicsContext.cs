@@ -16,6 +16,12 @@ using Kokoro.OpenGL;    //If building for OpenGL
 #if PC
 using Kokoro.OpenGL.PC;     //If building for OpenGL on PC (Windows, Linux, Mac)
 #endif
+
+#elif OPENGL_AZDO
+#if PC
+using Kokoro.OpenGL.AZDO;
+#endif
+
 #endif
 
 namespace Kokoro.Engine
@@ -282,6 +288,14 @@ namespace Kokoro.Engine
         /// The thread running the Animation loop
         /// </summary>
         public Thread AnimationThread { get; private set; }
+        /// <summary>
+        /// The Render thread
+        /// </summary>
+        public Thread RenderThread { get; private set; }
+        /// <summary>
+        /// The thread on which the engine resource manager runs
+        /// </summary>
+        public Thread ResourceManager { get; private set; }
 
         /// <summary>
         /// The Update handler
@@ -309,6 +323,7 @@ namespace Kokoro.Engine
         /// </summary>
         public void Start(int tpf, int tpu)
         {
+            //Update handler thread
             UpdateThread = new Thread(() =>
             {
                 Stopwatch su = Stopwatch.StartNew();
@@ -319,9 +334,11 @@ namespace Kokoro.Engine
                     {
                         lock (Update)
                         {
-
+                            //Update all input data
                             Keyboard.Update();
                             Mouse.Update();
+
+                            //Call update handler
                             Update(GetNormTicks(su), this);
                         }
                     }
@@ -340,6 +357,7 @@ namespace Kokoro.Engine
                 }
             });
 
+            //Physics handler thread
             PhysicsThread = new Thread(() =>
             {
                 GameLooper(160000, Physics);
@@ -353,6 +371,7 @@ namespace Kokoro.Engine
             Stopwatch s = new Stopwatch();
             ViewportControl.Paint += (a, b) =>
             {
+                //TODO setup command buffer system
                 if (inited)
                 {
                     if (!s.IsRunning) s.Start();
@@ -370,7 +389,7 @@ namespace Kokoro.Engine
                     Thread.Sleep(TimeSpan.FromTicks((long)tpf - (long)GetNormTicks(s)));
                     Debug.ErrorLogger.AddMessage(0, (GetNormTicks(s)).ToString(), Debug.DebugType.Performance, Debug.Severity.Notification);
                 }
-                Kokoro.Debug.ObjectAllocTracker.PostFPS(GetNormTicks(s)); //TODO setup some sort of smoothing, this gives us mostly crap data
+                Kokoro.Debug.ObjectAllocTracker.PostFPS(GetNormTicks(s));
                 s.Reset();
                 s.Start();
                 ViewportControl.Invalidate();

@@ -11,7 +11,7 @@ namespace Kokoro.Engine
     /// <summary>
     /// Describes how often the object will be updated
     /// </summary>
-    public enum DrawMode
+    public enum UpdateMode
     {
         /// <summary>
         /// Never
@@ -62,7 +62,7 @@ namespace Kokoro.Engine
         /// <summary>
         /// Specifies whether the object data is updated often (Dynamic) or doesn't change (Static)
         /// </summary>
-        public DrawMode UpdateMode;
+        public UpdateMode UpdateMode;
         /// <summary>
         /// Describes the object type
         /// </summary>
@@ -172,7 +172,7 @@ namespace Kokoro.Engine
                                     FilePath = doc["FilePath"],
                                     ObjType = (ObjectType)Enum.Parse(typeof(ObjectType), doc["ObjectType"]),
                                     ScriptPath = doc["ScriptPath"],
-                                    UpdateMode = (DrawMode)Enum.Parse(typeof(DrawMode), doc["UpdateMode"]),
+                                    UpdateMode = (UpdateMode)Enum.Parse(typeof(UpdateMode), doc["UpdateMode"]),
                                     Position = new Vector3(doc["Position"])
                                 });
                                 break;

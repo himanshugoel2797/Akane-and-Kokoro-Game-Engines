@@ -33,7 +33,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;OPENGL;PC;DEBUG</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;OPENGL;PC</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
@@ -557,6 +557,14 @@
     <Compile Include="Math\Vector4.cs" />
     <Compile Include="Math\Vector4d.cs" />
     <Compile Include="Math\Vector4h.cs" />
+    <Compile Include="OpenGL\AZDO\FrameBufferLL.cs" />
+    <Compile Include="OpenGL\AZDO\GraphicsContextLL.cs" />
+    <Compile Include="OpenGL\AZDO\InputLL.cs" />
+    <Compile Include="OpenGL\AZDO\ShaderLL.cs" />
+    <Compile Include="OpenGL\AZDO\ShaderProgramLL.cs" />
+    <Compile Include="OpenGL\AZDO\SoundLL.cs" />
+    <Compile Include="OpenGL\AZDO\TextureLL.cs" />
+    <Compile Include="OpenGL\AZDO\VertexBufferLL.cs" />
     <Compile Include="OpenGL\EnumConverters.cs" />
     <Compile Include="OpenGL\PC\Debug.cs" />
     <Compile Include="OpenGL\PC\FrameBufferLL.cs" />
@@ -572,6 +580,7 @@
     <Compile Include="ShaderLib\Default.cs" />
     <Compile Include="ShaderLib\FrameBuffer.cs" />
     <Compile Include="ShaderLib\GBufferShader.cs" />
+    <Compile Include="Sinus\SinusManager.cs" />
     <Compile Include="VFS\FSReader.cs" />
     <EmbeddedResource Include="Debug\LogViewer.resx">
       <DependentUpon>LogViewer.cs</DependentUpon>

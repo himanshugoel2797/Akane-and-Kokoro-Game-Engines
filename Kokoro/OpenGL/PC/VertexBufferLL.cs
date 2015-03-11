@@ -1,4 +1,4 @@
-﻿#if OPENGL
+﻿#if OPENGL && PC
 
 using OpenTK.Graphics.OpenGL4;
 using System;
@@ -24,6 +24,12 @@ namespace Kokoro.OpenGL.PC
 
     public class VertexBufferLL : IDisposable
     {
+
+        public Matrix4 World { get; set; }
+        public int VertexCount { get; set; }
+        public uint IndexCount { get; set; }
+        public Engine.DrawMode DrawMode { get; set; }
+
         private int vaID;
         private int vboID;
         private int iboID;
@@ -32,11 +38,6 @@ namespace Kokoro.OpenGL.PC
         private int tanID;
         private Type indexType;
 
-
-        public Matrix4 World { get; set; }
-        public int VertexCount { get; set; }
-        public uint IndexCount { get; set; }
-        public Engine.DrawMode DrawMode { get; set; }
 
         public VertexBufferLL()
         {
@@ -148,7 +149,7 @@ namespace Kokoro.OpenGL.PC
                 GL.VertexAttribDivisor(2, 0);
             }
 
-            if(tanID != 0)
+            if (tanID != 0)
             {
                 GL.EnableVertexAttribArray(3);
                 GL.BindBuffer(BufferTarget.ArrayBuffer, tanID);

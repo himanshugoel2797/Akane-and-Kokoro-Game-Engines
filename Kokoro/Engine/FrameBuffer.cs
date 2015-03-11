@@ -9,6 +9,12 @@ using Kokoro.Math;
 #if PC
 using Kokoro.OpenGL.PC;
 #endif
+
+#elif OPENGL_AZDO
+#if PC
+using Kokoro.OpenGL.AZDO;
+#endif
+
 #endif
 
 namespace Kokoro.Engine

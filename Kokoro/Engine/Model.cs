@@ -15,6 +15,11 @@ using Assimp;
 #if PC
 using Kokoro.OpenGL.PC;
 #endif
+
+#elif OPENGL_AZDO
+#if PC
+using Kokoro.OpenGL.AZDO;
+#endif
 #endif
 
 namespace Kokoro.Engine
@@ -64,7 +69,7 @@ namespace Kokoro.Engine
                 VertexBufferLL vbuf = new VertexBufferLL();
                 Texture t;
                 Mesh m = model.Meshes[a];
-                
+
 
                 if (m.MaterialIndex >= 0 && model.Materials[m.MaterialIndex].TextureDiffuse.FilePath != null) t = new Texture(Path.Combine(baseDir, model.Materials[m.MaterialIndex].TextureDiffuse.FilePath));
                 else
@@ -173,7 +178,7 @@ namespace Kokoro.Engine
 
             m.Bound.Max = tmpBound.Max;
             m.Bound.Min = tmpBound.Min;
-            
+
 
             return m;
         }
