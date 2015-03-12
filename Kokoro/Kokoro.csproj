@@ -33,17 +33,19 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;OPENGL;PC</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;OPENGL;PC;GL44</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;OPENGL;PC;RELEASE</DefineConstants>
+    <DefineConstants>TRACE;OPENGL;PC;RELEASE;GL44</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>logo.ico</ApplicationIcon>
@@ -568,13 +570,14 @@
     <Compile Include="OpenGL\EnumConverters.cs" />
     <Compile Include="OpenGL\PC\Debug.cs" />
     <Compile Include="OpenGL\PC\FrameBufferLL.cs" />
+    <Compile Include="OpenGL\PC\GPUBufferLL.cs" />
     <Compile Include="OpenGL\PC\GraphicsContextLL.cs" />
     <Compile Include="OpenGL\PC\Input.cs" />
     <Compile Include="OpenGL\PC\ShaderLL.cs" />
     <Compile Include="OpenGL\PC\ShaderProgramLL.cs" />
     <Compile Include="OpenGL\PC\Sound.cs" />
     <Compile Include="OpenGL\PC\TextureLL.cs" />
-    <Compile Include="OpenGL\PC\VertexBufferLL.cs" />
+    <Compile Include="OpenGL\PC\VertexArrayLL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripting\PyScript.cs" />
     <Compile Include="ShaderLib\Default.cs" />

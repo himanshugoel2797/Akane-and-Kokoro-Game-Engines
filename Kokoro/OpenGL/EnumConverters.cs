@@ -55,7 +55,7 @@ namespace Kokoro.OpenGL
 
         public static DrawBuffersEnum EDrawBufferAttachment(Engine.FrameBufferAttachments attachment)
         {
-			return (DrawBuffersEnum)Enum.Parse(typeof(DrawBuffersEnum), attachment.ToString());
+            return (DrawBuffersEnum)Enum.Parse(typeof(DrawBuffersEnum), attachment.ToString());
         }
 
         public static CullFaceMode ECullMode(Engine.CullMode cullMode)
@@ -108,6 +108,16 @@ namespace Kokoro.OpenGL
         public static OpenTK.Input.Key EKey(Kokoro.Engine.Input.Key k)
         {
             return (OpenTK.Input.Key)Enum.Parse(typeof(OpenTK.Input.Key), k.ToString());
+        }
+
+        public static BufferTarget EBufferTarget(Kokoro.Engine.BufferUse use)
+        {
+            if (use == Engine.BufferUse.Array) return BufferTarget.ArrayBuffer;
+            else if (use == Engine.BufferUse.Index) return BufferTarget.ElementArrayBuffer;
+            else if (use == Engine.BufferUse.ShaderStorage) return BufferTarget.ShaderStorageBuffer;
+            else if (use == Engine.BufferUse.Uniform) return BufferTarget.UniformBuffer;
+
+            return BufferTarget.ArrayBuffer;    //Flow should never reach this
         }
     }
 }

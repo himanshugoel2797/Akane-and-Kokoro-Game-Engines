@@ -66,11 +66,6 @@ namespace Kokoro.OpenGL.PC
 			ErrorCode err = GL.GetError();
 			if (err != ErrorCode.NoError) Kokoro.Debug.ErrorLogger.AddMessage(0, err.ToString(), Kokoro.Debug.DebugType.Error, Kokoro.Debug.Severity.High);
 
-            if (tmpCtrl == false)
-            {
-                (this as Engine.GraphicsContext).Initialize(this as Engine.GraphicsContext);
-                tmpCtrl = true;
-            }
 
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 #if DEBUG
@@ -78,10 +73,9 @@ namespace Kokoro.OpenGL.PC
             curRequestTexture = 0;
             Kokoro.Debug.ErrorLogger.AddMessage(0, "End Render Frame", Kokoro.Debug.DebugType.Other, Kokoro.Debug.Severity.Notification);
             Kokoro.Debug.ObjectAllocTracker.MarkGameLoop(interval, (this as Engine.GraphicsContext));
-
 #endif
         }
-        protected void SwapBuffers()
+        protected void swap()
         {
             Window.SwapBuffers();
         }

@@ -14,7 +14,8 @@ using Kokoro.Engine.Input;
 #if OPENGL
 using Kokoro.OpenGL;    //If building for OpenGL
 #if PC
-using Kokoro.OpenGL.PC;     //If building for OpenGL on PC (Windows, Linux, Mac)
+using Kokoro.OpenGL.PC;
+using System.Windows.Forms;     //If building for OpenGL on PC (Windows, Linux, Mac)
 #endif
 
 #elif OPENGL_AZDO
@@ -295,7 +296,7 @@ namespace Kokoro.Engine
         /// <summary>
         /// The thread on which the engine resource manager runs
         /// </summary>
-        public Thread ResourceManager { get; private set; }
+        public Thread ResourceManager { get; private set; }     //NOTE: The resource manager also deals with balancing the world octree, as a result it manages the resources in the tree by unloading any objects which are too far away for current use
 
         /// <summary>
         /// The Update handler
@@ -368,32 +369,41 @@ namespace Kokoro.Engine
                 GameLooper(80000, Animation);
             });
 
+            RenderThread = new Thread(() =>
+            {
+                GameLooper(tpf, Render);
+            });
+
+            #region LL executor
             Stopwatch s = new Stopwatch();
+            bool tmpCtrl = false;
             ViewportControl.Paint += (a, b) =>
             {
                 //TODO setup command buffer system
                 if (inited)
                 {
-                    if (!s.IsRunning) s.Start();
-                    Clear(1, 05f, 0, 0);
-                    Window_RenderFrame(GetNormTicks(s));
-                    lock (Render)
+                    if (!tmpCtrl)
                     {
-                        Render(GetNormTicks(s), this);
+                        Initialize(this);
+                        tmpCtrl = true;
                     }
-                    SwapBuffers();
+
+                    if (!s.IsRunning) s.Start();
+                    lock (Sinus.SinusManager.CommandBuffer)
+                    {
+                        while (Sinus.SinusManager.CommandBuffer.Count > 0)
+                        {
+                            Sinus.SinusManager.CommandBuffer.Dequeue()();   //Invoke the next function
+                            //TODO Drop everything if the renderer starts falling behind
+                        }
+                    }
                 }
 
-                if (tpf != 0 && tpf > GetNormTicks(s))
-                {
-                    Thread.Sleep(TimeSpan.FromTicks((long)tpf - (long)GetNormTicks(s)));
-                    Debug.ErrorLogger.AddMessage(0, (GetNormTicks(s)).ToString(), Debug.DebugType.Performance, Debug.Severity.Notification);
-                }
                 Kokoro.Debug.ObjectAllocTracker.PostFPS(GetNormTicks(s));
                 s.Reset();
                 s.Start();
-                ViewportControl.Invalidate();
             };
+            #endregion
 
             var tmp = Initialize;
             Initialize = (GraphicsContext c) =>
@@ -411,11 +421,27 @@ namespace Kokoro.Engine
             Initialize += (GraphicsContext c) =>
             {
 
-                //Spawn threads for each: Update, Physics, Animation; Render is on the current thread (control.paint)
+                //Spawn threads for each: Update, Physics, Animation, Render
                 UpdateThread.Start();
                 PhysicsThread.Start();
                 AnimationThread.Start();
+                RenderThread.Start();
             };
+        }
+
+        /// <summary>
+        /// Swap the backbuffer and frontbuffer
+        /// </summary>
+        public void SwapBuffers()
+        {
+            //Push all data
+            Sinus.SinusManager.PushCommandBuffer();
+
+            //Invalidate the winform paint and trigger the draw thread
+            ViewportControl.BeginInvoke(new MethodInvoker(() =>
+            {
+                ViewportControl.Invalidate();
+            }));
         }
 
         private void GameLooper(double timestep, Action<double, GraphicsContext> handler)
