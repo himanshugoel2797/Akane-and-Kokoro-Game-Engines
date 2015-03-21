@@ -10,6 +10,7 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK;
 using OpenTK.Input;
 using System.Windows.Forms;
+using Kokoro.Sinus;
 
 namespace Kokoro.OpenGL.PC
 {
@@ -47,11 +48,13 @@ namespace Kokoro.OpenGL.PC
             Window.ParentForm.ResizeEnd += ParentForm_ResizeEnd;
 
             inited = true;
-            //Depth Test is always enabled, it's a matter of what the depth function is
-            GL.Enable(EnableCap.DepthTest);
-            GL.Enable(EnableCap.LineSmooth);
-            GL.LineWidth(4);
-
+            SinusManager.QueueCommand(() =>
+            {
+                //Depth Test is always enabled, it's a matter of what the depth function is
+                GL.Enable(EnableCap.DepthTest);
+                GL.Enable(EnableCap.LineSmooth);
+                GL.LineWidth(4);
+            });
         }
 
         void Window_Resize(object sender, EventArgs e)
@@ -63,11 +66,10 @@ namespace Kokoro.OpenGL.PC
 
         protected void Window_RenderFrame(double interval)
         {
-			ErrorCode err = GL.GetError();
-			if (err != ErrorCode.NoError) Kokoro.Debug.ErrorLogger.AddMessage(0, err.ToString(), Kokoro.Debug.DebugType.Error, Kokoro.Debug.Severity.High);
+            ErrorCode err = GL.GetError();
+            if (err != ErrorCode.NoError) Kokoro.Debug.ErrorLogger.AddMessage(0, err.ToString(), Kokoro.Debug.DebugType.Error, Kokoro.Debug.Severity.High);
 
-
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+            SinusManager.QueueCommand(() => GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0));
 #if DEBUG
             if (curRequestTexture != 0) Debug.DLbmp(curRequestTexture);
             curRequestTexture = 0;
@@ -119,9 +121,12 @@ namespace Kokoro.OpenGL.PC
         #region State Machine
         protected void aClear(float r, float g, float b, float a)
         {
-            //TODO maybe it'll be faster to just disable depth testing and draw a fsq? This is currently one of the slowest parts of the engine
-            GL.ClearColor(r, g, b, a);
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            SinusManager.QueueCommand(() =>
+            {
+                //TODO maybe it'll be faster to just disable depth testing and draw a fsq? This is currently one of the slowest parts of the engine
+                GL.ClearColor(r, g, b, a);
+                GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            });
         }
 
         #region Depth Write
@@ -147,7 +152,7 @@ namespace Kokoro.OpenGL.PC
                 polyMode = PolygonMode.Fill;
             }
 
-            GL.PolygonMode(MaterialFace.FrontAndBack, polyMode);
+            SinusManager.QueueCommand(() => GL.PolygonMode(MaterialFace.FrontAndBack, polyMode));
         }
         protected bool GetWireframe() { return polyMode == PolygonMode.Line; }
         #endregion
@@ -156,37 +161,49 @@ namespace Kokoro.OpenGL.PC
         int msaaTexID, fbufID, msaaLevel;
         protected void InitializeMSAA(int sampleCount)
         {
-			return; //TODO Fixme
-            msaaTexID = GL.GenTexture();
-            GL.BindTexture(TextureTarget.Texture2DMultisample, msaaTexID);
-            GL.TexImage2DMultisample(TextureTargetMultisample.Texture2DMultisample, sampleCount, PixelInternalFormat.Rgba8, Window.ClientSize.Width, Window.ClientSize.Height, false);
+            return; //TODO Fixme
+            SinusManager.QueueCommand(() =>
+            {
+                msaaTexID = GL.GenTexture();
+                GL.BindTexture(TextureTarget.Texture2DMultisample, msaaTexID);
+                GL.TexImage2DMultisample(TextureTargetMultisample.Texture2DMultisample, sampleCount, PixelInternalFormat.Rgba8, Window.ClientSize.Width, Window.ClientSize.Height, false);
 
-            fbufID = GL.GenFramebuffer();
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, fbufID);
-            GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, msaaTexID, 0);
-            msaaLevel = sampleCount;
+                fbufID = GL.GenFramebuffer();
+                GL.BindFramebuffer(FramebufferTarget.Framebuffer, fbufID);
+                GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, msaaTexID, 0);
+                msaaLevel = sampleCount;
+            });
         }
 
         protected int GetMSAALevel() { return msaaLevel; }
 
         protected void SetMSAA()
         {
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, fbufID);
-            GL.DrawBuffers(1, new DrawBuffersEnum[] { DrawBuffersEnum.ColorAttachment0 });
+            SinusManager.QueueCommand(() =>
+            {
+                GL.BindFramebuffer(FramebufferTarget.Framebuffer, fbufID);
+                GL.DrawBuffers(1, new DrawBuffersEnum[] { DrawBuffersEnum.ColorAttachment0 });
+            });
         }
 
         protected void BlitMSAA()
         {
-            GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, 0);
-            GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, fbufID);
-            GL.DrawBuffer(DrawBufferMode.Back);
-            GL.BlitFramebuffer(0, 0, Window.ClientSize.Width, Window.ClientSize.Height, 0, 0, Window.ClientSize.Width, Window.ClientSize.Height, ClearBufferMask.ColorBufferBit, BlitFramebufferFilter.Nearest);
+            SinusManager.QueueCommand(() =>
+            {
+                GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, 0);
+                GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, fbufID);
+                GL.DrawBuffer(DrawBufferMode.Back);
+                GL.BlitFramebuffer(0, 0, Window.ClientSize.Width, Window.ClientSize.Height, 0, 0, Window.ClientSize.Width, Window.ClientSize.Height, ClearBufferMask.ColorBufferBit, BlitFramebufferFilter.Nearest);
+            });
         }
 
         protected void ResetMSAA()
         {
-            if (fbufID != 0) GL.DeleteFramebuffer(fbufID);
-            if (msaaTexID != 0) GL.DeleteTexture(msaaTexID);
+            SinusManager.QueueCommand(() =>
+            {
+                if (fbufID != 0) GL.DeleteFramebuffer(fbufID);
+                if (msaaTexID != 0) GL.DeleteTexture(msaaTexID);
+            });
             fbufID = 0;
             msaaTexID = 0;
         }
@@ -198,12 +215,15 @@ namespace Kokoro.OpenGL.PC
         {
             if (cullMode != Engine.CullMode.Off)
             {
-                GL.Enable(EnableCap.CullFace);
-                GL.CullFace(EnumConverters.ECullMode(cullMode));
+                SinusManager.QueueCommand(() =>
+                {
+                    GL.Enable(EnableCap.CullFace);
+                    GL.CullFace(EnumConverters.ECullMode(cullMode));
+                });
             }
             else
             {
-                GL.Disable(EnableCap.CullFace);
+                SinusManager.QueueCommand(() => GL.Disable(EnableCap.CullFace));
             }
             this.cullMode = cullMode;
         }
@@ -233,8 +253,11 @@ namespace Kokoro.OpenGL.PC
             else if (resultB) dFunction = DepthFunction.Equal;
             else if (!resultB) dFunction = DepthFunction.Notequal;
 
-            GL.DepthFunc(dFunction);
-            GL.Enable(EnableCap.DepthTest);
+            SinusManager.QueueCommand(() =>
+            {
+                GL.DepthFunc(dFunction);
+                GL.Enable(EnableCap.DepthTest);
+            });
             depthFunc = func;
         }
         protected Func<float, float, bool> GetDepthFunc()
@@ -265,7 +288,7 @@ namespace Kokoro.OpenGL.PC
         protected void SetViewport(Kokoro.Math.Vector4 viewport)
         {
             Viewport = viewport;
-            GL.Viewport((int)viewport.X, (int)viewport.Y, (int)viewport.Z, (int)viewport.W);
+            SinusManager.QueueCommand(() => GL.Viewport((int)viewport.X, (int)viewport.Y, (int)viewport.Z, (int)viewport.W));
         }
         protected Kokoro.Math.Vector4 GetViewport() { return Viewport; }
         #endregion
@@ -279,7 +302,7 @@ namespace Kokoro.OpenGL.PC
         protected void SetBlendFunc(Engine.BlendFunc blend)
         {
             blFunc = blend;
-            GL.BlendFunc(EnumConverters.EBlendFuncSRC(blFunc.Src), EnumConverters.EBlendFuncDST(blFunc.Dst));
+            SinusManager.QueueCommand(() => GL.BlendFunc(EnumConverters.EBlendFuncSRC(blFunc.Src), EnumConverters.EBlendFuncDST(blFunc.Dst)));
         }
         #endregion
 

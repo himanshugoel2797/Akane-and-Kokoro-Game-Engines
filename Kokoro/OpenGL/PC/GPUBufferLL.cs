@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenTK.Graphics.OpenGL4;
 using Kokoro.Sinus;
+using System.Runtime.InteropServices;
 
 
 namespace Kokoro.OpenGL.PC
@@ -69,9 +70,7 @@ namespace Kokoro.OpenGL.PC
                     {
                         fixed (float* SystemMemory = &data[0])
                         {
-                            float* VideoMemory = (float*)mappedPtr.ToPointer();
-                            for (int i = offset; i < ((length == -1) ? data.Length : length); i++)
-                                VideoMemory[i] = SystemMemory[i - offset]; // simulate what GL.BufferData would do
+                            Marshal.Copy(data, offset, mappedPtr, ((length == -1) ? data.Length : length));
                         }
                     }
 
@@ -88,6 +87,7 @@ namespace Kokoro.OpenGL.PC
                 #endregion
             }
         }
+
 
         /// <summary>
         /// Put data into the buffer
@@ -115,8 +115,7 @@ namespace Kokoro.OpenGL.PC
                         fixed (uint* SystemMemory = &data[0])
                         {
                             uint* VideoMemory = (uint*)mappedPtr.ToPointer();
-                            for (int i = offset; i < ((length == -1) ? data.Length : length); i++)
-                                VideoMemory[i] = SystemMemory[i - offset]; // simulate what GL.BufferData would do
+                            Buffer.MemoryCopy(mappedPtr, new IntPtr((void*)SystemMemory), (uint)((length == -1) ? data.Length : length));
                         }
                     }
 
@@ -129,7 +128,8 @@ namespace Kokoro.OpenGL.PC
             else if (updateMode == UpdateMode.Static)
             {
                 #region Buffer Data
-                SinusManager.QueueCommand(() => {
+                SinusManager.QueueCommand(() =>
+                {
                     GL.BindBuffer(target, staticID);
                     GL.BufferData(target, (IntPtr)(sizeof(uint) * data.Length), data, BufferUsageHint.StaticDraw);
                     GL.BindBuffer(target, 0);

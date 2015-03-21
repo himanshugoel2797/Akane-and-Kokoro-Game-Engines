@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Kokoro.Engine;
 using Kokoro.Math;
+using Kokoro.Sinus;
 
 using OpenTK.Graphics.OpenGL4;
 
@@ -30,30 +31,35 @@ namespace Kokoro.OpenGL.PC
         {
             return shaderType;
         }
-        
+
         protected void aSetPatchSize(int num)
         {
-            GL.PatchParameter(PatchParameterInt.PatchVertices, num);
+            SinusManager.QueueCommand(() => GL.PatchParameter(PatchParameterInt.PatchVertices, num));
         }
 
-        protected int aCreate(Engine.Shaders.ShaderTypes type, string file)
+        protected void aCreate(Engine.Shaders.ShaderTypes type, string file)
         {
-            int id = GL.CreateShader(EnumConverters.EShaderTypes(type));
-            GL.ShaderSource(id, file);
-            GL.CompileShader(id);
-            return id;
+            SinusManager.QueueCommand(() =>
+            {
+                id = GL.CreateShader(EnumConverters.EShaderTypes(type));
+                GL.ShaderSource(id, file);
+                GL.CompileShader(id);
+            });
         }
 
         protected void CheckForErrors(string fshader, Engine.Shaders.ShaderTypes type)
         {
-            int result = 0;
-            GL.GetShader(id, ShaderParameter.CompileStatus, out result);
-            if (result != 1) throw new Exception(GL.GetShaderInfoLog(id));
+            SinusManager.QueueCommand(() =>
+            {
+                int result = 0;
+                GL.GetShader(id, ShaderParameter.CompileStatus, out result);
+                if (result != 1) throw new Exception(GL.GetShaderInfoLog(id));
+            });
         }
 
         public void Dispose()
         {
-            GL.DeleteShader(id);
+            SinusManager.QueueCommand(() => GL.DeleteShader(id));
         }
 
     }
