@@ -20,10 +20,10 @@ namespace Kokoro.Engine.Prefabs
         {
             this.World = Matrix4.CreateTranslation((box.Min + box.Max) / 2) * Matrix4.Scale(box.Max - box.Min);
             this.DrawMode = Engine.DrawMode.Lines;
-            vbufs = new OpenGL.PC.VertexBufferLL[1];
-            vbufs[0] = new OpenGL.PC.VertexBufferLL();
+            Init(1);
 
-            vbufs[0].SetVertices(new float[]{
+
+            SetVertices(UpdateMode.Static, new float[]{
                 -0.5f, -0.5f, -0.5f,
                 0.5f, -0.5f, -0.5f,
                 0.5f,  0.5f, -0.5f,
@@ -32,9 +32,9 @@ namespace Kokoro.Engine.Prefabs
                 0.5f, -0.5f,  0.5f,
                 0.5f,  0.5f,  0.5f,
                 -0.5f,  0.5f,  0.5f
-            });
+            }, 0);
 
-            vbufs[0].SetIndices(new ushort[] {
+            SetIndices(UpdateMode.Static, new uint[] {
                 0, 1,
                 1, 2,
                 2, 3,
@@ -47,9 +47,9 @@ namespace Kokoro.Engine.Prefabs
                 1, 5,
                 2, 6,
                 3, 7
-            });
+            }, 0);
 
-            vbufs[0].SetUVs(new float[]{
+            SetUVs(UpdateMode.Static, new float[]{
                 -0.5f, -0.5f,
                 0.5f, -0.5f,
                 0.5f,  0.5f,
@@ -58,7 +58,7 @@ namespace Kokoro.Engine.Prefabs
                 0.5f, -0.5f,
                 0.5f,  0.5f,
                 -0.5f,  0.5f
-            });
+            }, 0);
 
         }
     }

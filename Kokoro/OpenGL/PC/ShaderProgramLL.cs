@@ -54,6 +54,8 @@ namespace Kokoro.OpenGL.PC
                 }
 
             });
+            //Wait for a moment so the commands can be processed?
+            System.Threading.Thread.Sleep(1000);
         }
 
         public void AttachShader(Shader s)
@@ -206,96 +208,120 @@ namespace Kokoro.OpenGL.PC
         }
         protected void aSetShaderMatrix(string name, Matrix4 val)
         {
-            variables[name] = new shaderVars()
+            if (uniformLocations.ContainsKey(name))
             {
-                obj = val,
-                pos = uniformLocations[name],
-                type = VarType.Matrix4
-            };
+                variables[name] = new shaderVars()
+                {
+                    obj = val,
+                    pos = uniformLocations[name],
+                    type = VarType.Matrix4
+                };
+            }
         }
 
         protected void aSetShaderMatrix(string name, Matrix2 val)
         {
-            variables[name] = new shaderVars()
+            if (uniformLocations.ContainsKey(name))
             {
-                obj = val,
-                pos = uniformLocations[name],
-                type = VarType.Matrix2
-            };
+                variables[name] = new shaderVars()
+                {
+                    obj = val,
+                    pos = uniformLocations[name],
+                    type = VarType.Matrix2
+                };
+            }
         }
 
         protected void aSetShaderMatrix(string name, Matrix3 val)
         {
-            variables[name] = new shaderVars()
+            if (uniformLocations.ContainsKey(name))
             {
-                obj = val,
-                pos = uniformLocations[name],
-                type = VarType.Matrix3
-            };
+                variables[name] = new shaderVars()
+                {
+                    obj = val,
+                    pos = uniformLocations[name],
+                    type = VarType.Matrix3
+                };
+            }
         }
 
         protected void aSetShaderVector(string name, Vector4 val)
         {
-            variables[name] = new shaderVars()
+            if (uniformLocations.ContainsKey(name))
             {
-                obj = val,
-                pos = uniformLocations[name],
-                type = VarType.Vector4
-            };
+                variables[name] = new shaderVars()
+                {
+                    obj = val,
+                    pos = uniformLocations[name],
+                    type = VarType.Vector4
+                };
+            }
         }
 
         protected void aSetShaderVector(string name, Vector3 val)
         {
-            variables[name] = new shaderVars()
+            if (uniformLocations.ContainsKey(name))
             {
-                obj = val,
-                pos = uniformLocations[name],
-                type = VarType.Vector3
-            };
+                variables[name] = new shaderVars()
+                {
+                    obj = val,
+                    pos = uniformLocations[name],
+                    type = VarType.Vector3
+                };
+            }
         }
 
         protected void aSetShaderVector(string name, Vector2 val)
         {
-            variables[name] = new shaderVars()
+            if (uniformLocations.ContainsKey(name))
             {
-                obj = val,
-                pos = uniformLocations[name],
-                type = VarType.Vector2
-            };
+                variables[name] = new shaderVars()
+                {
+                    obj = val,
+                    pos = uniformLocations[name],
+                    type = VarType.Vector2
+                };
+            }
         }
 
         protected void aSetShaderFloat(string name, float val)
         {
-            variables[name] = new shaderVars()
+            if (uniformLocations.ContainsKey(name))
             {
-                obj = val,
-                pos = uniformLocations[name],
-                type = VarType.Float
-            };
+                variables[name] = new shaderVars()
+                {
+                    obj = val,
+                    pos = uniformLocations[name],
+                    type = VarType.Float
+                };
+            }
         }
 
         int texUnit = 0;
         protected void aSetTexture(string name, Texture tex)
         {
-            if (variables.ContainsKey(name))
+            if (uniformLocations.ContainsKey(name))
             {
-                variables[name] = new shaderVars()
+                if (variables.ContainsKey(name))
                 {
-                    metadata = variables[name].metadata,
-                    obj = tex,
-                    pos = variables[name].pos,
-                    type = VarType.Texture
-                };
-            }
-            else
-            {
-                variables[name] = new shaderVars()
+                    variables[name] = new shaderVars()
+                    {
+                        metadata = variables[name].metadata,
+                        obj = tex,
+                        pos = variables[name].pos,
+                        type = VarType.Texture
+                    };
+                }
+                else
                 {
-                    metadata = texUnit++,
-                    obj = tex,
-                    pos = uniformLocations[name],
-                    type = VarType.Texture
-                };
+                    variables[name] = new shaderVars()
+                    {
+                        metadata = texUnit++,
+                        obj = tex,
+                        pos = uniformLocations[name],
+                        type = VarType.Texture
+                    };
+                }
             }
         }
         #endregion

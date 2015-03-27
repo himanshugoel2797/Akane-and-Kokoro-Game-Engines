@@ -26,27 +26,27 @@ namespace Kokoro.Engine.Prefabs
         /// <param name="width">The width of the unit quad</param>
         /// <param name="height">The height of the unit quad</param>
         /// <param name="tex">An optional texture to be applied to the quad</param>
-        public Quad(float x, float y, float width, float height, Texture tex = null) : base()
+        public Quad(float x, float y, float width, float height, Texture tex = null)
+            : base()
         {
             filepath = "";
             this.DrawMode = DrawMode.Triangles;
-            vbufs = new VertexBufferLL[1];
-            vbufs[0] = new VertexBufferLL();
+            Init(1);
 
-            vbufs[0].SetIndices(new ushort[] { 3, 2, 0, 0, 2, 1 });
-            vbufs[0].SetUVs(new float[] { 
+            SetIndices(UpdateMode.Static, new uint[] { 3, 2, 0, 0, 2, 1 }, 0);
+            SetUVs(UpdateMode.Static, new float[] { 
                 0,1,
                 1,1,
                 1,0,
                 0,0
-            });
+            }, 0);
 
-            vbufs[0].SetVertices(new float[]{
+            SetVertices(UpdateMode.Static, new float[]{
                 x, 0, y + height,
                 x + width, 0, y + height,
                 x + width, 0, y,
                 x, 0, y
-            });
+            }, 0);
             Materials[0] = new Material { ColorMap = tex };
 
             World = Matrix4.Identity;

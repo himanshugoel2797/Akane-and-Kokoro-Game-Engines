@@ -85,6 +85,24 @@ namespace Kokoro.KSL.Lib.Math
         }
 
         #region Math Operators
+        public static Vec4 operator *(Vec4 b, Mat4 a)
+        {
+            var k = new Vec4()
+            {
+                ObjName = "(" + a.ObjName + "*" + b.ObjName + ")"
+            };
+
+            SyntaxTree.Variables[k.ObjName] = new SyntaxTree.Variable()
+            {
+                type = k.GetType(),
+                value = null,
+                paramType = SyntaxTree.ParameterType.Variable,
+                name = k.ObjName
+            };
+
+            return k;
+        }
+
         public static Vec4 operator *(Mat4 a, Vec4 b)
         {
             var k = new Vec4()

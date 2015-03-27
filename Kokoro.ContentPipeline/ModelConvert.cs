@@ -204,15 +204,33 @@ namespace Kokoro.ContentPipeline
                     }
 
                     //We are done writing all the first dimensions, now write second dimensions
-                    for (int i = 0; i < indices.Length; i++)
+                    for (int i = 0; i < uvs.Length; i++)
                     {
-                        writer.Write(indices[i].Length);    //Write all the lengths
+                        writer.Write(uvs[i].Length);    //Write all the lengths
                     }
 
                     //We are done writing all the first dimensions, now write second dimensions
-                    for (int i = 0; i < indices.Length; i++)
+                    for (int i = 0; i < norms.Length; i++)
                     {
-                        writer.Write(indices[i].Length);    //Write all the lengths
+                        writer.Write(norms[i].Length);    //Write all the lengths
+                    }
+
+                    //We are done writing all the first dimensions, now write second dimensions
+                    for (int i = 0; i < weights.Length; i++)
+                    {
+                        writer.Write(weights[i].Length);    //Write all the lengths
+                    }
+
+                    //We are done writing all the first dimensions, now write second dimensions
+                    for (int i = 0; i < bones.Length; i++)
+                    {
+                        writer.Write(bones[i].Length);    //Write all the lengths
+                    }
+
+                    //We are done writing all the first dimensions, now write second dimensions
+                    for (int i = 0; i < skeleton.Length; i++)
+                    {
+                        writer.Write(skeleton[i].Length);    //Write all the lengths
                     }
                 }
                 outdata = strm.ToArray();

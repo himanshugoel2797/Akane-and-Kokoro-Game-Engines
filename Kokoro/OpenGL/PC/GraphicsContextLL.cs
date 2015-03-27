@@ -128,6 +128,7 @@ namespace Kokoro.OpenGL.PC
                 buf[i * 5 + 3] = MDIEntries[i].baseVertex;
                 buf[i * 5 + 4] = MDIEntries[i].baseInstance;
             }
+            EntryCount = MDIEntries.Count;
             MDIEntries.Clear();
 
             MDIBuffer.BufferData(buf, 0, buf.Length);

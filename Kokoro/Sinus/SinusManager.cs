@@ -11,7 +11,12 @@ namespace Kokoro.Sinus
         internal static Queue<Action> CommandBuffer = new Queue<Action>();
 
         [ThreadStatic]
-        private static Queue<Action> LocalCommands = new Queue<Action>();
+        private static Queue<Action> LocalCommands;
+
+        static SinusManager()
+        {
+            LocalCommands = new Queue<Action>();
+        }
 
         /// <summary>
         /// Queue a command for execution on the main thread
@@ -20,6 +25,8 @@ namespace Kokoro.Sinus
         /// <remarks>This should only be called from the Render thread, there may be undefined behavior if called from other threads</remarks>
         public static void QueueCommand(params Action[] command)
         {
+            if (LocalCommands == null) LocalCommands = new Queue<Action>();
+
             for (int i = 0; i < command.Length; i++)
             {
                 LocalCommands.Enqueue(command[i]);

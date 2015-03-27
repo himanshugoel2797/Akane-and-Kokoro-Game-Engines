@@ -31,7 +31,7 @@ namespace Kokoro.OpenGL.PC
             target = EnumConverters.EBufferTarget(use);
 
             if (use == BufferUse.Array || use == BufferUse.Index || use == BufferUse.Indirect) flags = BufferStorageFlags.MapWriteBit | BufferStorageFlags.MapPersistentBit | BufferStorageFlags.MapCoherentBit;
-            
+
             SinusManager.QueueCommand(() =>
             {
                 syncObj = GL.FenceSync(SyncCondition.SyncGpuCommandsComplete, WaitSyncFlags.None);  //Initialize the first sync object
@@ -69,11 +69,11 @@ namespace Kokoro.OpenGL.PC
         /// </summary>
         /// <param name="data">The data to append</param>
         /// <returns>The offset it was buffered to</returns>
-        public int AppendData(float[] data)
+        public uint AppendData(float[] data)
         {
             BufferData(data, offset, data.Length);
             offset += data.Length;
-            return offset - data.Length;
+            return (uint)(offset - data.Length);
         }
 
         /// <summary>
@@ -81,18 +81,18 @@ namespace Kokoro.OpenGL.PC
         /// </summary>
         /// <param name="data">The data to append</param>
         /// <returns>The offset it was buffered to</returns>
-        public int AppendData(uint[] data)
+        public uint AppendData(uint[] data)
         {
             BufferData(data, offset, data.Length);
             offset += data.Length;
-            return offset - data.Length;
+            return (uint)(offset - data.Length);
         }
 
-        public int AppendData(byte[] data)
+        public uint AppendData(byte[] data)
         {
             BufferData(data, offset, data.Length);
             offset += data.Length;
-            return offset - data.Length;
+            return (uint)(offset - data.Length);
         }
 
         /// <summary>
@@ -133,7 +133,8 @@ namespace Kokoro.OpenGL.PC
             else if (updateMode == UpdateMode.Static)
             {
                 #region Buffer Data
-                SinusManager.QueueCommand(() => {
+                SinusManager.QueueCommand(() =>
+                {
                     GL.BindBuffer(target, staticID);
                     GL.BufferData(target, (IntPtr)(sizeof(float) * data.Length), data, BufferUsageHint.StaticDraw);
                     GL.BindBuffer(target, 0);

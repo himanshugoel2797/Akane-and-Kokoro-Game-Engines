@@ -26,12 +26,11 @@ namespace Kokoro.Engine.Prefabs
         /// <param name="terrainWidth">The width of the quad</param>
         /// <param name="terrainHeight">The heigth of the quad</param>
         /// <param name="tex">The optional texture to be applied to the quad</param>
-        public HighResQuad(float x0, float y0, int terrainWidth, int terrainHeight, Texture tex = null) : base()
+        public HighResQuad(float x0, float y0, int terrainWidth, int terrainHeight, Texture tex = null)
+            : base()
         {
             filepath = "";
-            vbufs = new VertexBufferLL[1];
-            vbufs[0] = new VertexBufferLL();
-
+            Init(1);
 
             Vector3[] vertices = new Vector3[terrainWidth * terrainHeight];
             Vector2[] uvs = new Vector2[terrainWidth * terrainHeight];
@@ -78,11 +77,11 @@ namespace Kokoro.Engine.Prefabs
                 norms.AddRange(new float[] { 0, 1, 0 });
             }
 
-            vbufs[0].SetIndices(indices);
-            vbufs[0].SetUVs(uv.ToArray());
-            vbufs[0].SetVertices(verts.ToArray());
-            vbufs[0].SetNormals(norms.ToArray());
-            vbufs[0].DrawMode = DrawMode.Triangles;
+            SetIndices(UpdateMode.Static, indices, 0);
+            SetUVs(UpdateMode.Static, uv.ToArray(), 0);
+            SetVertices(UpdateMode.Static, verts.ToArray(), 0);
+            SetNormals(UpdateMode.Static, norms.ToArray(), 0);
+
             Materials[0] = new Material { ColorMap = tex };
 
 

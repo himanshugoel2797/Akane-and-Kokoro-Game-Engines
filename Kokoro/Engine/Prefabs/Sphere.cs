@@ -23,7 +23,8 @@ namespace Kokoro.Engine.Prefabs
         /// </summary>
         /// <param name="radius">The radius of the sphere</param>
         /// <param name="step">The amount of detail to put in the sphere</param>
-        public Sphere(float radius, int step = 10) : base()
+        public Sphere(float radius, int step = 10)
+            : base()
         {
 
             this.DrawMode = DrawMode.Triangles;
@@ -137,13 +138,12 @@ namespace Kokoro.Engine.Prefabs
                 }
             }
 
-            vbufs = new VertexBufferLL[1];
-            vbufs[0] = new VertexBufferLL();
+            Init(1);
 
-            vbufs[0].SetIndices(indices.ToArray());
-            vbufs[0].SetUVs(uvs.ToArray());
-            vbufs[0].SetVertices(verts.ToArray());
-            vbufs[0].SetNormals(normals.ToArray());
+            SetIndices(UpdateMode.Static, indices.ToArray(), 0);
+            SetUVs(UpdateMode.Static, uvs.ToArray(), 0);
+            SetVertices(UpdateMode.Static, verts.ToArray(), 0);
+            SetNormals(UpdateMode.Static, normals.ToArray(), 0);
         }
     }
 }

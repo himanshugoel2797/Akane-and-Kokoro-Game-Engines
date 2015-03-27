@@ -20,6 +20,7 @@ namespace Kokoro.ShaderLib
             Manager.StreamOut<Vec4>("Color", 0);
 
             Vars.Color = Texture.Read2D(Vars.ColorMap, Vars.UV);
+            Vars.Color["rgba"] = 1;
         }
 
         public void Vertex()

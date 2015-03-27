@@ -385,6 +385,8 @@ namespace Kokoro.Engine
                     if (!tmpCtrl)
                     {
                         Initialize(this);
+                        //Push the accumulated command buffers for this thread right now
+                        Sinus.SinusManager.PushCommandBuffer();
                         tmpCtrl = true;
                     }
 
@@ -397,9 +399,11 @@ namespace Kokoro.Engine
                             //TODO Drop everything if the renderer starts falling behind
                         }
                     }
+                    Sinus.SinusManager.PushCommandBuffer(); //Push this scene's command buffer
                 }
 
                 Kokoro.Debug.ObjectAllocTracker.PostFPS(GetNormTicks(s));
+                ViewportControl.Invalidate();
                 s.Reset();
                 s.Start();
             };
@@ -434,14 +438,22 @@ namespace Kokoro.Engine
         /// </summary>
         public void SwapBuffers()
         {
-            //Push all data
-            Sinus.SinusManager.PushCommandBuffer();
+            Sinus.SinusManager.QueueCommand(() =>
+            {
+                SubmitDraw();
+                Draw();
+                swap();
+                Window_RenderFrame(0);
+            });
+
+            //Push all data, this should 
+            //Sinus.SinusManager.PushCommandBuffer();
 
             //Invalidate the winform paint and trigger the draw thread
-            ViewportControl.BeginInvoke(new MethodInvoker(() =>
-            {
-                ViewportControl.Invalidate();
-            }));
+            //ViewportControl.BeginInvoke(new MethodInvoker(() =>
+            //{
+            //    ViewportControl.Invalidate();
+            //}));
         }
 
         private void GameLooper(double timestep, Action<double, GraphicsContext> handler)
@@ -456,6 +468,8 @@ namespace Kokoro.Engine
                     {
                         handler((timestep == 0) ? GetNormTicks(s) : timestep, this);
                     }
+                    //Each thread is required to push its commandbuffer when done
+                    Sinus.SinusManager.PushCommandBuffer();
                 }
 
                 if (timestep != 0 && timestep > GetNormTicks(s))

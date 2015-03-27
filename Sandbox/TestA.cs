@@ -32,7 +32,8 @@ namespace Kokoro.Game
             };
 
 
-            room = Model.Load("room.obj");
+            room = new Quad(0, 0, 1, 1);//Model.Load("room.obj");
+            room.Materials[0].Shader = new ShaderProgram(new ShaderLib.FrameBufferShader());
         }
 
         public IScene Parent
@@ -44,6 +45,8 @@ namespace Kokoro.Game
         public void Render(double interval, GraphicsContext context)
         {
             room.Draw(context);
+
+            context.SwapBuffers();
         }
 
         public void Update(double interval, GraphicsContext context)

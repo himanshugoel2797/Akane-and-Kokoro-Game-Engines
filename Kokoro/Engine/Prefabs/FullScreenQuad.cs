@@ -21,27 +21,27 @@ namespace Kokoro.Engine.Prefabs
         /// <summary>
         /// Creates a new FullScreenQuad object
         /// </summary>
-        public FullScreenQuad() : base()
+        public FullScreenQuad()
+            : base()
         {
-            vbufs = new VertexBufferLL[1];
-            vbufs[0] = new VertexBufferLL();
+            Init(1);
 
             this.DrawMode = DrawMode.Triangles;
 
-            vbufs[0].SetIndices(new ushort[] { 3, 2, 0, 0, 2, 1 });
-            vbufs[0].SetUVs(new float[] {
+            SetIndices(UpdateMode.Static, new uint[] { 3, 2, 0, 0, 2, 1 }, 0);
+            SetUVs(UpdateMode.Static, new float[] {
                 0,1,
                 1,1,
                 1,0,
                 0,0
-            });
+            }, 0);
 
-            vbufs[0].SetVertices(new float[]{
+            SetVertices(UpdateMode.Static, new float[]{
                 -1, 1, 0.5f,
                 1, 1, 0.5f,
                 1, -1,0.5f,
                 -1, -1,0.5f
-            });
+            }, 0);
 
             World = Math.Matrix4.Identity;
             Materials[0].Shader = new ShaderProgram(ShaderLib.FrameBufferShader.Create(ShaderTypes.Vertex), ShaderLib.DefaultShader.Create(ShaderTypes.Fragment));
