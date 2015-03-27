@@ -109,9 +109,11 @@ namespace Kokoro.OpenGL.PC
 
         internal static void Draw()
         {
+            Engine.Model.staticBuffer.Bind();
+
             SinusManager.QueueCommand(() =>
             {
-                GL.MultiDrawArraysIndirect(PrimitiveType.Triangles, IntPtr.Zero, EntryCount, 0);
+                GL.MultiDrawElementsIndirect(All.Triangles, All.UnsignedInt, IntPtr.Zero, EntryCount, 0);
             });
         }
 

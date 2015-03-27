@@ -14,6 +14,8 @@ namespace Kokoro.OpenGL.PC
         GPUBufferLL[] buffers;
         int vaID = 0;
 
+        GPUBufferLL ibo;
+
         /// <summary>
         /// Allows access of the underlying GPU buffers
         /// </summary>
@@ -43,10 +45,17 @@ namespace Kokoro.OpenGL.PC
                     GL.BindVertexArray(vaID);
                     for (int i = 0; i < bufferCount; i++)
                     {
-                        GL.EnableVertexAttribArray(i);
-                        buffers[i].Bind();
-                        GL.VertexAttribPointer(i, elementCount[i], VertexAttribPointerType.Float, false, 0, 0);
-                        GL.VertexAttribDivisor(i, 0);
+                        if (bufferUses[i] != Engine.BufferUse.Index)
+                        {
+                            GL.EnableVertexAttribArray(i);
+                            buffers[i].Bind();
+                            GL.VertexAttribPointer(i, elementCount[i], VertexAttribPointerType.Float, false, 0, 0);
+                            GL.VertexAttribDivisor(i, 0);
+                        }
+                        else
+                        {
+                            ibo = buffers[i];
+                        }
                     }
                     GL.BindVertexArray(0);
                 });
@@ -58,6 +67,7 @@ namespace Kokoro.OpenGL.PC
             SinusManager.QueueCommand(() =>
             {
                 GL.BindVertexArray(vaID);
+                if (ibo != null) ibo.Bind();
             });
         }
 

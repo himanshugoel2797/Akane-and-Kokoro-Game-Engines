@@ -20,14 +20,13 @@ namespace Kokoro.ShaderLib
             Manager.StreamOut<Vec4>("Color", 0);
 
             Vars.Color = Texture.Read2D(Vars.ColorMap, Vars.UV);
-            Vars.Color["rgba"] = 1;
         }
 
         public void Vertex()
         {
             var Vars = Manager.ShaderStart();
-            Manager.StreamIn<Vec3>("VertexPos", 0);
-            Manager.StreamIn<Vec2>("UV0", 1);
+            Manager.StreamIn<Vec3>("VertexPos", 1);
+            Manager.StreamIn<Vec2>("UV0", 3);
 
             Manager.SharedOut<Vec2>("UV");
 

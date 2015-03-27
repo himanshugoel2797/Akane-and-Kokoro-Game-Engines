@@ -52,11 +52,11 @@ namespace Kokoro.Engine
             public Vector3 Up;
         };
 
-        protected static VertexArrayLL staticBuffer;
+        internal static VertexArrayLL staticBuffer;
         protected static long[] staticBufferOffset;
         protected static long[] staticBufferLength;
 
-        protected static VertexArrayLL dynamicBuffer;
+        internal static VertexArrayLL dynamicBuffer;
         protected static long[] dynamicBufferOffset;
         protected static long[] dynamicBufferLength;
 
@@ -183,7 +183,7 @@ namespace Kokoro.Engine
                     GraphicsContextLL.AddDrawCall(0, lengths[a], offsets[a][1]);   //Send the draw call
 
                     //Cleanup the Material
-                    Materials[a].Cleanup(context, this);    //Queue the material to be cleaned out after everything has been done
+                    //Materials[a].Cleanup(context, this);    //Queue the material to be cleaned out after everything has been done
                 }
             });
         }

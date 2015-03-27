@@ -32,6 +32,10 @@ namespace Kokoro.OpenGL.PC
 
             if (use == BufferUse.Array || use == BufferUse.Index || use == BufferUse.Indirect) flags = BufferStorageFlags.MapWriteBit | BufferStorageFlags.MapPersistentBit | BufferStorageFlags.MapCoherentBit;
 
+#if DEBUG
+            flags |= BufferStorageFlags.MapReadBit;
+#endif
+
             SinusManager.QueueCommand(() =>
             {
                 syncObj = GL.FenceSync(SyncCondition.SyncGpuCommandsComplete, WaitSyncFlags.None);  //Initialize the first sync object
@@ -175,6 +179,7 @@ namespace Kokoro.OpenGL.PC
                     // lock the buffer:
                     GL.DeleteSync(syncObj);
                     syncObj = GL.FenceSync(SyncCondition.SyncGpuCommandsComplete, WaitSyncFlags.None);
+
                 });
                 #endregion
             }
