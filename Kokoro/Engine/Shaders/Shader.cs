@@ -16,7 +16,7 @@ namespace Kokoro.Engine.Shaders
 {
     public enum ShaderTypes
     {
-        Vertex = 0, Fragment = 4, Geometry = 3, TessellationControl = 1, TessellationEval = 2, TessellationComb = 5
+        Vertex = 0, Fragment = 4, Geometry = 3, TessellationControl = 1, TessellationEval = 2, TessellationComb = 5, Compute = 6
     }
 
     /// <summary>
@@ -36,7 +36,7 @@ namespace Kokoro.Engine.Shaders
 
                 if (!shaderDB.ContainsKey(hash))
                 {
-                    id = base.aCreate(base.shaderType, shader);
+                    base.aCreate(base.shaderType, shader);
                     base.CheckForErrors(shader, base.shaderType);
 
                     shaderDB.Add(hash, base.id);

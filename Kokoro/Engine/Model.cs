@@ -36,11 +36,14 @@ namespace Kokoro.Engine
 
     enum BufferUse
     {
-        Array, Index, Uniform, ShaderStorage
+        Array, Index, Uniform, ShaderStorage, Indirect
     }
 
     public class Model : IDisposable
     {
+        //Models will only store vertex information and a system will be invoked to batch together static meshes?
+        //Should multidrawindirect be limited to things loaded by the World?
+
         public struct BoundingBox
         {
             public Vector3 Min;
@@ -49,44 +52,36 @@ namespace Kokoro.Engine
             public Vector3 Up;
         };
 
-        protected GPUBufferLL[] buffers { get; set; }
+        protected static VertexArrayLL staticBuffer;
+        protected static long staticBufferOffset;
+        protected static long staticBufferLength;
+
+        protected static VertexArrayLL dynamicBuffer;
+        protected static long dynamicBufferOffset;
+        protected static long dynamicBufferLength;
+
 
         protected string filepath;
+        protected uint offset;
+        protected uint length;
 
         public Matrix4 World { get; set; }
         public Material[] Materials { get; set; }
         public DrawMode DrawMode { get; set; }
         public BoundingBox Bound;
+        public uint IndexCount { get; set; }
 
         private static BoundingBox tmpBound;
-        
-        private static Tuple<GPUBufferLL[], Texture[]> LoadModelVB(string filename)
+
+        static Model()
         {
+            staticBufferOffset = 0;
+            staticBufferLength = /*How much should we allocate?*/10000000;  //Current limit = 10 Million Elements
+            staticBuffer = new VertexArrayLL(4, staticBufferLength, UpdateMode.Static, new BufferUse[] { BufferUse.Index, BufferUse.Array, BufferUse.Array, BufferUse.Array }, new int[] { 1, 3, 3, 2 });
 
-        }
-
-        public static Model Load(string filename)
-        {
-            var tmp = LoadModelVB(filename);
-            Model m = new Model();
-            m.filepath = filename;
-            m.buffers = tmp.Item1;
-            m.Materials = new Material[tmp.Item2.Length];
-            for (int i = 0; i < tmp.Item2.Length; i++)
-            {
-                m.Materials[i] = new Material
-                {
-                    ColorMap = tmp.Item2[i],
-                    Shader = new ShaderProgram(new ShaderLib.GBufferShader())
-                };
-            }
-            m.World = Matrix4.Identity;
-
-            m.Bound.Max = tmpBound.Max;
-            m.Bound.Min = tmpBound.Min;
-
-
-            return m;
+            dynamicBufferOffset = 0;
+            dynamicBufferLength =  /*How much should we allocate?*/1000000; //Current limit = 1 Million Elements
+            dynamicBuffer = new VertexArrayLL(4, dynamicBufferLength, UpdateMode.Static, new BufferUse[] { BufferUse.Index, BufferUse.Array, BufferUse.Array, BufferUse.Array }, new int[] { 1, 3, 3, 2 });
         }
 
         public Model()
@@ -106,34 +101,25 @@ namespace Kokoro.Engine
 
         public Action<GraphicsContext> PreDraw { get; set; }
 
+        //Use this to build a list of all the commands to send to the appropriate multidraw indirect buffers
         public void Draw(GraphicsContext context)
         {
-
-            for (int a = 0; a < vbufs.Length; a++)
+            //Append a draw command to the MDI queue
+            for (int a = 0; a < buffers.Length; a++)
             {
-                vbufs[a].DrawMode = this.DrawMode;
-                vbufs[a].Bind();
-
-                if (PreDraw != null) PreDraw(context);
-
                 //Apply the Material
-                Materials[a].Apply(context, this);
+                Materials[a].Apply(context, this);      //Material pipeline will just setup textures and uniform buffer parameters somehow
 
-                vbufs[a].Draw((int)vbufs[a].IndexCount);
+                GraphicsContextLL.AddDrawCall(0, IndexCount, offset);   //Send the draw call
 
                 //Cleanup the Material
-                Materials[a].Cleanup(context, this);
+                Materials[a].Cleanup(context, this);    //Queue the material to be cleaned out after everything has been done
             }
-
-            VertexBufferLL.UnBind();
         }
 
         public void Dispose()
         {
-            for (int i = 0; i < vbufs.Length; i++)
-            {
-                vbufs[i].Dispose();
-            }
+            //Nothing unless we end up needing to setup the defragmentation mechanism
         }
     }
 }

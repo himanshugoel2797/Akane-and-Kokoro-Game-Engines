@@ -20,7 +20,7 @@ namespace Kokoro.OpenGL.PC
             Matrix4, Matrix3, Matrix2, Vector4, Vector3, Vector2, Float, Texture
         }
 
-#if GL44
+#if GL44        //TODO Finish updating ShaderProgramLL to use the AZDO model
         private static Dictionary<string, int> programDB = new Dictionary<string, int>();
         private string shaderName;
         private Shader[] shaderStages;

@@ -8,8 +8,9 @@ namespace Kokoro.Sinus
 {
     public class SinusManager
     {
-
         internal static Queue<Action> CommandBuffer = new Queue<Action>();
+
+        [ThreadStatic]
         private static Queue<Action> LocalCommands = new Queue<Action>();
 
         /// <summary>

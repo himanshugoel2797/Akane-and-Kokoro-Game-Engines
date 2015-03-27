@@ -14,6 +14,15 @@ using Kokoro.Sinus;
 
 namespace Kokoro.OpenGL.PC
 {
+    struct MDIEntry
+    {
+        public uint count;
+        public uint instanceCount;
+        public uint first;
+        public uint baseVertex;
+        public uint baseInstance;
+    }
+
     /// <summary>
     /// This class exposes low level OpenGL statemachine functions to the engine
     /// </summary>
@@ -55,6 +64,8 @@ namespace Kokoro.OpenGL.PC
                 GL.Enable(EnableCap.LineSmooth);
                 GL.LineWidth(4);
             });
+
+            MDIBuffer.Bind();   //This is the only place the draw indirect can be used so we only bind this once, it will never be replaced unless someone does something really wrong
         }
 
         void Window_Resize(object sender, EventArgs e)
@@ -89,6 +100,52 @@ namespace Kokoro.OpenGL.PC
             curRequestTexture = id;
         }
 #endif
+
+        #region Multidraw
+        static GPUBufferLL MDIBuffer = new GPUBufferLL(Engine.UpdateMode.Dynamic, Engine.BufferUse.Indirect, 1024); //Allocate 1kb to the indirect buffer
+        static List<MDIEntry> MDIEntries = new List<MDIEntry>();
+        static int EntryCount = 0;
+        static int EntryOffset = 0;
+
+        internal static void Draw()
+        {
+            SinusManager.QueueCommand(() =>
+            {
+                GL.MultiDrawArraysIndirect(PrimitiveType.Triangles, IntPtr.Zero, EntryCount, 0);
+            });
+        }
+
+        //Submit all the current draw calls and clear the draw list
+        internal static void SubmitDraw()
+        {
+            //Build the array to submit to the GPU
+            uint[] buf = new uint[MDIEntries.Count * 5];
+            for (int i = 0; i < MDIEntries.Count; i++)
+            {
+                buf[i * 5] = MDIEntries[i].count;
+                buf[i * 5 + 1] = MDIEntries[i].instanceCount;
+                buf[i * 5 + 2] = MDIEntries[i].first;
+                buf[i * 5 + 3] = MDIEntries[i].baseVertex;
+                buf[i * 5 + 4] = MDIEntries[i].baseInstance;
+            }
+            MDIEntries.Clear();
+
+            MDIBuffer.BufferData(buf, 0, buf.Length);
+        }
+
+        internal static void AddDrawCall(uint first, uint count, uint baseVertex)
+        {
+            //Append the draw call data to the MDIBuffer
+            MDIEntries.Add(new MDIEntry()
+            {
+                baseInstance = 0,
+                baseVertex = baseVertex,
+                count = count,
+                first = first,
+                instanceCount = 1
+            });
+        }
+        #endregion
 
         #region Input Focus Handlers
         void ParentForm_ResizeEnd(object sender, EventArgs e)

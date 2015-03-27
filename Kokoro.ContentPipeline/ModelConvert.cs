@@ -176,11 +176,50 @@ namespace Kokoro.ContentPipeline
         private static byte[] FinalProcess(string[] tex, float[][] verts, float[][] uvs, float[][] norms,
             uint[][] indices, float[][][] weights, int[][][] bones, float[][][] skeleton)
         {
+            byte[] outdata;
 
+            using (MemoryStream strm = new MemoryStream())
+            {
+                using (StreamWriter writer = new StreamWriter(strm))
+                {
+                    writer.Write(new char[] { 'A', 'K', '3', 'D' }, 0, 4);    //Write the magic number "AK3D"
+                    writer.Write(indices.Length);    //Get the total number of models in question
+                    writer.Write(verts.Length);       //Get the total number of vertices in question
+                    writer.Write(uvs.Length);         //Get the total number of UVs in question
+                    writer.Write(norms.Length);       //Get the total number of normals available
+                    writer.Write(weights.Length);
+                    writer.Write(bones.Length);
+                    writer.Write(skeleton.Length);
 
+                    //We are done writing all the first dimensions, now write second dimensions
+                    for (int i = 0; i < indices.Length; i++)
+                    {
+                        writer.Write(indices[i].Length);    //Write all the lengths
+                    }
 
+                    //We are done writing all the first dimensions, now write second dimensions
+                    for (int i = 0; i < verts.Length; i++)
+                    {
+                        writer.Write(verts[i].Length);    //Write all the lengths
+                    }
 
+                    //We are done writing all the first dimensions, now write second dimensions
+                    for (int i = 0; i < indices.Length; i++)
+                    {
+                        writer.Write(indices[i].Length);    //Write all the lengths
+                    }
+
+                    //We are done writing all the first dimensions, now write second dimensions
+                    for (int i = 0; i < indices.Length; i++)
+                    {
+                        writer.Write(indices[i].Length);    //Write all the lengths
+                    }
+                }
+                outdata = strm.ToArray();
+            }
+
+            return outdata;
         }
-    
+
     }
 }

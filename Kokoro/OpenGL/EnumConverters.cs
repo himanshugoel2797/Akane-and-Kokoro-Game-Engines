@@ -73,6 +73,7 @@ namespace Kokoro.OpenGL
             else if (type == Engine.Shaders.ShaderTypes.TessellationControl) return ShaderType.TessControlShader;
             else if (type == Engine.Shaders.ShaderTypes.TessellationEval) return ShaderType.TessEvaluationShader;
             else if (type == Engine.Shaders.ShaderTypes.Vertex) return ShaderType.VertexShader;
+            else if (type == Engine.Shaders.ShaderTypes.Compute) return ShaderType.ComputeShader;
 
             return ShaderType.ComputeShader;
         }
@@ -116,6 +117,7 @@ namespace Kokoro.OpenGL
             else if (use == Engine.BufferUse.Index) return BufferTarget.ElementArrayBuffer;
             else if (use == Engine.BufferUse.ShaderStorage) return BufferTarget.ShaderStorageBuffer;
             else if (use == Engine.BufferUse.Uniform) return BufferTarget.UniformBuffer;
+            else if (use == Engine.BufferUse.Indirect) return BufferTarget.DrawIndirectBuffer;
 
             return BufferTarget.ArrayBuffer;    //Flow should never reach this
         }

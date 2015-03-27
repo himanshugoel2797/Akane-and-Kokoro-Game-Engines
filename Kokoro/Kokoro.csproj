@@ -186,6 +186,7 @@
     <Compile Include="Engine\SceneGraph\IScene.cs" />
     <Compile Include="Engine\SceneGraph\ITransitionEvaluator.cs" />
     <Compile Include="Engine\SceneGraph\SceneManager.cs" />
+    <Compile Include="Engine\Shaders\ComputeShader.cs" />
     <Compile Include="Engine\Shaders\FragmentShader.cs" />
     <Compile Include="Engine\Shaders\GeometryShader.cs" />
     <Compile Include="Engine\Shaders\HLShader.cs" />
