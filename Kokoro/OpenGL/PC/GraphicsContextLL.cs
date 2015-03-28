@@ -63,9 +63,9 @@ namespace Kokoro.OpenGL.PC
                 GL.Enable(EnableCap.DepthTest);
                 GL.Enable(EnableCap.LineSmooth);
                 GL.LineWidth(4);
+                MDIBuffer.Bind();   //This is the only place the draw indirect can be used so we only bind this once, it will never be replaced unless someone does something really wrong
             });
 
-            MDIBuffer.Bind();   //This is the only place the draw indirect can be used so we only bind this once, it will never be replaced unless someone does something really wrong
         }
 
         void Window_Resize(object sender, EventArgs e)
@@ -102,6 +102,7 @@ namespace Kokoro.OpenGL.PC
 #endif
 
         #region Multidraw
+        static object locker = new object();
         static GPUBufferLL MDIBuffer = new GPUBufferLL(Engine.UpdateMode.Dynamic, Engine.BufferUse.Indirect, 1024); //Allocate 1kb to the indirect buffer
         static List<MDIEntry> MDIEntries = new List<MDIEntry>();
         static int EntryCount = 0;
@@ -109,10 +110,11 @@ namespace Kokoro.OpenGL.PC
 
         internal static void Draw()
         {
-            Engine.Model.staticBuffer.Bind();
+            Engine.Model.staticBuffer.Bind();   //Eventually this should be replaced by one call for static buffers and one for dynamic buffers
 
             SinusManager.QueueCommand(() =>
             {
+                //GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedInt, 0);
                 GL.MultiDrawElementsIndirect(All.Triangles, All.UnsignedInt, IntPtr.Zero, EntryCount, 0);
             });
         }
@@ -120,33 +122,40 @@ namespace Kokoro.OpenGL.PC
         //Submit all the current draw calls and clear the draw list
         internal static void SubmitDraw()
         {
-            //Build the array to submit to the GPU
-            uint[] buf = new uint[MDIEntries.Count * 5];
-            for (int i = 0; i < MDIEntries.Count; i++)
+            lock (locker)
             {
-                buf[i * 5] = MDIEntries[i].count;
-                buf[i * 5 + 1] = MDIEntries[i].instanceCount;
-                buf[i * 5 + 2] = MDIEntries[i].first;
-                buf[i * 5 + 3] = MDIEntries[i].baseVertex;
-                buf[i * 5 + 4] = MDIEntries[i].baseInstance;
-            }
-            EntryCount = MDIEntries.Count;
-            MDIEntries.Clear();
+                //Build the array to submit to the GPU
+                uint[] buf = new uint[MDIEntries.Count * 5];
+                for (int i = 0; i < MDIEntries.Count; i++)
+                {
+                    buf[i * 5] = MDIEntries[i].count;
+                    buf[i * 5 + 1] = MDIEntries[i].instanceCount;
+                    buf[i * 5 + 2] = MDIEntries[i].first;
+                    buf[i * 5 + 3] = MDIEntries[i].baseVertex;
+                    buf[i * 5 + 4] = MDIEntries[i].baseInstance;
+                }
+                EntryCount = MDIEntries.Count;
+                Console.Write(EntryCount);      //TODO Remove this console output later
+                MDIEntries.Clear();
 
-            MDIBuffer.BufferData(buf, 0, buf.Length);
+                if (buf.Length > 0) MDIBuffer.BufferData(buf, 0, buf.Length);
+            }
         }
 
         internal static void AddDrawCall(uint first, uint count, uint baseVertex)
         {
-            //Append the draw call data to the MDIBuffer
-            MDIEntries.Add(new MDIEntry()
+            lock (locker)
             {
-                baseInstance = 0,
-                baseVertex = baseVertex,
-                count = count,
-                first = first,
-                instanceCount = 1
-            });
+                //Append the draw call data to the MDIBuffer
+                MDIEntries.Add(new MDIEntry()
+                {
+                    baseInstance = 0,
+                    baseVertex = baseVertex,
+                    count = count,
+                    first = first,
+                    instanceCount = 1
+                });
+            }
         }
         #endregion
 

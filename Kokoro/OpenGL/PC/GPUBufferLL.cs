@@ -54,18 +54,12 @@ namespace Kokoro.OpenGL.PC
 
         public void Bind()
         {
-            SinusManager.QueueCommand(() =>
-            {
-                GL.BindBuffer(target, staticID);
-            });
+            GL.BindBuffer(target, staticID);
         }
 
         public void UnBind()
         {
-            SinusManager.QueueCommand(() =>
-            {
-                GL.BindBuffer(target, 0);
-            });
+            GL.BindBuffer(target, 0);
         }
 
         /// <summary>

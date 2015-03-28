@@ -14,6 +14,9 @@ namespace Kokoro.OpenGL.PC
         GPUBufferLL[] buffers;
         int vaID = 0;
 
+        int[] elementCount;
+        Kokoro.Engine.BufferUse[] bufferUses;
+
         GPUBufferLL ibo;
 
         /// <summary>
@@ -38,25 +41,36 @@ namespace Kokoro.OpenGL.PC
                 buffers[i] = new GPUBufferLL(updateMode, bufferUses[i], bufferSize * elementCount[i] * 8);  //NOTE: bufferSize no longer refers to the number of bytes of data, but the number of elements in total
             }
 
+            this.elementCount = elementCount;
+            this.bufferUses = bufferUses;
+
             SinusManager.QueueCommand
                 (() =>
                 {
                     vaID = GL.GenVertexArray();
                     GL.BindVertexArray(vaID);
-                    for (int i = 0; i < bufferCount; i++)
+
+                    if (bufferUses[0] == Engine.BufferUse.Index)
                     {
-                        if (bufferUses[i] != Engine.BufferUse.Index)
-                        {
-                            GL.EnableVertexAttribArray(i);
-                            buffers[i].Bind();
-                            GL.VertexAttribPointer(i, elementCount[i], VertexAttribPointerType.Float, false, 0, 0);
-                            GL.VertexAttribDivisor(i, 0);
-                        }
-                        else
-                        {
-                            ibo = buffers[i];
-                        }
+                        ibo = buffers[0];
+                        ibo.Bind();
+                        bufferCount--;
                     }
+
+                    for (int j = 0; j < bufferCount; j++)
+                    {
+                        int i = j;
+                        if (bufferUses[0] == Engine.BufferUse.Index)
+                        {
+                            i = j + 1;
+                        }
+                        GL.EnableVertexAttribArray(j);
+                        buffers[i].Bind();
+                        GL.VertexAttribPointer(j, elementCount[i], VertexAttribPointerType.Float, false, 0, 0);
+                        GL.VertexAttribDivisor(j, 0);
+
+                    }
+                    GL.EnableVertexAttribArray(0);
                     GL.BindVertexArray(0);
                 });
         }
@@ -67,7 +81,31 @@ namespace Kokoro.OpenGL.PC
             SinusManager.QueueCommand(() =>
             {
                 GL.BindVertexArray(vaID);
+                int bufferCount = elementCount.Length;
+
+                if (bufferUses[0] == Engine.BufferUse.Index)
+                {
+                    ibo = buffers[0];
+                    ibo.Bind();
+                    bufferCount--;
+                }
+
+                for (int j = 0; j < bufferCount; j++)
+                {
+                    int i = j;
+                    if (bufferUses[0] == Engine.BufferUse.Index)
+                    {
+                        i++;
+                    }
+                    GL.EnableVertexAttribArray(j);
+                    buffers[i].Bind();
+                    GL.VertexAttribPointer(j, elementCount[i], VertexAttribPointerType.Float, false, 0, 0);
+                    GL.VertexAttribDivisor(j, 0);
+
+                }
+
                 if (ibo != null) ibo.Bind();
+
             });
         }
 
@@ -77,6 +115,7 @@ namespace Kokoro.OpenGL.PC
             SinusManager.QueueCommand(() =>
             {
                 GL.BindVertexArray(0);
+                if (ibo != null) ibo.UnBind();
             });
         }
 

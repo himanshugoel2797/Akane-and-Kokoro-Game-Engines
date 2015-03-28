@@ -172,20 +172,17 @@ namespace Kokoro.Engine
         //Use this to build a list of all the commands to send to the appropriate multidraw indirect buffers
         public void Draw(GraphicsContext context)
         {
-            Sinus.SinusManager.QueueCommand(() =>
+            //Append a draw command to the MDI queue
+            for (int a = 0; a < offsets.Length; a++)
             {
-                //Append a draw command to the MDI queue
-                for (int a = 0; a < offsets.Length; a++)
-                {
-                    //Apply the Material
-                    Materials[a].Apply(context, this);      //Material pipeline will just setup textures and uniform buffer parameters somehow
+                //Apply the Material
+                Materials[a].Apply(context, this);      //Material pipeline will just setup textures and uniform buffer parameters somehow
 
-                    GraphicsContextLL.AddDrawCall(0, lengths[a], offsets[a][1]);   //Send the draw call
+                GraphicsContextLL.AddDrawCall(0, lengths[a], offsets[a][1]);   //Send the draw call
 
-                    //Cleanup the Material
-                    //Materials[a].Cleanup(context, this);    //Queue the material to be cleaned out after everything has been done
-                }
-            });
+                //Cleanup the Material
+                //Materials[a].Cleanup(context, this);    //Queue the material to be cleaned out after everything has been done
+            }
         }
 
         public void Dispose()

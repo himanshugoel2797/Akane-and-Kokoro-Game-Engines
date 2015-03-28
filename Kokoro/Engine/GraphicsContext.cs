@@ -391,6 +391,7 @@ namespace Kokoro.Engine
                     }
 
                     if (!s.IsRunning) s.Start();
+                    Window_RenderFrame(0);
                     lock (Sinus.SinusManager.CommandBuffer)
                     {
                         while (Sinus.SinusManager.CommandBuffer.Count > 0)
@@ -403,7 +404,7 @@ namespace Kokoro.Engine
                 }
 
                 Kokoro.Debug.ObjectAllocTracker.PostFPS(GetNormTicks(s));
-                ViewportControl.Invalidate();
+                //ViewportControl.Invalidate();
                 s.Reset();
                 s.Start();
             };
@@ -438,22 +439,22 @@ namespace Kokoro.Engine
         /// </summary>
         public void SwapBuffers()
         {
-            Sinus.SinusManager.QueueCommand(() =>
-            {
-                SubmitDraw();
-                Draw();
-                swap();
-                Window_RenderFrame(0);
-            });
+            SubmitDraw();
+            Draw();
+
+            Sinus.SinusManager.QueueCommand(swap);
 
             //Push all data, this should 
             //Sinus.SinusManager.PushCommandBuffer();
 
             //Invalidate the winform paint and trigger the draw thread
-            //ViewportControl.BeginInvoke(new MethodInvoker(() =>
-            //{
-            //    ViewportControl.Invalidate();
-            //}));
+            if (ViewportControl.IsHandleCreated)
+            {
+                ViewportControl.BeginInvoke(new MethodInvoker(() =>
+                    {
+                        ViewportControl.Invalidate();
+                    }));
+            }
         }
 
         private void GameLooper(double timestep, Action<double, GraphicsContext> handler)

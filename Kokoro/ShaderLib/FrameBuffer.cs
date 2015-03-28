@@ -25,8 +25,8 @@ namespace Kokoro.ShaderLib
         public void Vertex()
         {
             var Vars = Manager.ShaderStart();
-            Manager.StreamIn<Vec3>("VertexPos", 1);
-            Manager.StreamIn<Vec2>("UV0", 3);
+            Manager.StreamIn<Vec3>("VertexPos", 0);
+            Manager.StreamIn<Vec2>("UV0", 2);
 
             Manager.SharedOut<Vec2>("UV");
 
