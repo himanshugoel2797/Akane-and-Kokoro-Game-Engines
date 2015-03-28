@@ -32,6 +32,14 @@ namespace Kokoro.OpenGL.PC
             }
         }
 
+        public void PostFence()
+        {
+            for (int i = 0; i < buffers.Length; i++)
+            {
+                buffers[i].PostFence();
+            }
+        }
+
         public VertexArrayLL(int bufferCount, long bufferSize, Kokoro.Engine.UpdateMode updateMode, Kokoro.Engine.BufferUse[] bufferUses, int[] elementCount)
         {
             //Generate all GPUBuffers

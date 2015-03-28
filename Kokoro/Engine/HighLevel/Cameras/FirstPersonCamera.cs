@@ -60,6 +60,8 @@ namespace Kokoro.Engine.HighLevel.Cameras
         /// <param name="Context">The current GraphicsContext</param>
         public override void Update(double interval, GraphicsContext Context)
         {
+            interval /= 100;
+
             if (Mouse.ButtonsDown.Left)
             {
                 if (System.Math.Abs(mousePos.X - Mouse.MousePos.X) > 0) leftrightRot -= (float)MathHelper.DegreesToRadians(rotationSpeed * (mousePos.X - Mouse.MousePos.X) * interval/10000f);

@@ -114,8 +114,10 @@ namespace Kokoro.OpenGL.PC
 
             SinusManager.QueueCommand(() =>
             {
-                //GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedInt, 0);
                 GL.MultiDrawElementsIndirect(All.Triangles, All.UnsignedInt, IntPtr.Zero, EntryCount, 0);
+                MDIBuffer.PostFence();      //The MDIBuffer can not be modified until this is done
+                Kokoro.Engine.Model.staticBuffer.PostFence();   //The draw buffers may not be modified until they have been drawn
+                Kokoro.Engine.Model.dynamicBuffer.PostFence();  
             });
         }
 
@@ -135,10 +137,12 @@ namespace Kokoro.OpenGL.PC
                     buf[i * 5 + 4] = MDIEntries[i].baseInstance;
                 }
                 EntryCount = MDIEntries.Count;
-                Console.Write(EntryCount);      //TODO Remove this console output later
                 MDIEntries.Clear();
 
-                if (buf.Length > 0) MDIBuffer.BufferData(buf, 0, buf.Length);
+                if (buf.Length > 0)
+                {
+                    MDIBuffer.BufferData(buf, 0, buf.Length);
+                }
             }
         }
 

@@ -93,6 +93,16 @@ namespace Kokoro.OpenGL.PC
             return (uint)(offset - data.Length);
         }
 
+        public void PostFence()
+        {
+            if (updateMode == UpdateMode.Dynamic)
+            {
+                // lock the buffer:
+                GL.DeleteSync(syncObj);
+                syncObj = GL.FenceSync(SyncCondition.SyncGpuCommandsComplete, WaitSyncFlags.None);
+            }
+        }
+
         /// <summary>
         /// Put data into the buffer
         /// </summary>
@@ -121,10 +131,6 @@ namespace Kokoro.OpenGL.PC
                             Marshal.Copy(data, offset, mappedPtr, ((length == -1) ? data.Length : length));
                         }
                     }
-
-                    // lock the buffer:
-                    GL.DeleteSync(syncObj);
-                    syncObj = GL.FenceSync(SyncCondition.SyncGpuCommandsComplete, WaitSyncFlags.None);
                 });
                 #endregion
             }
@@ -169,11 +175,6 @@ namespace Kokoro.OpenGL.PC
                             Marshal.Copy(data, offset, mappedPtr, ((length == -1) ? data.Length : length));
                         }
                     }
-
-                    // lock the buffer:
-                    GL.DeleteSync(syncObj);
-                    syncObj = GL.FenceSync(SyncCondition.SyncGpuCommandsComplete, WaitSyncFlags.None);
-
                 });
                 #endregion
             }
@@ -225,10 +226,6 @@ namespace Kokoro.OpenGL.PC
                             }
                         }
                     }
-
-                    // lock the buffer:
-                    GL.DeleteSync(syncObj);
-                    syncObj = GL.FenceSync(SyncCondition.SyncGpuCommandsComplete, WaitSyncFlags.None);
                 });
                 #endregion
             }

@@ -340,7 +340,7 @@ namespace Kokoro.Engine
                             Mouse.Update();
 
                             //Call update handler
-                            Update(GetNormTicks(su), this);
+                            Update((tpu == 0) ? GetNormTicks(su) : tpu, this);
                         }
                     }
 

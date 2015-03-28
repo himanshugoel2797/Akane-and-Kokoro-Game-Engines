@@ -15,7 +15,7 @@ namespace Kokoro.Engine.Shaders
 
         public static FragmentShader Load(string dir)
         {
-            return new FragmentShader(new StreamReader(VFS.FSReader.OpenFile(Path.Combine(dir, "compute.glsl"))).ReadToEnd());
+            return new FragmentShader(new StreamReader(VFS.FSReader.OpenFile(dir + "/compute.glsl")).ReadToEnd());
         }
     }
 }
