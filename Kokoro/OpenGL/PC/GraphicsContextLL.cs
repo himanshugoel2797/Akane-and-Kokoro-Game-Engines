@@ -141,7 +141,7 @@ namespace Kokoro.OpenGL.PC
 
                 if (buf.Length > 0)
                 {
-                    MDIBuffer.BufferData(buf, 0, buf.Length);
+                    MDIBuffer.BufferData(buf, 0, buf.Length * sizeof(uint));
                 }
             }
         }

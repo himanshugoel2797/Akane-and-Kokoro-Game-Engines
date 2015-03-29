@@ -16,7 +16,7 @@ namespace Kokoro.KSL
 {
     public class KSLCompiler
     {
-        internal static Dictionary<string, Obj> preDefUniforms = new Dictionary<string, Obj>();
+        internal static Dictionary<string, Obj> preDefUniforms = new Dictionary<string, Obj>(); 
 
         public enum KShaderType
         {
@@ -40,6 +40,12 @@ namespace Kokoro.KSL
         public static void UnRegisterPreDefinedUniform(string name)
         {
             preDefUniforms.Remove(name);
+        }
+
+        //Generate the shader header with params in UBO/SSBO format with given number of subroutines, this functions should be called in the end to generate the header for hte ubershader
+        public static string GenerateHeader(int num)
+        {
+            return "";
         }
 
         /// <summary>

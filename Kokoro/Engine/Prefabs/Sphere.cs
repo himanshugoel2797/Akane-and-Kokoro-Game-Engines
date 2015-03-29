@@ -38,6 +38,14 @@ namespace Kokoro.Engine.Prefabs
             float angleStep = 360f / (float)step;
             double toRad = MathHelper.Pi / 180;
 
+            float maxX = 0;
+            float maxY = 0;
+            float maxZ = 0;
+
+            float minX = 0;
+            float minY = 0;
+            float minZ = 0;
+
             uint n = 0;
             for (float aY = 0; aY < 180; aY += angleStep)
             {
@@ -46,6 +54,14 @@ namespace Kokoro.Engine.Prefabs
                     float x = (float)(radius * System.Math.Cos(aX * toRad) * System.Math.Sin(aY * toRad));
                     float y = (float)(radius * System.Math.Sin(aX * toRad) * System.Math.Sin(aY * toRad));
                     float z = (float)(radius * System.Math.Cos(aY * toRad));
+
+                    if (x > maxX) maxX = x;
+                    if (y > maxY) maxY = y;
+                    if (z > maxZ) maxZ = z;
+
+                    if (x < minX) minX = x;
+                    if (y < minY) minY = y;
+                    if (z < minZ) minZ = z;
 
                     verts.Add(x);
                     verts.Add(y);
@@ -144,6 +160,12 @@ namespace Kokoro.Engine.Prefabs
             SetUVs(UpdateMode.Static, uvs.ToArray(), 0);
             SetVertices(UpdateMode.Static, verts.ToArray(), 0);
             SetNormals(UpdateMode.Static, normals.ToArray(), 0);
+            Bound = new BoundingBox()
+            {
+                Max = new Vector3(maxX, maxY, maxZ),
+                Min = new Vector3(minX, minY, minZ),
+                Up = Vector3.UnitY
+            };
         }
     }
 }

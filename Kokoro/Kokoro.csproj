@@ -224,14 +224,6 @@
     <Compile Include="Math\Vector4.cs" />
     <Compile Include="Math\Vector4d.cs" />
     <Compile Include="Math\Vector4h.cs" />
-    <Compile Include="OpenGL\AZDO\FrameBufferLL.cs" />
-    <Compile Include="OpenGL\AZDO\GraphicsContextLL.cs" />
-    <Compile Include="OpenGL\AZDO\InputLL.cs" />
-    <Compile Include="OpenGL\AZDO\ShaderLL.cs" />
-    <Compile Include="OpenGL\AZDO\ShaderProgramLL.cs" />
-    <Compile Include="OpenGL\AZDO\SoundLL.cs" />
-    <Compile Include="OpenGL\AZDO\TextureLL.cs" />
-    <Compile Include="OpenGL\AZDO\VertexBufferLL.cs" />
     <Compile Include="OpenGL\EnumConverters.cs" />
     <Compile Include="OpenGL\PC\Debug.cs" />
     <Compile Include="OpenGL\PC\FrameBufferLL.cs" />

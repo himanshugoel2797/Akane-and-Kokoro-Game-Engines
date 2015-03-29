@@ -69,9 +69,9 @@ namespace Kokoro.OpenGL.PC
         /// <returns>The offset it was buffered to</returns>
         public uint AppendData(float[] data)
         {
-            BufferData(data, offset, data.Length);
-            offset += data.Length;
-            return (uint)(offset - data.Length);
+            BufferData(data, offset, data.Length * sizeof(float));
+            offset += data.Length * sizeof(float);
+            return (uint)(offset - data.Length * sizeof(float));
         }
 
         /// <summary>
@@ -81,9 +81,9 @@ namespace Kokoro.OpenGL.PC
         /// <returns>The offset it was buffered to</returns>
         public uint AppendData(uint[] data)
         {
-            BufferData(data, offset, data.Length);
-            offset += data.Length;
-            return (uint)(offset - data.Length);
+            BufferData(data, offset, data.Length * sizeof(uint));
+            offset += data.Length * sizeof(uint);
+            return (uint)(offset - data.Length * sizeof(uint));
         }
 
         public uint AppendData(byte[] data)
@@ -111,40 +111,9 @@ namespace Kokoro.OpenGL.PC
         /// <param name="length">The amount of data to copy (only used for dynamic objects)</param>
         public void BufferData(float[] data, int offset = 0, int length = -1)
         {
-            if (updateMode == UpdateMode.Dynamic)   //Write to the persistent mapped buffer
-            {
-                #region Persistent Mapping
-                SinusManager.QueueCommand(() =>
-                {
-                    // waiting for the buffer
-                    WaitSyncStatus waitReturn = WaitSyncStatus.TimeoutExpired;
-                    while (waitReturn != WaitSyncStatus.AlreadySignaled && waitReturn != WaitSyncStatus.ConditionSatisfied)
-                    {
-                        waitReturn = GL.ClientWaitSync(syncObj, ClientWaitSyncFlags.SyncFlushCommandsBit, 1);   //TODO depending on how much time this can take, we might want to do other work in the meantime
-                    }
-
-                    //Write the data
-                    unsafe
-                    {
-                        fixed (float* SystemMemory = &data[0])
-                        {
-                            Marshal.Copy(data, offset, mappedPtr, ((length == -1) ? data.Length : length));
-                        }
-                    }
-                });
-                #endregion
-            }
-            else if (updateMode == UpdateMode.Static)
-            {
-                #region Buffer Data
-                SinusManager.QueueCommand(() =>
-                {
-                    GL.BindBuffer(target, staticID);
-                    GL.BufferData(target, (IntPtr)(sizeof(float) * data.Length), data, BufferUsageHint.StaticDraw);
-                    GL.BindBuffer(target, 0);
-                });
-                #endregion
-            }
+            byte[] tmp = new byte[((length == -1) ? data.Length : length) * sizeof(float)];
+            Buffer.BlockCopy(data, 0, tmp, 0, tmp.Length);
+            BufferData(tmp, offset, length);
         }
 
         /// <summary>
@@ -172,7 +141,7 @@ namespace Kokoro.OpenGL.PC
                     {
                         fixed (byte* SystemMemory = &data[0])
                         {
-                            Marshal.Copy(data, offset, mappedPtr, ((length == -1) ? data.Length : length));
+                            Marshal.Copy(data, 0, (mappedPtr + offset), ((length == -1) ? data.Length : length));
                         }
                     }
                 });
@@ -184,7 +153,8 @@ namespace Kokoro.OpenGL.PC
                 SinusManager.QueueCommand(() =>
                 {
                     GL.BindBuffer(target, staticID);
-                    GL.BufferData(target, (IntPtr)(sizeof(byte) * data.Length), data, BufferUsageHint.StaticDraw);
+                    if (offset == 0) GL.BufferData(target, (IntPtr)((length == -1) ? data.Length : length), data, BufferUsageHint.StaticDraw);
+                    else GL.BufferSubData(target, (IntPtr)(offset), (IntPtr)((length == -1) ? data.Length : length), data);
                     GL.BindBuffer(target, 0);
                 });
                 #endregion
@@ -200,46 +170,9 @@ namespace Kokoro.OpenGL.PC
         /// <param name="length">The amount of data to copy (only used for dynamic objects)</param>
         public void BufferData(uint[] data, int offset = 0, int length = -1)
         {
-            if (updateMode == UpdateMode.Dynamic)   //Write to the persistent mapped buffer
-            {
-                #region Persistent Mapping
-                SinusManager.QueueCommand(() =>
-                {
-                    // waiting for the buffer
-                    WaitSyncStatus waitReturn = WaitSyncStatus.TimeoutExpired;
-                    while (waitReturn != WaitSyncStatus.AlreadySignaled && waitReturn != WaitSyncStatus.ConditionSatisfied)
-                    {
-                        waitReturn = GL.ClientWaitSync(syncObj, ClientWaitSyncFlags.SyncFlushCommandsBit, 1);   //TODO depending on how much time this can take, we might want to do other work in the meantime
-                    }
-
-                    //Write the data
-                    unsafe
-                    {
-                        fixed (uint* SystemMemory = &data[0])
-                        {
-                            uint* VideoMemory = (uint*)mappedPtr.ToPointer();
-
-                            //TODO This can possibly become a bottleneck and may need optimization
-                            for (int i = offset; i < offset + ((length == -1) ? data.Length : length); i++)
-                            {
-                                VideoMemory[i - offset] = SystemMemory[i];
-                            }
-                        }
-                    }
-                });
-                #endregion
-            }
-            else if (updateMode == UpdateMode.Static)
-            {
-                #region Buffer Data
-                SinusManager.QueueCommand(() =>
-                {
-                    GL.BindBuffer(target, staticID);
-                    GL.BufferData(target, (IntPtr)(sizeof(uint) * data.Length), data, BufferUsageHint.StaticDraw);
-                    GL.BindBuffer(target, 0);
-                });
-                #endregion
-            }
+            byte[] tmp = new byte[data.Length * sizeof(float)];
+            Buffer.BlockCopy(data, 0, tmp, 0, tmp.Length);
+            BufferData(tmp, offset, length);
         }
 #else
 

@@ -146,7 +146,7 @@ namespace Kokoro.Engine
 
             dynamicBufferOffset = new long[numBufs];
             dynamicBufferLength = new long[numBufs]; /*How much should we allocate?*/ //Current limit = 1 Million Elements
-            dynamicBuffer = new VertexArrayLL(4, 1000000, UpdateMode.Static, new BufferUse[] { BufferUse.Index, BufferUse.Array, BufferUse.Array, BufferUse.Array }, new int[] { 1, 3, 3, 2 });
+            dynamicBuffer = new VertexArrayLL(4, 1000000, UpdateMode.Dynamic, new BufferUse[] { BufferUse.Index, BufferUse.Array, BufferUse.Array, BufferUse.Array }, new int[] { 1, 3, 3, 2 });
             dynamicBufferLength[0] = 1000000;
             dynamicBufferLength[1] = 3000000;
             dynamicBufferLength[2] = 3000000;
@@ -178,7 +178,7 @@ namespace Kokoro.Engine
                 //Apply the Material
                 Materials[a].Apply(context, this);      //Material pipeline will just setup textures and uniform buffer parameters somehow
 
-                GraphicsContextLL.AddDrawCall(0, lengths[a], offsets[a][1]);   //Send the draw call
+                GraphicsContextLL.AddDrawCall(offsets[a][0] / sizeof(uint), lengths[a], offsets[a][1] / sizeof(float));   //Send the draw call
 
                 //Cleanup the Material
                 //Materials[a].Cleanup(context, this);    //Queue the material to be cleaned out after everything has been done
