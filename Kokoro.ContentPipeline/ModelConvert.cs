@@ -173,7 +173,7 @@ namespace Kokoro.ContentPipeline
             }
 
             return FinalProcess(texs.ToArray(), Vertices.ToArray(), UV.ToArray(), Normals.ToArray(),
-                Indices.ToArray(), vweights, vbones, SkeletonBones.ToArray(), texs.ToArray(), bounds);
+                Indices.ToArray(), texs.ToArray(), bounds, vweights, vbones, SkeletonBones.ToArray());
             #endregion
         }
 
@@ -209,7 +209,7 @@ namespace Kokoro.ContentPipeline
         }
 
         private static byte[] FinalProcess(string[] tex, float[][] verts, float[][] uvs, float[][] norms,
-            uint[][] indices, float[][][] weights, int[][][] bones, float[][][] skeleton, string[] texPaths, float[][] boundingbox)
+            uint[][] indices, string[] texPaths, float[][] boundingbox, float[][][] weights = null, int[][][] bones = null, float[][][] skeleton = null)
         {
             byte[] outdata;
 

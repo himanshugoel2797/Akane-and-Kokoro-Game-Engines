@@ -40,9 +40,12 @@ namespace Kokoro.Engine.Prefabs
             public string[] texPaths;
         }
 
-        public VertexMesh(string filename)
+        private bool animatedMesh;
+
+        public VertexMesh(string filename, bool animated)
         {
             Model_m tmp = Serializer.Deserialize<Model_m>(VFS.FSReader.OpenFile(filename, false));
+            animatedMesh = animated;
 
             Init(tmp.indices.Length);
             for (int i = 0; i < tmp.indices.Length; i++)

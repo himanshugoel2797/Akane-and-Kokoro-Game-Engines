@@ -56,10 +56,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Kokoro.FSWriter\Kokoro.FSWriter.csproj">
-      <Project>{0E6B4980-4A7E-4E4A-A2F9-615E5602F2C7}</Project>
-      <Name>Kokoro.FSWriter</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Kokoro.Irradiate\Kokoro.Irradiate.csproj">
       <Project>{701DFB6D-7953-460F-A8A9-FB347E9EC72C}</Project>
       <Name>Kokoro.Irradiate</Name>

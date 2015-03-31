@@ -7,10 +7,6 @@ using System.IO;
 using Kokoro.Math;
 using Kokoro.Engine.Shaders;
 
-#if PC
-using Assimp;
-#endif
-
 #if OPENGL
 #if PC
 using Kokoro.OpenGL.PC;
