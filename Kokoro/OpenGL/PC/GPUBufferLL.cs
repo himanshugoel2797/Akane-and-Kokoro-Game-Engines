@@ -111,7 +111,8 @@ namespace Kokoro.OpenGL.PC
         /// <param name="length">The amount of data to copy (only used for dynamic objects)</param>
         public void BufferData(float[] data, int offset = 0, int length = -1)
         {
-            byte[] tmp = new byte[((length == -1) ? data.Length : length) * sizeof(float)];
+            if(length == -1)length = data.Length * sizeof(float);
+            byte[] tmp = new byte[length];
             Buffer.BlockCopy(data, 0, tmp, 0, tmp.Length);
             BufferData(tmp, offset, length);
         }
@@ -170,8 +171,9 @@ namespace Kokoro.OpenGL.PC
         /// <param name="length">The amount of data to copy (only used for dynamic objects)</param>
         public void BufferData(uint[] data, int offset = 0, int length = -1)
         {
-            byte[] tmp = new byte[data.Length * sizeof(float)];
-            Buffer.BlockCopy(data, 0, tmp, 0, tmp.Length);
+            if (length == -1) length = data.Length * sizeof(uint);
+            byte[] tmp = new byte[length];
+            Buffer.BlockCopy(data, 0, tmp, 0, length);
             BufferData(tmp, offset, length);
         }
 #else

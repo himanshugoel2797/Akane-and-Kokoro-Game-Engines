@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DiscUtils.SquashFs;
 using System.IO;
 using System.IO.Compression;
 
@@ -11,37 +10,22 @@ namespace Kokoro.VFS
 {
     public static class FSReader
     {
-        /*
-        A loosely designed file system, header is the file tree. Individual files can be RSA-encrypted with game specific keys, write mode is only available in 'EDITOR/DEBUG' build mode
-        supports header RSA-CMAC hashing
-    */
-
-        static Dictionary<string, SquashFileSystemReader> Archives;
-        static List<string> AllFiles;
+        static Dictionary<string, ZipArchive> archives;
 
         static FSReader()
         {
-            Archives = new Dictionary<string, SquashFileSystemReader>();
-            AllFiles = new List<string>();
+            archives = new Dictionary<string, ZipArchive>();
         }
 
-        public static void LoadFileSystem(string archive)
+        public static void LoadFileSystem(string archive, string directoryMap)
         {
             FileStream arch = File.OpenRead(archive);
-            SquashFileSystemReader r = new SquashFileSystemReader(arch);
-
-            AllFiles.AddRange(r.GetFileSystemEntries(r.Root.FullName));
-            Archives.Add(archive, r);
+            archives.Add(directoryMap, new ZipArchive(arch, ZipArchiveMode.Read));
         }
 
-        public static void UnloadFileSystem(string archive)
+        public static void UnloadFileSystem(string directoryMap)
         {
-            if (Archives.ContainsKey(archive))
-            {
-                string[] tmp = Archives[archive].GetFileSystemEntries(Archives[archive].Root.FullName);
-                AllFiles.RemoveRange(AllFiles.IndexOf(tmp[0]), tmp.Length);
-                Archives.Remove(archive);
-            }
+            archives.Remove(directoryMap);
         }
 
         /// <summary>
@@ -51,7 +35,19 @@ namespace Kokoro.VFS
         /// <returns>True if the item exists</returns>
         public static bool ItemExists(string file)
         {
-            return AllFiles.Contains(file);
+            string baseDir = file.Split('/')[0];
+            file = file.Replace(baseDir + "/", "");
+
+
+            for (int i = 0; i < archives[baseDir].Entries.Count; i++)
+            {
+                if (archives[baseDir].Entries[i].FullName == file)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -61,30 +57,10 @@ namespace Kokoro.VFS
         /// <returns>The File Stream</returns>
         public static Stream OpenFile(string file, bool decompress = false)
         {
-            //Check if the file exists
-            if (AllFiles.Contains(file))
-            {
-                //Search all loaded filesystems for file
-                foreach(SquashFileSystemReader reader in Archives.Values)
-                {
-                    if (reader.FileExists(file))
-                    {
-                        if (!decompress)
-                        {
-                            //Return the file stream
-                            return reader.OpenFile(file, FileMode.Open, FileAccess.Read);
-                        }else
-                        {
-                            //Decompress the file if specified
-                            return new GZipStream(reader.OpenFile(file, FileMode.Open, FileAccess.Read), CompressionMode.Decompress);
-                        }
-                    }
-                }
+            string baseDir = file.Split('/')[0];
+            file = file.Replace(baseDir + "/", "");
 
-                //This will never be reached
-                return null;
-            }
-            else throw new FileNotFoundException("File Not Found", file);
+            return archives[baseDir].GetEntry(file).Open();
         }
 
     }

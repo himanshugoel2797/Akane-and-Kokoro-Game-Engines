@@ -24,7 +24,7 @@ namespace Kokoro.Game
 
         public TestA(GraphicsContext context)
         {
-            context.Wireframe = true;
+            //context.Wireframe = true;
             context.Camera = new FirstPersonCamera(Vector3.Zero, Vector3.UnitZ);
             context.Projection = Matrix4.CreatePerspectiveFieldOfView(0.78539f, 16f / 9f, context.ZNear, context.ZFar);
             context.DepthFunction = (x, y) => x <= y;
@@ -35,12 +35,15 @@ namespace Kokoro.Game
             };
 
             tmp = new Texture("Resources/asuna.png");       //Ok so Image loading works as expected, how do we test the actual rendering if we can't make it show anything?
-            room = new Sphere(5);//Model.Load("room.obj");
+
+            t2 = new Sphere(1);
+            t2.Materials[0].Shader = new ShaderProgram(new ShaderLib.DefaultShader());
+            t2.Materials[0].ColorMap = tmp;
+
+            room = new Sphere(5, 50);//Model.Load("room.obj");
             room.Materials[0].Shader = new ShaderProgram(new ShaderLib.DefaultShader());
             room.Materials[0].ColorMap = tmp;
 
-            t2 = new Sphere(1, 100);
-            t2.Materials[0].Shader = new ShaderProgram(new ShaderLib.DefaultShader());
         }
 
         public IScene Parent
@@ -53,9 +56,9 @@ namespace Kokoro.Game
         {
             context.Clear(0, 0.5f, 1.0f, 0.0f);
 
+            t2.Draw(context);
             room.Draw(context);
 
-            t2.Draw(context);
             /*
              * The shader architecture works by defining a class which will be responsible for compiling all KSL shaders into one ubershader and assigning IDs to them so their params
              * can be accessed in the shader while hiding all of the complexity and management issues of dealing with uber shaders, this will however introduce a performance concern

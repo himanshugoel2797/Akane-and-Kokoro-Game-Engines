@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ProtoBuf;
 
 namespace Kokoro.ContentPipeline
 {
@@ -13,7 +14,10 @@ namespace Kokoro.ContentPipeline
     {
         internal static byte[] Process(string filename)
         {
-            Kokoro.Engine.Model.BoundingBox tmpBound;
+            float[][] bounds = new float[2][];
+            bounds[0] = new float[3];
+            bounds[1] = new float[3];
+
             AssimpContext context = new AssimpContext();
             Scene model = context.ImportFile(filename, PostProcessSteps.CalculateTangentSpace | PostProcessSteps.GenerateSmoothNormals | PostProcessSteps.ImproveCacheLocality | PostProcessSteps.RemoveRedundantMaterials);
 
@@ -28,6 +32,7 @@ namespace Kokoro.ContentPipeline
             List<List<int>[]> VertexBones = new List<List<int>[]>();
             List<float[][]> SkeletonBones = new List<float[][]>();
 
+            //TODO Eventually we will want to parse information from another file regarding which shaders to load and the parameters and add that information here (by means of reference to another file and a material DB class?)
 
             for (int a = 0; a < model.MeshCount; a++)
             {
@@ -35,7 +40,7 @@ namespace Kokoro.ContentPipeline
                 Mesh m = model.Meshes[a];
 
                 #region Textures
-                if (m.MaterialIndex >= 0 && model.Materials[m.MaterialIndex].TextureDiffuse.FilePath != null) t = Path.Combine(baseDir, model.Materials[m.MaterialIndex].TextureDiffuse.FilePath);
+                if (m.MaterialIndex >= 0 && model.Materials[m.MaterialIndex].TextureDiffuse.FilePath != null) t = model.Materials[m.MaterialIndex].TextureDiffuse.FilePath;
                 else
                 {
                     t = null;
@@ -43,8 +48,8 @@ namespace Kokoro.ContentPipeline
                 texs.Add(t);
                 #endregion
 
-                tmpBound.Min = new Vector3(m.Vertices[0].X, m.Vertices[0].Y, m.Vertices[0].Z);
-                tmpBound.Max = new Vector3(m.Vertices[0].X, m.Vertices[0].Y, m.Vertices[0].Z);
+                bounds[0] = new float[] { m.Vertices[0].X, m.Vertices[0].Y, m.Vertices[0].Z };
+                bounds[1] = new float[] { m.Vertices[0].X, m.Vertices[0].Y, m.Vertices[0].Z };
 
                 #region Vertices
                 float[] vertices = new float[m.VertexCount * 3];
@@ -54,12 +59,12 @@ namespace Kokoro.ContentPipeline
                     vertices[v + 1] = m.Vertices[(v - (v % 3)) / 3].Y;
                     vertices[v + 2] = m.Vertices[(v - (v % 3)) / 3].Z;
 
-                    if (vertices[v] < tmpBound.Min.X) tmpBound.Min.X = vertices[v];
-                    if (vertices[v + 1] < tmpBound.Min.Y) tmpBound.Min.Y = vertices[v + 1];
-                    if (vertices[v + 2] < tmpBound.Min.Z) tmpBound.Min.Z = vertices[v + 2];
-                    if (vertices[v] > tmpBound.Max.X) tmpBound.Max.X = vertices[v];
-                    if (vertices[v + 1] > tmpBound.Max.Y) tmpBound.Max.Y = vertices[v + 1];
-                    if (vertices[v + 2] > tmpBound.Max.Z) tmpBound.Max.Z = vertices[v + 2];
+                    if (vertices[v] < bounds[0][0]) bounds[0][0] = vertices[v];
+                    if (vertices[v + 1] < bounds[0][1]) bounds[0][1] = vertices[v + 1];
+                    if (vertices[v + 2] < bounds[0][2]) bounds[0][2] = vertices[v + 2];
+                    if (vertices[v] > bounds[1][0]) bounds[1][0] = vertices[v];
+                    if (vertices[v + 1] > bounds[1][1]) bounds[1][1] = vertices[v + 1];
+                    if (vertices[v + 2] > bounds[1][2]) bounds[1][2] = vertices[v + 2];
                 }
                 Vertices.Add(vertices);
                 #endregion
@@ -168,71 +173,62 @@ namespace Kokoro.ContentPipeline
             }
 
             return FinalProcess(texs.ToArray(), Vertices.ToArray(), UV.ToArray(), Normals.ToArray(),
-                Indices.ToArray(), vweights, vbones, SkeletonBones.ToArray());
+                Indices.ToArray(), vweights, vbones, SkeletonBones.ToArray(), texs.ToArray(), bounds);
             #endregion
         }
 
+        [ProtoContract]
+        struct Model
+        {
+            [ProtoMember(0)]
+            public float[][] vertices;
+
+            [ProtoMember(1)]
+            public float[][] BoundingBox;
+
+            [ProtoMember(2)]
+            public float[][] uvs;
+
+            [ProtoMember(4)]
+            public float[][] normals;
+
+            [ProtoMember(8)]
+            public uint[][] indices;
+
+            [ProtoMember(16)]
+            public float[][][] weights;
+
+            [ProtoMember(32)]
+            public int[][][] bones;
+
+            [ProtoMember(64)]
+            public float[][][] skeleton;
+
+            [ProtoMember(128)]
+            public string[] texPaths;
+        }
 
         private static byte[] FinalProcess(string[] tex, float[][] verts, float[][] uvs, float[][] norms,
-            uint[][] indices, float[][][] weights, int[][][] bones, float[][][] skeleton)
+            uint[][] indices, float[][][] weights, int[][][] bones, float[][][] skeleton, string[] texPaths, float[][] boundingbox)
         {
             byte[] outdata;
 
+            Model m = new Model()
+            {
+                vertices = verts,
+                BoundingBox = boundingbox,
+                uvs = uvs,
+                normals = norms,
+                indices = indices,
+                weights = weights,
+                bones = bones,
+                skeleton = skeleton,
+                texPaths = texPaths
+            };
+
             using (MemoryStream strm = new MemoryStream())
             {
-                using (StreamWriter writer = new StreamWriter(strm))
-                {
-                    writer.Write(new char[] { 'A', 'K', '3', 'D' }, 0, 4);    //Write the magic number "AK3D"
-                    writer.Write(indices.Length);    //Get the total number of models in question
-                    writer.Write(verts.Length);       //Get the total number of vertices in question
-                    writer.Write(uvs.Length);         //Get the total number of UVs in question
-                    writer.Write(norms.Length);       //Get the total number of normals available
-                    writer.Write(weights.Length);
-                    writer.Write(bones.Length);
-                    writer.Write(skeleton.Length);
-
-                    //We are done writing all the first dimensions, now write second dimensions
-                    for (int i = 0; i < indices.Length; i++)
-                    {
-                        writer.Write(indices[i].Length);    //Write all the lengths
-                    }
-
-                    //We are done writing all the first dimensions, now write second dimensions
-                    for (int i = 0; i < verts.Length; i++)
-                    {
-                        writer.Write(verts[i].Length);    //Write all the lengths
-                    }
-
-                    //We are done writing all the first dimensions, now write second dimensions
-                    for (int i = 0; i < uvs.Length; i++)
-                    {
-                        writer.Write(uvs[i].Length);    //Write all the lengths
-                    }
-
-                    //We are done writing all the first dimensions, now write second dimensions
-                    for (int i = 0; i < norms.Length; i++)
-                    {
-                        writer.Write(norms[i].Length);    //Write all the lengths
-                    }
-
-                    //We are done writing all the first dimensions, now write second dimensions
-                    for (int i = 0; i < weights.Length; i++)
-                    {
-                        writer.Write(weights[i].Length);    //Write all the lengths
-                    }
-
-                    //We are done writing all the first dimensions, now write second dimensions
-                    for (int i = 0; i < bones.Length; i++)
-                    {
-                        writer.Write(bones[i].Length);    //Write all the lengths
-                    }
-
-                    //We are done writing all the first dimensions, now write second dimensions
-                    for (int i = 0; i < skeleton.Length; i++)
-                    {
-                        writer.Write(skeleton[i].Length);    //Write all the lengths
-                    }
-                }
+                ProtoBuf.Serializer.Serialize(strm, m);
                 outdata = strm.ToArray();
             }
 
