@@ -19,12 +19,9 @@ namespace Kokoro.KSL.GLSL
         static string src;
         static StringBuilder strBuilder;
         static Dictionary<string, string> PreDefinedVariablesMap = new Dictionary<string, string>();
-        
 
-        //Generate code from the syntax tree created from its execution
-        internal static string CompileFromSyntaxTree(KSL.KSLCompiler.KShaderType shaderType)
+        internal static string GenerateHeader()
         {
-            
             //Map some predefined variables for GLSL
             PreDefinedVariablesMap["VertexPosition"] = "gl_Position";
             PreDefinedVariablesMap["VertexID"] = "gl_VertexID";
@@ -32,22 +29,23 @@ namespace Kokoro.KSL.GLSL
             PreDefinedVariablesMap["FragCoord"] = "gl_FragCoord";
 
 
-			//Specify version as per Logic.AvailableSM
-			switch(KSL.Lib.General.Logic.AvailableSM){
+            //Specify version as per Logic.AvailableSM
+            switch (KSL.Lib.General.Logic.AvailableSM)
+            {
 
-			case ShadingModel.SM4:
-				src = "#version 440 core\n";    //Use attribute to specify version number?
-				break;
-			case ShadingModel.SM3:
-				src = "#version 330 core\n";
-				break;
-			case ShadingModel.SM2:
-				src = "#version 200 core\n";
-				break;
-			case ShadingModel.SM1:
-				src = "";		//TODO look up about whether #version was even available back then
-				break;
-			}
+                case ShadingModel.SM4:
+                    src = "#version 440 core\n";    //Use attribute to specify version number?
+                    break;
+                case ShadingModel.SM3:
+                    src = "#version 330 core\n";
+                    break;
+                case ShadingModel.SM2:
+                    src = "#version 200 core\n";
+                    break;
+                case ShadingModel.SM1:
+                    src = "";		//TODO look up about whether #version was even available back then
+                    break;
+            }
             strBuilder = new StringBuilder(src);
 
             //Get variable declarations from the syntax tree and organize them
@@ -102,9 +100,18 @@ namespace Kokoro.KSL.GLSL
                     variable.name);
             }
 
+            strBuilder.AppendLine();
+
+            return strBuilder.ToString();
+        }
+
+        //Generate code from the syntax tree created from its execution
+        internal static string CompileFromSyntaxTree(KSL.KSLCompiler.KShaderType shaderType)
+        {
+            strBuilder = new StringBuilder();
             //Generate the main method signature
             strBuilder.AppendLine();
-            strBuilder.AppendLine("void main(){");
+            strBuilder.AppendFormat("void {0}(){", SyntaxTree.ShaderName);
 
             //Build the code body using the fundamental operations available to the language
             while (SyntaxTree.Instructions.Count >= 1)
@@ -197,7 +204,7 @@ namespace Kokoro.KSL.GLSL
         //Substitute reserved predefined variables with the GLSL specifc name
         internal static string SubstitutePredefinedVars(string varName)
         {
-            foreach(KeyValuePair<string, string> substitutions in PreDefinedVariablesMap)
+            foreach (KeyValuePair<string, string> substitutions in PreDefinedVariablesMap)
             {
                 varName = varName.Replace(substitutions.Key, substitutions.Value);
             }

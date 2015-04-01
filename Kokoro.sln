@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Resources.csproj", "{1F25123A-85AA-4CDE-B0CE-A918F867BA12}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shaders", "Shaders\Shaders.csproj", "{802D0C28-D52E-4718-8A42-28B72FAB05E5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{0306BFB8-4DB5-4877-8345-8A764A28E689}"
@@ -31,7 +29,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kokoro", "Kokoro\Kokoro.csproj", "{6D8EB8BD-F8AD-4FE1-995F-4EEFBC2BC8F5}"
 	ProjectSection(ProjectDependencies) = postProject
 		{802D0C28-D52E-4718-8A42-28B72FAB05E5} = {802D0C28-D52E-4718-8A42-28B72FAB05E5}
-		{1F25123A-85AA-4CDE-B0CE-A918F867BA12} = {1F25123A-85AA-4CDE-B0CE-A918F867BA12}
 		{3CC9E16B-C337-420E-A9D2-D7203CE4ABFE} = {3CC9E16B-C337-420E-A9D2-D7203CE4ABFE}
 	EndProjectSection
 EndProject
@@ -74,10 +71,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1F25123A-85AA-4CDE-B0CE-A918F867BA12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1F25123A-85AA-4CDE-B0CE-A918F867BA12}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1F25123A-85AA-4CDE-B0CE-A918F867BA12}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1F25123A-85AA-4CDE-B0CE-A918F867BA12}.Release|Any CPU.Build.0 = Release|Any CPU
 		{802D0C28-D52E-4718-8A42-28B72FAB05E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{802D0C28-D52E-4718-8A42-28B72FAB05E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{802D0C28-D52E-4718-8A42-28B72FAB05E5}.Release|Any CPU.ActiveCfg = Release|Any CPU

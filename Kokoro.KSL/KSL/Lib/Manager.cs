@@ -16,6 +16,11 @@ namespace Kokoro.KSL.Lib
     {
         internal static dynamic VarDB;
 
+        //Define shader name metadata and setup a global shader manager class in the engine to handle the representation of all shaders as subroutines
+        //We now have dynamic models, we need to setup draw calls for them as well
+        //Need to work on more functions for the shading language
+        //Implement the path tracer in KSL and attempt to speed it up if possible, use the oppurtunity to study if a realtime path tracing process is feasible
+
         private static void HandlePropertyChanges(
         object sender, PropertyChangedEventArgs e)
         {
@@ -36,11 +41,12 @@ namespace Kokoro.KSL.Lib
         /// Marks the start of a new shader
         /// </summary>
         /// <returns>Provides a dynamic object which will contain all the shader's variables</returns>
-        public static dynamic ShaderStart()
+        public static dynamic ShaderStart(string name)
         {
             VarDB = new ExpandoObject();
 
             //Define predefined variables beforehand
+            SyntaxTree.ShaderName = name;
             SyntaxTree.Variables = new Dictionary<string, SyntaxTree.Variable>();
             SyntaxTree.Variables.Add("VertexPosition", new SyntaxTree.Variable()
             {

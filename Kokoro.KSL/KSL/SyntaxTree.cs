@@ -40,6 +40,7 @@ namespace Kokoro.KSL
             public string[] Parameters;
         }
 
+        internal static string ShaderName;
         internal static Dictionary<string, Variable> Variables = new Dictionary<string, Variable>();
         internal static Dictionary<string, Variable> Parameters = new Dictionary<string, Variable>();
         internal static Dictionary<string, Variable> SharedVariables = new Dictionary<string, Variable>();

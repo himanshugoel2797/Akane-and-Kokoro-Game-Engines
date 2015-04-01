@@ -24,6 +24,7 @@ namespace Kokoro.Game
 
         public TestA(GraphicsContext context)
         {
+            VFS.FSReader.LoadFileSystem("Resources", "Resources");
             //context.Wireframe = true;
             context.Camera = new FirstPersonCamera(Vector3.Zero, Vector3.UnitZ);
             context.Projection = Matrix4.CreatePerspectiveFieldOfView(0.78539f, 16f / 9f, context.ZNear, context.ZFar);
@@ -36,9 +37,12 @@ namespace Kokoro.Game
 
             tmp = new Texture("Resources/asuna.png");       //Ok so Image loading works as expected, how do we test the actual rendering if we can't make it show anything?
 
-            t2 = new Sphere(1);
-            t2.Materials[0].Shader = new ShaderProgram(new ShaderLib.DefaultShader());
-            t2.Materials[0].ColorMap = tmp;
+            t2 = new VertexMesh("Resources/room.obj", false);
+            for (int a = 0; a < t2.Materials.Length; a++)
+            {
+                t2.Materials[a].Shader = new ShaderProgram(new ShaderLib.DefaultShader());
+                t2.Materials[a].ColorMap = tmp;
+            }
 
             room = new Sphere(5, 50);//Model.Load("room.obj");
             room.Materials[0].Shader = new ShaderProgram(new ShaderLib.DefaultShader());

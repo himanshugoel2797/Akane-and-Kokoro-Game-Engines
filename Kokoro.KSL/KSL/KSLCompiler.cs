@@ -16,7 +16,7 @@ namespace Kokoro.KSL
 {
     public class KSLCompiler
     {
-        internal static Dictionary<string, Obj> preDefUniforms = new Dictionary<string, Obj>(); 
+        internal static Dictionary<string, Obj> preDefUniforms = new Dictionary<string, Obj>();
 
         public enum KShaderType
         {
@@ -45,7 +45,7 @@ namespace Kokoro.KSL
         //Generate the shader header with params in UBO/SSBO format with given number of subroutines, this functions should be called in the end to generate the header for hte ubershader
         public static string GenerateHeader(int num)
         {
-            return "";
+            return CodeGenerator.GenerateHeader();      //TODO make it generate the code for shader subroutines
         }
 
         /// <summary>
@@ -58,7 +58,6 @@ namespace Kokoro.KSL
         {
 
             //Execute the object and collect the output code from the code generator
-
             switch (s)
             {
                 case KShaderType.Vertex:
@@ -70,7 +69,7 @@ namespace Kokoro.KSL
             }
 
 
-
+            string shaderName = SyntaxTree.ShaderName;
             string vshader = CodeGenerator.CompileFromSyntaxTree(s);
 
             return vshader;

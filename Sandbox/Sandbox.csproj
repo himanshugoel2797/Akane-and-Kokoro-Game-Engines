@@ -78,6 +78,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources.txt" />
     <Content Include="Resources.xml" />
     <Content Include="TestA.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

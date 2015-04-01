@@ -15,7 +15,7 @@ namespace Kokoro.ShaderLib
     {
         public void Fragment()
         {
-            var Vars = Manager.ShaderStart();
+            var Vars = Manager.ShaderStart("FrameBuf_S_Frag");
             Manager.SharedIn<Vec2>("UV");
             Manager.StreamOut<Vec4>("Color", 0);
 
@@ -24,7 +24,7 @@ namespace Kokoro.ShaderLib
 
         public void Vertex()
         {
-            var Vars = Manager.ShaderStart();
+            var Vars = Manager.ShaderStart("FrameBuf_S_Vert");
             Manager.StreamIn<Vec3>("VertexPos", 0);
             Manager.StreamIn<Vec2>("UV0", 2);
 

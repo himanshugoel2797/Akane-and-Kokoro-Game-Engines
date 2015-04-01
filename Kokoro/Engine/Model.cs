@@ -62,9 +62,13 @@ namespace Kokoro.Engine
         protected void Init(int num)
         {
             offsets = new uint[num][];
-            for (int a = 0; a < num; a++) offsets[a] = new uint[4];
             lengths = new uint[num];
             Materials = new Material[num];
+            for (int a = 0; a < num; a++)
+            {
+                offsets[a] = new uint[4];
+                Materials[a] = new Material();
+            }
         }
         protected void SetUVs(UpdateMode mode, float[] uvs, int index)
         {
@@ -172,8 +176,6 @@ namespace Kokoro.Engine
             {
                 //Apply the Material
                 Materials[a].Apply(context, this);      //Material pipeline will just setup textures and uniform buffer parameters somehow
-
-                //GraphicsContextLL.AddDrawCall(0, lengths[a], 0);   //Send the draw call
 
                 GraphicsContextLL.AddDrawCall(offsets[a][0] / sizeof(uint), lengths[a], offsets[a][1] / (3 * sizeof(float)));   //Send the draw call
 

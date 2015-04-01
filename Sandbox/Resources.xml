@@ -1,13 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Resources>
-  <Dir Name="Env">
-    <Scene FileName="scene.kscene" Group="Lv0">lv0</Scene>
-    <Model FileName="room.obj" Group="Lv0">room</Model>
-  </Dir>
-  <Dir Name="skels">
-    <Animation FileName="anim.dae" Group="Lv0">anim</Animation>
-  </Dir>
-  <Dir Name="BGM">
-    <Sound FileName="sound.wav" Group="Lv0">lv0BGM</Sound>
-  </Dir>
-</Resources>
+<ContentPipeline>
+  <Archive Name="Resources">
+    <File Path="room.obj">room.obj</File>
+    <File Path="../Resources/asuna.png">asuna.png</File>
+  </Archive>
+  <Batch>Resources.xml</Batch>
+</ContentPipeline>

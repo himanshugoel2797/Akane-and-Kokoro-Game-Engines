@@ -15,18 +15,18 @@ namespace Kokoro.ShaderLib
     {
         public void Fragment()
         {
-            var Vars = Manager.ShaderStart();
+            var Vars = Manager.ShaderStart("Default_S_Frag");
             Manager.SharedIn<Vec2>("UV");
             Manager.StreamOut<Vec4>("Color", 0);
 
             Vars.Color = Texture.Read2D(Vars.ColorMap, Vars.UV);
 
-			Manager.ShaderEnd();
+            Manager.ShaderEnd();
         }
 
         public void Vertex()
         {
-            var Vars = Manager.ShaderStart();
+            var Vars = Manager.ShaderStart("Default_S_Vert");
             Manager.StreamIn<Vec3>("VertexPos", 0);
             Manager.StreamIn<Vec2>("UV0", 1);
 
@@ -38,7 +38,7 @@ namespace Kokoro.ShaderLib
             Vars.VertexPosition *= Vars.MVP;
             Vars.UV = Vars.UV0;
 
-			Manager.ShaderEnd();
+            Manager.ShaderEnd();
         }
 
         public static HLShader Create(ShaderTypes t)

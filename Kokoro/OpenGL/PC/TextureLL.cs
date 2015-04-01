@@ -19,7 +19,7 @@ namespace Kokoro.OpenGL.PC
 
         protected void SetFilterMode(Engine.TextureFilter filter)
         {
-            if(filter == Engine.TextureFilter.Linear)
+            if (filter == Engine.TextureFilter.Linear)
             {
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
@@ -67,12 +67,12 @@ namespace Kokoro.OpenGL.PC
             int id = GL.GenTexture();
             GL.BindTexture(TextureTarget.Texture2D, id);
 
-            Bitmap bmp = new Bitmap(filename);
+            Bitmap bmp = new Bitmap(VFS.FSReader.OpenFile(filename));
             bmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
 
             this.width = bmp.Width;
             this.height = bmp.Height;
-            
+
             BitmapData bmp_data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmp_data.Width, bmp_data.Height, 0,
@@ -113,7 +113,7 @@ namespace Kokoro.OpenGL.PC
         protected void BindToFBuffer(Engine.FrameBufferAttachments texUnit, int id)
         {
             FramebufferAttachment attach = EnumConverters.EFrameBufferAttachment(texUnit);
-			GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, attach, TextureTarget.Texture2D, id, 0);
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, attach, TextureTarget.Texture2D, id, 0);
         }
 
         protected Bitmap FetchTextureData(int id)
