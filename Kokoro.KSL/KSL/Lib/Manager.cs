@@ -37,16 +37,9 @@ namespace Kokoro.KSL.Lib
             }
         }
 
-        /// <summary>
-        /// Marks the start of a new shader
-        /// </summary>
-        /// <returns>Provides a dynamic object which will contain all the shader's variables</returns>
-        public static dynamic ShaderStart(string name)
+        internal static void Init()
         {
             VarDB = new ExpandoObject();
-
-            //Define predefined variables beforehand
-            SyntaxTree.ShaderName = name;
             SyntaxTree.Variables = new Dictionary<string, SyntaxTree.Variable>();
             SyntaxTree.Variables.Add("VertexPosition", new SyntaxTree.Variable()
             {
@@ -131,6 +124,18 @@ namespace Kokoro.KSL.Lib
 
                 ((IDictionary<string, object>)VarDB).Add(t.Key, tmp);
             }
+        }
+
+        /// <summary>
+        /// Marks the start of a new shader
+        /// </summary>
+        /// <returns>Provides a dynamic object which will contain all the shader's variables</returns>
+        public static dynamic ShaderStart(string name)
+        {
+
+            //Define predefined variables beforehand
+            SyntaxTree.ShaderName = name;
+
 
             return VarDB;
         }
@@ -153,17 +158,17 @@ namespace Kokoro.KSL.Lib
             T tmp = new T();
             tmp.ObjName = name;
 
-            SyntaxTree.Parameters.Add(name, new SyntaxTree.Variable()
+            SyntaxTree.Parameters[name] = new SyntaxTree.Variable()
             {
                 type = typeof(T),
                 value = null,
                 paramType = SyntaxTree.ParameterType.SharedIn,
                 name = name
-            });
+            };
 
-            SyntaxTree.Variables.Add(name, SyntaxTree.Parameters[name]);
+            SyntaxTree.Variables[name] = SyntaxTree.Parameters[name];
 
-            ((IDictionary<string, object>)VarDB).Add(name, tmp);
+            ((IDictionary<string, object>)VarDB)[name] = tmp;
         }
 
         /// <summary>
@@ -176,17 +181,17 @@ namespace Kokoro.KSL.Lib
             T tmp = new T();
             tmp.ObjName = name;
 
-            SyntaxTree.Parameters.Add(name, new SyntaxTree.Variable()
+            SyntaxTree.Parameters[name] = new SyntaxTree.Variable()
             {
                 type = typeof(T),
                 value = null,
                 paramType = SyntaxTree.ParameterType.SharedOut,
                 name = name
-            });
+            };
 
-            SyntaxTree.Variables.Add(name, SyntaxTree.Parameters[name]);
+            SyntaxTree.Variables[name] = SyntaxTree.Parameters[name];
 
-            ((IDictionary<string, object>)VarDB).Add(name, null);
+            ((IDictionary<string, object>)VarDB)[name] = null;
         }
 
         /// <summary>
@@ -200,17 +205,17 @@ namespace Kokoro.KSL.Lib
             T tmp = new T();
             tmp.ObjName = name;
 
-            SyntaxTree.Parameters.Add(name, new SyntaxTree.Variable()
+            SyntaxTree.Parameters[name] = new SyntaxTree.Variable()
             {
                 type = typeof(T),
                 value = location,
                 paramType = SyntaxTree.ParameterType.StreamIn,
                 name = name
-            });
+            };
 
-            SyntaxTree.Variables.Add(name, SyntaxTree.Parameters[name]);
+            SyntaxTree.Variables[name] = SyntaxTree.Parameters[name];
 
-            ((IDictionary<string, object>)VarDB).Add(name, tmp);
+            ((IDictionary<string, object>)VarDB)[name] = tmp;
         }
 
         /// <summary>
@@ -224,17 +229,17 @@ namespace Kokoro.KSL.Lib
             T tmp = new T();
             tmp.ObjName = name;
 
-            SyntaxTree.Parameters.Add(name, new SyntaxTree.Variable()
+            SyntaxTree.Parameters[name] = new SyntaxTree.Variable()
             {
                 type = typeof(T),
                 value = location,
                 paramType = SyntaxTree.ParameterType.StreamOut,
                 name = name
-            });
+            };
 
-            SyntaxTree.Variables.Add(name, SyntaxTree.Parameters[name]);
+            SyntaxTree.Variables[name] = SyntaxTree.Parameters[name];
 
-            ((IDictionary<string, object>)VarDB).Add(name, tmp);
+            ((IDictionary<string, object>)VarDB)[name] = tmp;
         }
 
         /// <summary>
@@ -247,17 +252,17 @@ namespace Kokoro.KSL.Lib
             T tmp = new T();
             tmp.ObjName = name;
 
-            SyntaxTree.Parameters.Add(name, new SyntaxTree.Variable()
+            SyntaxTree.Parameters[name] = new SyntaxTree.Variable()
             {
                 type = typeof(T),
                 value = null,
                 paramType = SyntaxTree.ParameterType.Uniform,
                 name = name
-            });
+            };
 
-            SyntaxTree.Variables.Add(name, SyntaxTree.Parameters[name]);
+            SyntaxTree.Variables[name] = SyntaxTree.Parameters[name];
 
-            ((IDictionary<string, object>)VarDB).Add(name, tmp);
+            ((IDictionary<string, object>)VarDB)[name] = tmp;
         }
 
         /// <summary>
@@ -271,13 +276,13 @@ namespace Kokoro.KSL.Lib
             tmp.ObjName = name;
 
             //TODO Implement type specific object value assigners
-            SyntaxTree.Variables.Add(name, new SyntaxTree.Variable()
+            SyntaxTree.Variables[name] = new SyntaxTree.Variable()
             {
                 type = typeof(T),
                 value = null,
                 paramType = SyntaxTree.ParameterType.Variable,
                 name = name
-            });
+            };
 
             SyntaxTree.Instructions.Enqueue(new SyntaxTree.Instruction()
             {
@@ -285,7 +290,7 @@ namespace Kokoro.KSL.Lib
                 Parameters = new string[] { name }
             });
 
-            ((IDictionary<string, object>)VarDB).Add(name, tmp);
+            ((IDictionary<string, object>)VarDB)[name] = tmp;
         }
 
         static int tmpVarIDs = 0;
@@ -299,7 +304,7 @@ namespace Kokoro.KSL.Lib
         {
             if (!SyntaxTree.Variables.ContainsKey(name))
             {
-                SyntaxTree.Variables.Add(name, new SyntaxTree.Variable());
+                SyntaxTree.Variables[name] = new SyntaxTree.Variable();
             }
 
             SyntaxTree.Variables[name] = new SyntaxTree.Variable()

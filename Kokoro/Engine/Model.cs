@@ -121,7 +121,8 @@ namespace Kokoro.Engine
         public DrawMode DrawMode { get; set; }
         public BoundingBox Bound;
 
-        private static BoundingBox tmpBound;
+        protected bool IsDataReady = true;
+        protected object syncObject = new object();
 
         static Model()
         {
@@ -171,16 +172,22 @@ namespace Kokoro.Engine
         //Use this to build a list of all the commands to send to the appropriate multidraw indirect buffers
         public void Draw(GraphicsContext context)
         {
-            //Append a draw command to the MDI queue
-            for (int a = 0; a < offsets.Length; a++)
+            //lock (syncObject)
             {
-                //Apply the Material
-                Materials[a].Apply(context, this);      //Material pipeline will just setup textures and uniform buffer parameters somehow
+                if (IsDataReady)
+                {
+                    //Append a draw command to the MDI queue
+                    for (int a = 0; a < offsets.Length; a++)
+                    {
+                        //Apply the Material
+                        Materials[a].Apply(context, this);      //Material pipeline will just setup textures and uniform buffer parameters somehow
 
-                GraphicsContextLL.AddDrawCall(offsets[a][0] / sizeof(uint), lengths[a], offsets[a][1] / (3 * sizeof(float)));   //Send the draw call
+                        GraphicsContextLL.AddDrawCall(offsets[a][0] / sizeof(uint), lengths[a], offsets[a][1] / (3 * sizeof(float)));   //Send the draw call
 
-                //Cleanup the Material
-                //Materials[a].Cleanup(context, this);    //Queue the material to be cleaned out after everything has been done
+                        //Cleanup the Material
+                        //Materials[a].Cleanup(context, this);    //Queue the material to be cleaned out after everything has been done
+                    }
+                }
             }
         }
 

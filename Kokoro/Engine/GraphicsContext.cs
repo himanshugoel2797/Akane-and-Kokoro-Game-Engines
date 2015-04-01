@@ -296,7 +296,7 @@ namespace Kokoro.Engine
         /// <summary>
         /// The thread on which the engine resource manager runs
         /// </summary>
-        public Thread ResourceManager { get; private set; }     //NOTE: The resource manager also deals with balancing the world octree, as a result it manages the resources in the tree by unloading any objects which are too far away for current use
+        public Thread ResourceManagerThread { get; private set; }     //NOTE: The resource manager also deals with balancing the world octree, as a result it manages the resources in the tree by unloading any objects which are too far away for current use
 
         /// <summary>
         /// The Update handler
@@ -318,7 +318,10 @@ namespace Kokoro.Engine
         /// The initialization handler
         /// </summary>
         public Action<GraphicsContext> Initialize { get; set; }
-
+        /// <summary>
+        /// The Resource Manager handler - Use for Async resource loading
+        /// </summary>
+        public Action<GraphicsContext> ResourceManager { get; set; }
         /// <summary>
         /// Start the game loop
         /// </summary>
@@ -374,6 +377,14 @@ namespace Kokoro.Engine
                 GameLooper(tpf, Render);
             });
 
+            ResourceManagerThread = new Thread(() =>
+            {
+                GameLooper(160000, (a, b) =>
+                {
+                    if (ResourceManager != null) ResourceManager(b);
+                    ResourceManager = null;
+                });
+            });
             #region LL executor
             Stopwatch s = new Stopwatch();
             bool tmpCtrl = false;
@@ -431,6 +442,7 @@ namespace Kokoro.Engine
                 PhysicsThread.Start();
                 AnimationThread.Start();
                 RenderThread.Start();
+                ResourceManagerThread.Start();
             };
         }
 

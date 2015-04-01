@@ -33,5 +33,11 @@ namespace Kokoro.Engine.SceneGraph
         /// <param name="interval">The time in ticks since the last frame</param>
         /// <param name="context">The current GraphicsContext</param>
         void Update(double interval, GraphicsContext context);
+
+        /// <summary>
+        /// The Resource loader
+        /// </summary>
+        /// <param name="context">The current GraphicsContext</param>
+        void LoadResources(GraphicsContext context);
     }
 }

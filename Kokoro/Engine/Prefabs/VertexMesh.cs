@@ -79,6 +79,7 @@ namespace Kokoro.Engine.Prefabs
             Model_m tmp = Serializer.Deserialize<Model_m>(VFS.FSReader.OpenFile(filename, false));
             animatedMesh = animated;
 
+            World = Kokoro.Math.Matrix4.Identity;
             Init(tmp.Mesh.Length);
             for (int i = 0; i < tmp.Mesh.Length; i++)
             {

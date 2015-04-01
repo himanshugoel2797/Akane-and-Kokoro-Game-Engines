@@ -57,29 +57,35 @@ namespace Kokoro.Engine
 
         public Texture(int width, int height, PixelFormat pf, PixelComponentType pct, PixelType pixelType)
         {
-            lock (locker)
+            Sinus.SinusManager.QueueCommand(() =>
             {
-                id = base.Create(width, height, pct, pf, pixelType);
-                ObjectAllocTracker.NewCreated(this, id, " { " + pf.ToString() + ", " + pct.ToString() + ", " + pixelType.ToString() + "}");
-            }
+                lock (locker)
+                {
+                    id = base.Create(width, height, pct, pf, pixelType);
+                    ObjectAllocTracker.NewCreated(this, id, " { " + pf.ToString() + ", " + pct.ToString() + ", " + pixelType.ToString() + "}");
+                }
+            });
         }
         public Texture(string filename, bool delayedLoad = false)
         {
-            lock (locker)
+            Sinus.SinusManager.QueueCommand(() =>
             {
-                //If requested, don't load the texture yet
-                if (!delayedLoad)
+                lock (locker)
                 {
-                    id = base.Create(filename);
-                    loaded = true;
+                    //If requested, don't load the texture yet
+                    if (!delayedLoad)
+                    {
+                        id = base.Create(filename);
+                        loaded = true;
+                    }
+                    else
+                    {
+                        this.file = filename;
+                        loaded = false;
+                    }
+                    ObjectAllocTracker.NewCreated(this, id, " " + filename);
                 }
-                else
-                {
-                    this.file = filename;
-                    loaded = false;
-                }
-                ObjectAllocTracker.NewCreated(this, id, " " + filename);
-            }
+            });
         }
         public Texture(int id)
         {
@@ -105,9 +111,9 @@ namespace Kokoro.Engine
         public virtual void Bind(int texUnit)
         {
             //load the texture if it wasn't loaded before
-            if(!loaded)
+            if (!loaded)
             {
-                lock(locker)
+                lock (locker)
                 {
                     id = base.Create(file);
                     loaded = true;

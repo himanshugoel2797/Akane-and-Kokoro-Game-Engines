@@ -19,6 +19,7 @@ namespace Kokoro.OpenGL.PC
 
         protected void SetFilterMode(Engine.TextureFilter filter)
         {
+
             if (filter == Engine.TextureFilter.Linear)
             {
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);

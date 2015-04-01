@@ -23,6 +23,11 @@ namespace Kokoro.KSL
             Vertex = 0, Fragment = 4, Geometry = 3, TessellationControl = 1, TessellationEval = 2, TessellationComb = 5
         }
 
+        public static void Initialize()
+        {
+            Manager.Init();
+        }
+
         /// <summary>
         /// Register a predefined uniform name to be made available to shaders
         /// </summary>

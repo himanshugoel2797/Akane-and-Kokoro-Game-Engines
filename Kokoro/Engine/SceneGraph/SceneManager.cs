@@ -32,6 +32,7 @@ namespace Kokoro.Engine.SceneGraph
         {
             context.Render += this.Render;
             context.Update += this.Update;
+            context.ResourceManager += this.LoadResources;
         }
 
         /// <summary>
@@ -82,6 +83,11 @@ namespace Kokoro.Engine.SceneGraph
         public void Render(double interval, GraphicsContext context)
         {
             if (curScene != null) curScene.Render(interval, context);
+        }
+
+        public void LoadResources(GraphicsContext context)
+        {
+            if (curScene != null) curScene.LoadResources(context);
         }
 
         public IScene Parent

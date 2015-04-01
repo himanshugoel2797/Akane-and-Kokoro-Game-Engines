@@ -13,7 +13,7 @@ using Kokoro.Engine.Shaders;
 
 namespace Kokoro.Game
 {
-    public class Game : IScene
+    public class Game
     {
         GraphicsContext Context;
         SceneManager sceneManager;
@@ -23,9 +23,6 @@ namespace Kokoro.Game
             Context = context;
 
             Context.Initialize += Initialize;
-            Context.Render += Render;
-            Context.Update += Update;
-
 
             Context.Start(160000, 160000);
         }
@@ -40,7 +37,7 @@ namespace Kokoro.Game
         {
             sceneManager = new SceneManager();
             sceneManager.Add("TestA", new TestA(Context));
-
+            sceneManager.Register(context);
             sceneManager.Activate("TestA");
         }
 
@@ -52,6 +49,11 @@ namespace Kokoro.Game
         public void Update(double interval, GraphicsContext context)
         {
             sceneManager.Update(interval, context);
+        }
+
+        public void LoadResources(GraphicsContext context)
+        {
+            sceneManager.LoadResources(context);
         }
     }
 }

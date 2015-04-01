@@ -117,7 +117,7 @@ namespace Kokoro.OpenGL.PC
                 GL.MultiDrawElementsIndirect(All.Triangles, All.UnsignedInt, IntPtr.Zero, EntryCount, 0);
                 MDIBuffer.PostFence();      //The MDIBuffer can not be modified until this is done
                 Kokoro.Engine.Model.staticBuffer.PostFence();   //The draw buffers may not be modified until they have been drawn
-                Kokoro.Engine.Model.dynamicBuffer.PostFence();  
+                Kokoro.Engine.Model.dynamicBuffer.PostFence();
             });
         }
 
@@ -134,7 +134,7 @@ namespace Kokoro.OpenGL.PC
                     buf[i * 5 + 1] = MDIEntries[i].instanceCount;
                     buf[i * 5 + 2] = MDIEntries[i].first;
                     buf[i * 5 + 3] = MDIEntries[i].baseVertex;
-                    buf[i * 5 + 4] = MDIEntries[i].baseInstance;
+                    buf[i * 5 + 4] = (uint)i;
                 }
                 EntryCount = MDIEntries.Count;
                 MDIEntries.Clear();

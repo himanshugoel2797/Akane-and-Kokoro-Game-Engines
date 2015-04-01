@@ -21,6 +21,7 @@ namespace Kokoro.Game
     {
         Model room, t2;
         Texture tmp;
+        object lockObject = new object();
 
         public TestA(GraphicsContext context)
         {
@@ -35,18 +36,7 @@ namespace Kokoro.Game
                 Dst = BlendingFactor.OneMinusSrcAlpha
             };
 
-            tmp = new Texture("Resources/asuna.png");       //Ok so Image loading works as expected, how do we test the actual rendering if we can't make it show anything?
 
-            t2 = new VertexMesh("Resources/room.obj", false);
-            for (int a = 0; a < t2.Materials.Length; a++)
-            {
-                t2.Materials[a].Shader = ShaderLib.DefaultShader.Create();
-                t2.Materials[a].ColorMap = tmp;
-            }
-
-            room = new Sphere(5, 50);//Model.Load("room.obj");
-            room.Materials[0].Shader = ShaderLib.DefaultShader.Create();
-            room.Materials[0].ColorMap = tmp;
 
         }
 
@@ -59,10 +49,11 @@ namespace Kokoro.Game
         public void Render(double interval, GraphicsContext context)
         {
             context.Clear(0, 0.5f, 1.0f, 0.0f);
-
-            t2.Draw(context);
-            room.Draw(context);
-
+            lock (lockObject)
+            {
+                if (t2 != null) t2.Draw(context);
+                if (room != null) room.Draw(context);
+            }
             /*
              * The shader architecture works by defining a class which will be responsible for compiling all KSL shaders into one ubershader and assigning IDs to them so their params
              * can be accessed in the shader while hiding all of the complexity and management issues of dealing with uber shaders, this will however introduce a performance concern
@@ -94,6 +85,28 @@ namespace Kokoro.Game
         public void Update(double interval, GraphicsContext context)
         {
             context.Camera.Update(interval, context);
+        }
+
+
+        public void LoadResources(GraphicsContext context)
+        {
+            lock (lockObject)
+            {
+                tmp = new Texture("Resources/asuna.png");       //Ok so Image loading works as expected, how do we test the actual rendering if we can't make it show anything?
+
+
+                room = new Sphere(5, 50);//Model.Load("room.obj");
+                room.Materials[0].Shader = ShaderLib.DefaultShader.Create();
+                room.Materials[0].ColorMap = tmp;
+
+                t2 = new VertexMesh("Resources/room.obj", false);
+                for (int a = 0; a < t2.Materials.Length; a++)
+                {
+                    t2.Materials[a].Shader = ShaderLib.DefaultShader.Create();
+                    t2.Materials[a].ColorMap = tmp;
+                }
+            }
+
         }
     }
 }

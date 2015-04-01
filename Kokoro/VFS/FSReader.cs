@@ -5,12 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.IO.Compression;
+using System.Threading;
 
 namespace Kokoro.VFS
 {
     public static class FSReader
     {
         static Dictionary<string, ZipArchive> archives;
+
+        //The FileSystem implements its own asynchronous resource loader, this thread however is not frame limited
 
         static FSReader()
         {
@@ -61,6 +64,11 @@ namespace Kokoro.VFS
             file = file.Replace(baseDir + "/", "");
 
             return archives[baseDir].GetEntry(file).Open();
+        }
+
+        public static void PerformOperationAsync(Func<object> op, Action<object> Callback)
+        {
+            ThreadPool.QueueUserWorkItem((o) => { Callback(op()); });
         }
 
     }

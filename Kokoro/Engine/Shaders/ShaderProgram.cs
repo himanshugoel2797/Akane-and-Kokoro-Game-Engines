@@ -87,9 +87,11 @@ namespace Kokoro.Engine.Shaders
             int subCount = shader.Subroutines.Count;
             string[] fragmentSubroutines = new string[subCount];
 
+            KSL.KSLCompiler.Initialize();
             string vshader = KSL.KSLCompiler.Compile(shader.UberMain, KSLCompiler.KShaderType.Vertex);
             vshader = KSL.KSLCompiler.GenerateHeader(KSLCompiler.KShaderType.Vertex) + vshader;
 
+            KSL.KSLCompiler.Initialize();
             string fshader = KSL.KSLCompiler.Compile(shader.UberMain, KSLCompiler.KShaderType.Fragment, subCount);
             string fragHeader = KSL.KSLCompiler.GenerateHeader(KSLCompiler.KShaderType.Fragment, subCount);
 
