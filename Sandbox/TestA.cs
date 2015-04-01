@@ -40,12 +40,12 @@ namespace Kokoro.Game
             t2 = new VertexMesh("Resources/room.obj", false);
             for (int a = 0; a < t2.Materials.Length; a++)
             {
-                t2.Materials[a].Shader = new ShaderProgram(new ShaderLib.DefaultShader());
+                t2.Materials[a].Shader = ShaderLib.DefaultShader.Create();
                 t2.Materials[a].ColorMap = tmp;
             }
 
             room = new Sphere(5, 50);//Model.Load("room.obj");
-            room.Materials[0].Shader = new ShaderProgram(new ShaderLib.DefaultShader());
+            room.Materials[0].Shader = ShaderLib.DefaultShader.Create();
             room.Materials[0].ColorMap = tmp;
 
         }

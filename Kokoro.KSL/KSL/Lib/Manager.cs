@@ -95,6 +95,12 @@ namespace Kokoro.KSL.Lib
             {
                 ObjName = "FragCoord"
             });
+
+            //Just make this available to the system, it doesn't need defining
+            ((IDictionary<string, object>)VarDB).Add("materialID", new Math.KInt()
+            {
+                ObjName = "materialID"
+            });
             //TODO add more variables into the shader compiler?
 
 

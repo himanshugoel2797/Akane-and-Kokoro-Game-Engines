@@ -20,7 +20,7 @@ namespace KSLTest
 
         public void Vertex()
         {
-            dynamic Variables = Manager.ShaderStart();
+            dynamic Variables = Manager.ShaderStart("Vert_Test");
             Manager.StreamIn<Vec4>("vertexPos", 0);
             Manager.StreamIn<Vec2>("UV", 1);
             Manager.StreamIn<Vec3>("Normals", 2);

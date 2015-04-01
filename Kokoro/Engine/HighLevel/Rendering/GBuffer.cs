@@ -29,7 +29,7 @@ namespace Kokoro.Engine.HighLevel.Rendering
             buffer.Add("Depth0", new FrameBufferTexture(width, height, PixelFormat.BGRA, PixelComponentType.RGBA8, PixelType.UInt1010102), FrameBufferAttachments.ColorAttachment1, context);
             buffer.Add("Normal0", new FrameBufferTexture(width, height, PixelFormat.BGRA, PixelComponentType.RGBA8, PixelType.Float), FrameBufferAttachments.ColorAttachment2, context);
 
-            GBufferShader = new ShaderProgram(new ShaderLib.GBufferShader());
+            GBufferShader = new ShaderProgram(new Ubershader(new ShaderLib.GBufferShader()));
         }
 
         public Texture this[string key]

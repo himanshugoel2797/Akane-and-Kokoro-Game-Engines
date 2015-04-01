@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="GLSL\CodeGen.cs" />
     <Compile Include="GLSL\PC\CodeGenerator.cs" />
+    <Compile Include="KSL\IKUbershader.cs" />
     <Compile Include="KSL\IKShaderProgram.cs" />
     <Compile Include="KSL\Lib\General\Logic.cs" />
     <Compile Include="KSL\Lib\General\StreamLocation.cs" />

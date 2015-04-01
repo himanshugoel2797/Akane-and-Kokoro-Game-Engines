@@ -17,7 +17,7 @@ namespace Akane
 
         public void Fragment()
         {
-            dynamic Vars = Manager.ShaderStart();
+            dynamic Vars = Manager.ShaderStart("Frag_Layer_Draw");
 
             //Define Uniform parameters
             Manager.Uniform<KFloat>("maxGid");
@@ -57,7 +57,7 @@ namespace Akane
 
         public void Vertex()
         {
-            var Vars = Manager.ShaderStart();
+            var Vars = Manager.ShaderStart("Vert_Layer_Draw");
 
             Manager.ShaderEnd();
         }

@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace Kokoro.ShaderLib
 {
-    public class GBufferShader : IKShaderProgram
+    public class GBufferShader : IKUbershader
     {
-        public void Fragment()
+        public void Fragment(int num)
         {
             var Vars = Manager.ShaderStart("GBuffer_S_Frag");
 
@@ -74,13 +74,17 @@ namespace Kokoro.ShaderLib
             Vars.UV = Vars.UV0;
         }
 
-        public static HLShader Create(ShaderTypes t)
+        public static Ubershader Create()
         {
-            return new HLShader()
-            {
-                Shader = new GBufferShader(),
-                ShaderType = t
-            };
+            return new Ubershader(new GBufferShader());
+        }
+
+        public static object Create(ShaderTypes s)
+        {
+            if (s == ShaderTypes.Vertex) return (Action)new GBufferShader().Vertex;
+            else if (s == ShaderTypes.Fragment) return (Action<int>)new GBufferShader().Fragment;
+
+            return null;
         }
     }
 }

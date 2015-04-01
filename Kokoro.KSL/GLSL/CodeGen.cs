@@ -20,15 +20,17 @@ namespace Kokoro.KSL.GLSL
         static StringBuilder strBuilder;
         static Dictionary<string, string> PreDefinedVariablesMap = new Dictionary<string, string>();
 
-        internal static string GenerateHeader()
+        static GLSLCodeGenerator()
         {
             //Map some predefined variables for GLSL
             PreDefinedVariablesMap["VertexPosition"] = "gl_Position";
             PreDefinedVariablesMap["VertexID"] = "gl_VertexID";
             PreDefinedVariablesMap["InstanceID"] = "gl_InstanceID";
             PreDefinedVariablesMap["FragCoord"] = "gl_FragCoord";
+        }
 
-
+        internal static string GenerateHeader(KSLCompiler.KShaderType ktype, int num)
+        {
             //Specify version as per Logic.AvailableSM
             switch (KSL.Lib.General.Logic.AvailableSM)
             {
@@ -48,10 +50,33 @@ namespace Kokoro.KSL.GLSL
             }
             strBuilder = new StringBuilder(src);
 
+            //Ubershader code is only needed in the fragment shader
+            if (ktype == KSLCompiler.KShaderType.Fragment && num > 1)
+            {
+                strBuilder.AppendLine();
+                strBuilder.Append("subroutine void mainType();\n");
+                strBuilder.AppendFormat("subroutine uniform mainType shaderRoutines[{0}];\n", num);     //TODO In order to actually be able to proceed with this, we need KSL to support Arrays
+            }
+
             //Get variable declarations from the syntax tree and organize them
             List<SyntaxTree.Variable> StreamVars = new List<SyntaxTree.Variable>();
             List<SyntaxTree.Variable> UniformVars = new List<SyntaxTree.Variable>();
             List<SyntaxTree.Variable> SharedVars = new List<SyntaxTree.Variable>();
+
+            //Insert the ubershader index selection id, to select a shader, perform an in-fragment shader texture fetch
+            //We should have multiple switches to control which kind of ubershader is generated, there should also only be one vertex shader
+
+            if (num > 1)
+            {
+                SharedVars.Add(new SyntaxTree.Variable()
+                {
+                    name = "materialID",
+                    paramType = (ktype == KSLCompiler.KShaderType.Fragment) ? SyntaxTree.ParameterType.SharedIn : SyntaxTree.ParameterType.SharedOut,
+                    type = typeof(KInt),
+                    value = null
+                });
+            }
+
 
             foreach (KeyValuePair<string, SyntaxTree.Variable> pair in SyntaxTree.Parameters)
             {
@@ -111,7 +136,8 @@ namespace Kokoro.KSL.GLSL
             strBuilder = new StringBuilder();
             //Generate the main method signature
             strBuilder.AppendLine();
-            strBuilder.AppendFormat("void {0}(){", SyntaxTree.ShaderName);
+            if (SyntaxTree.ShaderName != "main") strBuilder.Append("subroutine (mainType) ");       //If is a subroutine, fix the definition
+            strBuilder.Append("void " + SyntaxTree.ShaderName + "(){\n");
 
             //Build the code body using the fundamental operations available to the language
             while (SyntaxTree.Instructions.Count >= 1)

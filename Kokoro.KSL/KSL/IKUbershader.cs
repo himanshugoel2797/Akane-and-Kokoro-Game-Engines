@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Kokoro.KSL
 {
-    public interface IKShaderProgram
+    public interface IKUbershader
     {
-        void Fragment();
+        void Vertex();
+        void Fragment(int num);
     }
 }

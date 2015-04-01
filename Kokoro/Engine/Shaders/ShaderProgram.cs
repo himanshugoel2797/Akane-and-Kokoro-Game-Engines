@@ -50,13 +50,14 @@ namespace Kokoro.Engine.Shaders
         /// <summary>
         /// Create a new instance of a ShaderProgram using the provided KSL shader stages
         /// </summary>
-        /// <param name="shaders"></param>
+        /// <param name="shaders">The shaders</param>
         public ShaderProgram(params HLShader[] shaders) : base(PreProcess(shaders)) { }
+
         /// <summary>
         /// Create a new instance of a ShaderProgram using all the stages of the provided KSL shader object
         /// </summary>
-        /// <param name="shader"></param>
-        public ShaderProgram(IKShaderProgram shader) : base(PreProcess(shader)) { }
+        /// <param name="shader">The shaders</param>
+        public ShaderProgram(Ubershader shader) : base(PreProcess(shader)) { }
 
         //Preprocess arguments before passing them to the base constructor
         private static Shader[] PreProcess(HLShader[] shaders)
@@ -80,11 +81,27 @@ namespace Kokoro.Engine.Shaders
             }
             return compiledshaders.ToArray();
         }
-        private static Shader[] PreProcess(IKShaderProgram shader)
+        private static Shader[] PreProcess(Ubershader shader)
         {
-            return new Shader[] {
-                new VertexShader(KSL.KSLCompiler.Compile(shader, KSL.KSLCompiler.KShaderType.Vertex)),
-                new FragmentShader(KSL.KSLCompiler.Compile(shader, KSL.KSLCompiler.KShaderType.Fragment))
+            //Combine all the pieces together from the ubershader
+            int subCount = shader.Subroutines.Count;
+            string[] fragmentSubroutines = new string[subCount];
+
+            string vshader = KSL.KSLCompiler.Compile(shader.UberMain, KSLCompiler.KShaderType.Vertex);
+            vshader = KSL.KSLCompiler.GenerateHeader(KSLCompiler.KShaderType.Vertex) + vshader;
+
+            string fshader = KSL.KSLCompiler.Compile(shader.UberMain, KSLCompiler.KShaderType.Fragment, subCount);
+            string fragHeader = KSL.KSLCompiler.GenerateHeader(KSLCompiler.KShaderType.Fragment, subCount);
+
+            for (int i = 0; i < subCount; i++)
+            {
+                fragmentSubroutines[i] = KSL.KSLCompiler.Compile(shader.Subroutines[i], KSLCompiler.KShaderType.Fragment);
+                fragHeader += fragmentSubroutines[i];
+            }
+
+            return new Shader[]{
+                new VertexShader(vshader),
+                new FragmentShader(fragHeader + fshader)
             };
         }
 

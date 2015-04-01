@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace Kokoro.ShaderLib
 {
-    public class FrameBufferShader : IKShaderProgram
+    public class FrameBufferShader : IKUbershader
     {
-        public void Fragment()
+        public void Fragment(int num)
         {
             var Vars = Manager.ShaderStart("FrameBuf_S_Frag");
             Manager.SharedIn<Vec2>("UV");
@@ -34,13 +34,18 @@ namespace Kokoro.ShaderLib
             Vars.UV = Vars.UV0;
         }
 
-        public static HLShader Create(ShaderTypes t)
+        public static Ubershader Create()
         {
-            return new HLShader()
-            {
-                Shader = new FrameBufferShader(),
-                ShaderType = t
-            };
+            return new Ubershader(new FrameBufferShader());
         }
+
+        public static object Create(ShaderTypes t)
+        {
+            if (t == ShaderTypes.Fragment) return (Action<int>)new FrameBufferShader().Fragment;
+            else if (t == ShaderTypes.Vertex) return (Action)new FrameBufferShader().Vertex;
+
+            return null;
+        }
+
     }
 }

@@ -44,7 +44,7 @@ namespace Kokoro.Engine.Prefabs
             }, 0);
 
             World = Math.Matrix4.Identity;
-            Materials[0].Shader = new ShaderProgram(ShaderLib.FrameBufferShader.Create(ShaderTypes.Vertex), ShaderLib.DefaultShader.Create(ShaderTypes.Fragment));
+            Materials[0].Shader = new Ubershader(ShaderLib.FrameBufferShader.Create(ShaderTypes.Vertex), ShaderLib.DefaultShader.Create(ShaderTypes.Fragment));
         }
     }
 }
