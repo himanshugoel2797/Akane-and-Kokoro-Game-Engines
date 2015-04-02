@@ -1,3 +1,4 @@
 ﻿-3dm Resources,room.obj
 -a Resources,WorldA.xml
 -a Resources,../Resources/asuna.png
+-a Resources,Inori.jpg

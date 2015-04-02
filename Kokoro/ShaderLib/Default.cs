@@ -28,7 +28,7 @@ namespace Kokoro.ShaderLib
         {
             var Vars = Manager.ShaderStart("Default_S_Vert");
             Manager.StreamIn<Vec3>("VertexPos", 0);
-            Manager.StreamIn<Vec2>("UV0", 1);
+            Manager.StreamIn<Vec2>("UV0", 2);
 
             Manager.SharedOut<Vec2>("UV");
             Manager.Create<Mat4>("MVP");

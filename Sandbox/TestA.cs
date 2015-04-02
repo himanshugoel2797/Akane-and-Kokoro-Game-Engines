@@ -19,9 +19,10 @@ namespace Kokoro.Game
 {
     class TestA : IScene
     {
-        Model room, t2;
-        Texture tmp;
+        Model room, t2, fsq;
+        Texture tmp, wait;
         object lockObject = new object();
+        bool resourcesLoaded = false;
 
         public TestA(GraphicsContext context)
         {
@@ -36,8 +37,9 @@ namespace Kokoro.Game
                 Dst = BlendingFactor.OneMinusSrcAlpha
             };
 
-
-
+            fsq = new FullScreenQuad();
+            fsq.Materials[0].Shader = ShaderLib.FrameBufferShader.Create();
+            fsq.Materials[0].ColorMap = new Texture("Resources/Inori.jpg");
         }
 
         public IScene Parent
@@ -49,12 +51,20 @@ namespace Kokoro.Game
         public void Render(double interval, GraphicsContext context)
         {
             context.Clear(0, 0.5f, 1.0f, 0.0f);
-            lock (lockObject)
+            if (resourcesLoaded)
             {
-                if (t2 != null) t2.Draw(context);
-                if (room != null) room.Draw(context);
+                lock (lockObject)
+                {
+                    if (t2 != null) t2.Draw(context);
+                    if (room != null) room.Draw(context);
+                }
+            }
+            else
+            {
+                fsq.Draw(context);
             }
             /*
+             * 
              * The shader architecture works by defining a class which will be responsible for compiling all KSL shaders into one ubershader and assigning IDs to them so their params
              * can be accessed in the shader while hiding all of the complexity and management issues of dealing with uber shaders, this will however introduce a performance concern
              * if the shaders get too large.
@@ -94,7 +104,6 @@ namespace Kokoro.Game
             {
                 tmp = new Texture("Resources/asuna.png");       //Ok so Image loading works as expected, how do we test the actual rendering if we can't make it show anything?
 
-
                 room = new Sphere(5, 50);//Model.Load("room.obj");
                 room.Materials[0].Shader = ShaderLib.DefaultShader.Create();
                 room.Materials[0].ColorMap = tmp;
@@ -105,6 +114,8 @@ namespace Kokoro.Game
                     t2.Materials[a].Shader = ShaderLib.DefaultShader.Create();
                     t2.Materials[a].ColorMap = tmp;
                 }
+
+                resourcesLoaded = true;
             }
 
         }

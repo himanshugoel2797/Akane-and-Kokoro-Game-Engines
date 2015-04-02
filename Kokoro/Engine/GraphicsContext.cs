@@ -492,6 +492,7 @@ namespace Kokoro.Engine
                         Thread.Sleep(TimeSpan.FromTicks((long)timestep - (long)GetNormTicks(s)));
                     }
                     catch (InvalidOperationException) { }
+                    catch (ArgumentOutOfRangeException) { }
                 }
                 s.Reset();
                 s.Start();

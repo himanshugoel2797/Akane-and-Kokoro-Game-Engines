@@ -44,6 +44,7 @@
     <Compile Include="KSL\IKShaderProgram.cs" />
     <Compile Include="KSL\Lib\General\Logic.cs" />
     <Compile Include="KSL\Lib\General\StreamLocation.cs" />
+    <Compile Include="KSL\Lib\KArray.cs" />
     <Compile Include="KSL\Lib\Manager.cs" />
     <Compile Include="KSL\Lib\Math\KFloat.cs" />
     <Compile Include="KSL\Lib\Math\KInt.cs" />

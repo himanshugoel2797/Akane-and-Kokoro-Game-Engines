@@ -164,7 +164,9 @@ namespace Kokoro.KSL.GLSL
 
                     case SyntaxTree.InstructionType.Create:
                         SyntaxTree.Variable VAR = SyntaxTree.Variables[instruction.Parameters[0]];
-                        strBuilder.AppendFormat("{0} {1};\n", ConvertType(VAR.type), VAR.name);
+                        int aLen = 0;
+                        if (IsArrayType(VAR.value, VAR.type, out aLen)) strBuilder.AppendFormat("{0} {1}[{2}];\n", ConvertType(VAR.type), VAR.name, aLen);
+                        else strBuilder.AppendFormat("{0} {1};\n", ConvertType(VAR.type), VAR.name);
                         break;
                 }
             }
@@ -238,6 +240,65 @@ namespace Kokoro.KSL.GLSL
             return varName;
         }
 
+        internal static bool IsArrayType(object a, Type t, out int length)
+        {
+            length = 0;
+            bool isArray = false;
+
+            if (t == typeof(KArray<KFloat>))
+            {
+                isArray = true;
+                length = ((KArray<KFloat>)a).Length;
+            }
+            else if (t == typeof(KArray<Vec2>))
+            {
+                isArray = true;
+                length = ((KArray<Vec2>)a).Length;
+            }
+            else if (t == typeof(KArray<Vec3>))
+            {
+                isArray = true;
+                length = ((KArray<Vec3>)a).Length;
+            }
+            else if (t == typeof(KArray<Vec4>))
+            {
+                isArray = true;
+                length = ((KArray<Vec4>)a).Length;
+            }
+            else if (t == typeof(KArray<Mat4>))
+            {
+                isArray = true;
+                length = ((KArray<Mat4>)a).Length;
+            }
+            else if (t == typeof(KArray<Mat3>))
+            {
+                isArray = true;
+                length = ((KArray<Mat3>)a).Length;
+            }
+            else if (t == typeof(KArray<Mat2>))
+            {
+                isArray = true;
+                length = ((KArray<Mat2>)a).Length;
+            }
+            else if (t == typeof(KArray<Sampler1D>))
+            {
+                isArray = true;
+                length = ((KArray<Sampler1D>)a).Length;
+            }
+            else if (t == typeof(KArray<Sampler2D>))
+            {
+                isArray = true;
+                length = ((KArray<Sampler2D>)a).Length;
+            }
+            else if (t == typeof(KArray<Sampler3D>))
+            {
+                isArray = true;
+                length = ((KArray<Sampler3D>)a).Length;
+            }
+
+            return isArray;
+        }
+
         //Convert the C# Type object to its equivalent GLSL string
         internal static string ConvertType(Type t)
         {
@@ -257,6 +318,17 @@ namespace Kokoro.KSL.GLSL
             else if (t == typeof(Sampler1D)) tStr = "sampler1D";
             else if (t == typeof(Sampler2D)) tStr = "sampler2D";
             else if (t == typeof(Sampler3D)) tStr = "sampler3D";
+            else if (t == typeof(KArray<KFloat>)) tStr = "float";
+            else if (t == typeof(KArray<KInt>)) tStr = "int";
+            else if (t == typeof(KArray<Vec2>)) tStr = "vec2";
+            else if (t == typeof(KArray<Vec3>)) tStr = "vec3";
+            else if (t == typeof(KArray<Vec4>)) tStr = "vec4";
+            else if (t == typeof(KArray<Mat4>)) tStr = "mat4";
+            else if (t == typeof(KArray<Mat3>)) tStr = "mat3";
+            else if (t == typeof(KArray<Mat2>)) tStr = "mat2";
+            else if (t == typeof(KArray<Sampler1D>)) tStr = "sampler1D";
+            else if (t == typeof(KArray<Sampler2D>)) tStr = "sampler2D";
+            else if (t == typeof(KArray<Sampler3D>)) tStr = "sampler3D";
 
             return tStr;
         }
