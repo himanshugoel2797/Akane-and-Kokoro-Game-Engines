@@ -153,6 +153,7 @@
     <Compile Include="Engine\HighLevel\Cameras\FollowPointCamera.cs" />
     <Compile Include="Engine\HighLevel\CharacterControllers\CharacterControllerBase.cs" />
     <Compile Include="Engine\HighLevel\CharacterControllers\ThirdPersonController.cs" />
+    <Compile Include="Engine\HighLevel\Entity.cs" />
     <Compile Include="Engine\HighLevel\Rendering\GBuffer.cs" />
     <Compile Include="Engine\HighLevel\Rendering\Grass.cs" />
     <Compile Include="Engine\HighLevel\Rendering\LightingEngine.cs" />
@@ -233,6 +234,8 @@
     <Compile Include="OpenGL\PC\Sound.cs" />
     <Compile Include="OpenGL\PC\TextureLL.cs" />
     <Compile Include="OpenGL\PC\VertexArrayLL.cs" />
+    <Compile Include="Physics\ICollisionBody.cs" />
+    <Compile Include="Physics\PhysicsState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripting\PyScript.cs" />
     <Compile Include="ShaderLib\ColorDefault.cs" />
@@ -273,9 +276,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Physics\Entities\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
       <Visible>False</Visible>

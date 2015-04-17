@@ -656,11 +656,6 @@ namespace Kokoro.Math
             return !left.Equals(right);
         }
 
-        public static implicit operator BEPUutilities.Quaternion(Quaternion quat)
-        {
-            return new BEPUutilities.Quaternion(quat.X, quat.Y, quat.Z, quat.W);
-        }
-
         #endregion
 
         #region Overrides

@@ -195,23 +195,6 @@ namespace Kokoro.Math
                 matrix.R2C2
             };
         }
-
-        public static implicit operator BEPUutilities.Matrix3x3(Matrix3 matrix)
-        {
-            return new BEPUutilities.Matrix3x3
-            (
-                matrix.R0C0,
-                matrix.R0C1,
-                matrix.R0C2,
-                matrix.R1C0,
-                matrix.R1C1,
-                matrix.R1C2,
-                matrix.R2C0,
-                matrix.R2C1,
-                matrix.R2C2
-            );
-        }
-
         #endregion
 
         #region Constructors

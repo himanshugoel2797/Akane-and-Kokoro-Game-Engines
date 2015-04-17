@@ -1164,11 +1164,6 @@ namespace Kokoro.Math
 
         #endregion
 
-        public static implicit operator BEPUutilities.Vector4(Vector4 t)
-        {
-            return new BEPUutilities.Vector4(t.X, t.Y, t.Z, t.W);
-        }
-
         #endregion
 
         #region IEquatable<Vector4> Members

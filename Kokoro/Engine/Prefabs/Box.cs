@@ -56,7 +56,7 @@ namespace Kokoro.Engine.Prefabs
                 width, height, depth        //7
             }, 0);
 
-            Bound = new BoundingBox()
+            Bound = new BoundingVolume()
             {
                 Max = new Math.Vector3(width, height, depth),
                 Min = new Math.Vector3(-width, -height, -depth)

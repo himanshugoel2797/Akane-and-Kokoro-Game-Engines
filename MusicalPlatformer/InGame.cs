@@ -18,6 +18,7 @@ namespace MusicalPlatformer
     class InGame : IScene
     {
         Model Box, BoxB, Player;
+        Vector4[] Colors;
         ThirdPersonController2D PlayerController;
         Camera followCam;
         bool loaded = false;
@@ -39,12 +40,12 @@ namespace MusicalPlatformer
             if (loaded)
             {
                 Box.World = Matrix4.CreateTranslation(0, -0.25f, -0.5f);
-                Box.Materials[0].Shader["inColor"] = new Vector4(0, 1, 0, 1);
+                Box.Materials[0].Shader["inColor"] = Colors[0];
                 Box.Draw(context);
                 context.ForceDraw();
 
                 BoxB.World = Matrix4.CreateTranslation(0, -0.20f, 0f);
-                BoxB.Materials[0].Shader["inColor"] = new Vector4(1, 0.5f, 0, 1);
+                BoxB.Materials[0].Shader["inColor"] = Colors[1];
                 BoxB.Draw(context);
                 context.ForceDraw();
 
@@ -61,6 +62,17 @@ namespace MusicalPlatformer
                 PlayerController.Update(interval, context);
                 Player.World = Matrix4.CreateTranslation(PlayerController.Position);
                 context.Camera.Position = PlayerController.Position;
+
+                if (PlayerController.Position.Z > -0.25f)
+                {
+                    Colors[1].X = 1f;
+                    Colors[0].X = 0.5f;
+                }
+                else
+                {
+                    Colors[0].X = 1f;
+                    Colors[1].X = 0.5f;
+                }
             }
         }
 
@@ -81,6 +93,13 @@ namespace MusicalPlatformer
                 BoxB.Materials[0].Shader = Kokoro.ShaderLib.ColorDefaultShader.Create();
             }
 
+            if (Colors == null)
+            {
+                Colors = new Vector4[2];
+                Colors[0] = new Vector4(1, 0, 0, 0.5f);
+                Colors[1] = new Vector4(0, 0, 1, 0.5f);
+            }
+
             if (Player == null)
             {
                 Player = new Sphere(0.025f, 20);
@@ -90,7 +109,7 @@ namespace MusicalPlatformer
                 PlayerController.MoveSpeed = 0.1f;
             }
 
-            if(followCam == null)
+            if (followCam == null)
             {
                 followCam = new FollowPointCamera();
                 context.Camera = followCam;

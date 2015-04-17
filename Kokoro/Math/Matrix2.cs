@@ -145,17 +145,6 @@ namespace Kokoro.Math
             };
         }
 
-        public static implicit operator BEPUutilities.Matrix2x2(Matrix2 matrix)
-        {
-            return new BEPUutilities.Matrix2x2
-            (
-                matrix.R0C0,
-                matrix.R0C1,
-                matrix.R1C0,
-                matrix.R1C1
-            );
-        }
-
         #endregion
 
         #region Constructors

@@ -1393,11 +1393,6 @@ namespace Kokoro.Math
                 Z == other.Z;
         }
 
-
-        public static implicit operator BEPUutilities.Vector3(Vector3 t)
-        {
-            return new BEPUutilities.Vector3(t.X, t.Y, t.Z);
-        }
         #endregion
     }
 }

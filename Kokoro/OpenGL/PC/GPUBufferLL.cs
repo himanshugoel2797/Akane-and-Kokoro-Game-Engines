@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using OpenTK.Graphics.OpenGL4;
 using Kokoro.Sinus;
 using System.Runtime.InteropServices;
+using Kokoro.Engine.SceneGraph;
 
 
 namespace Kokoro.OpenGL.PC

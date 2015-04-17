@@ -38,7 +38,7 @@ namespace Kokoro.Engine
     public class Model : IDisposable
     {
 
-        public struct BoundingBox
+        public struct BoundingVolume
         {
             public Vector3 Min;
             public Vector3 Max;
@@ -119,7 +119,7 @@ namespace Kokoro.Engine
         public Matrix4 World { get; set; }
         public Material[] Materials { get; set; }
         public DrawMode DrawMode { get; set; }
-        public BoundingBox Bound;
+        public BoundingVolume Bound;
 
         protected bool IsDataReady = true;
         protected object syncObject = new object();

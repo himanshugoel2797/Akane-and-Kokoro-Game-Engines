@@ -89,7 +89,7 @@ namespace Kokoro.Engine.Prefabs
                 SetNormals(UpdateMode.Static, tmp.Mesh[i].normals, i);
             }
 
-            Bound = new BoundingBox()
+            Bound = new BoundingVolume()
             {
                 Min = new Math.Vector3(tmp.BoundingBox[0], tmp.BoundingBox[1], tmp.BoundingBox[2]),
                 Max = new Math.Vector3(tmp.BoundingBox[3], tmp.BoundingBox[4], tmp.BoundingBox[5]),

@@ -1029,11 +1029,6 @@ namespace Kokoro.Math
             return !left.Equals(right);
         }
 
-        public static implicit operator BEPUutilities.Vector2(Vector2 t)
-        {
-            return new BEPUutilities.Vector2(t.X, t.Y);
-        }
-
         #endregion
 
         #region Overrides

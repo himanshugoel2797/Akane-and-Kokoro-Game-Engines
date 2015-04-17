@@ -10,13 +10,13 @@ namespace Kokoro.Engine.Prefabs
     /// <summary>
     /// Represents an Axis Aligned Bounding Box
     /// </summary>
-    public class AABB : Model
+    public class OBV : Model
     {
         /// <summary>
-        /// Create a new AABB object
+        /// Create a new OBV object
         /// </summary>
         /// <param name="box">The bounding box as calculated from another Model</param>
-        public AABB(BoundingBox box)
+        public OBV(BoundingVolume box)
         {
             this.World = Matrix4.CreateTranslation((box.Min + box.Max) / 2) * Matrix4.Scale(box.Max - box.Min);
             this.DrawMode = Engine.DrawMode.Lines;
