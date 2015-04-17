@@ -61,7 +61,7 @@ namespace Kokoro.Engine.HighLevel.Rendering
 
         public void UnBind(GraphicsContext context)
         {
-            buffer.UnBind();
+            buffer.UnBind(context);
             context.Viewport = new Vector4(0, 0, context.WindowSize.X, context.WindowSize.Y);
         }
 

@@ -49,6 +49,11 @@ namespace Kokoro.Engine.Prefabs
             }, 0);
             Materials[0] = new Material { ColorMap = tex };
 
+            Bound = new BoundingBox(){
+                Max = new Vector3(width, 0, height),
+                Min = new Vector3(0, 0, 0)
+            }
+
             World = Matrix4.Identity;
         }
 

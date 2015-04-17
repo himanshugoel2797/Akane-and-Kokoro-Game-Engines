@@ -63,6 +63,7 @@ namespace Kokoro.Engine
                 {
                     id = base.Create(width, height, pct, pf, pixelType);
                     ObjectAllocTracker.NewCreated(this, id, " { " + pf.ToString() + ", " + pct.ToString() + ", " + pixelType.ToString() + "}");
+                    loaded = true;  //There's nothing to load
                 }
             });
         }
@@ -91,6 +92,7 @@ namespace Kokoro.Engine
         {
             lock (locker)
             {
+                loaded = true;
                 this.id = id;
                 ObjectAllocTracker.NewCreated(this, id, " Duplicate");
             }

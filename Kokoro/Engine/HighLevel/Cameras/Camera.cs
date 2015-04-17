@@ -16,19 +16,31 @@ namespace Kokoro.Engine.HighLevel.Cameras
         /// <summary>
         /// The Camera's View Matrix
         /// </summary>
-        public Matrix4 View { get; set; }
+        public Matrix4 View { get; internal set; }
+
+        Vector3 pos;
         /// <summary>
         /// The 3D Position of the Camera
         /// </summary>
-        public Vector3 Position { get; set; }
+        public Vector3 Position
+        {
+            get
+            {
+                return pos;
+            }
+            set
+            {
+                pos = value;
+            }
+        }
 
         /// <summary>
         /// Create a new Camera object
         /// </summary>
         public Camera()
         {
-            View = Matrix4.LookAt(new Vector3(0, -1, 0), Vector3.Zero, Vector3.UnitZ);
-            Position = -Vector3.UnitY;
+            View = Matrix4.LookAt(new Vector3(-1, 0, 0), Vector3.Zero, Vector3.UnitY);
+            Position = -Vector3.UnitX;
         }
 
         /// <summary>

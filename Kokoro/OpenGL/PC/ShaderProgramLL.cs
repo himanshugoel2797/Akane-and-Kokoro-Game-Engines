@@ -17,7 +17,7 @@ namespace Kokoro.OpenGL.PC
     {
         private enum VarType
         {
-            Matrix4, Matrix3, Matrix2, Vector4, Vector3, Vector2, Float, Texture
+            Matrix4, Matrix3, Matrix2, Vector4, Vector3, Vector2, Float, Texture, SSBO, UBO
         }
 
 #if GL44        //TODO Finish updating ShaderProgramLL to use the AZDO model
@@ -162,6 +162,10 @@ namespace Kokoro.OpenGL.PC
                         case VarType.Vector4:
                             Vector4 tmpC = (Vector4)variables[i].obj;
                             GL.ProgramUniform4(id, variables[i].pos, 1, new float[] { tmpC.X, tmpC.Y, tmpC.Z, tmpC.W });
+                            break;
+                        case VarType.SSBO:
+                            GPUBufferLL tmpGPUB_A = (GPUBufferLL)variables[i].obj;
+                            //GL.GetProgramResourceIndex()
                             break;
                     }
                 }

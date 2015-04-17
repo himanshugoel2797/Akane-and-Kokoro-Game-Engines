@@ -83,9 +83,9 @@ namespace Kokoro.Engine
             id = base.Generate();
             base.Bind(id);
 
-			Add("Color", new FrameBufferTexture(width, height, PixelFormat.BGRA, pct, PixelType.Float), FrameBufferAttachments.ColorAttachment0, context);
-			Add("DepthBuffer", new FrameBufferTexture(width, height, PixelFormat.Depth, PixelComponentType.D32, PixelType.Float), FrameBufferAttachments.DepthAttachment, context); //Attach the depth buffer to the framebuffer
-            
+            Add("Color", new FrameBufferTexture(width, height, PixelFormat.BGRA, pct, PixelType.Float), FrameBufferAttachments.ColorAttachment0, context);
+            Add("DepthBuffer", new FrameBufferTexture(width, height, PixelFormat.Depth, PixelComponentType.D32, PixelType.Float), FrameBufferAttachments.DepthAttachment, context); //Attach the depth buffer to the framebuffer
+
             base.CheckError();
             base.Bind(0);
 
@@ -101,11 +101,14 @@ namespace Kokoro.Engine
         /// <param name="context">The current GraphicsContext</param>
         public void Add(string id, FrameBufferTexture fbufTex, FrameBufferAttachments attachment, GraphicsContext context)
         {
-            if (fbufTex.Size != this.Size) throw new Exception("The dimensions of the FrameBufferTexture must be the same as the dimensions of the FrameBuffer");
+            Sinus.SinusManager.QueueCommand(() =>
+            {
+                if (fbufTex.Size != this.Size) throw new Exception("The dimensions of the FrameBufferTexture must be the same as the dimensions of the FrameBuffer");
+            });
 
             this.Bind(context);
             RenderTargets.Add(id);
-            
+
             if (!fbufTextures.ContainsKey(id)) fbufTextures.Add(id, fbufTex);
             else fbufTextures[id] = fbufTex;
 
@@ -157,9 +160,12 @@ namespace Kokoro.Engine
             if (id != -1)
             {
                 base.Bind(id);
-                base.DrawBuffers(attachments.Values.ToArray());
+                Sinus.SinusManager.QueueCommand(() =>
+                {
+                    base.DrawBuffers(attachments.Values.ToArray());
+                    currentFBUF = this;
+                });
                 context.Viewport = new Vector4(0, 0, Size.X, Size.Y);
-                currentFBUF = this;
             }
         }
 
@@ -185,9 +191,10 @@ namespace Kokoro.Engine
         /// <summary>
         /// Unbind the FrameBuffer from the pipeline
         /// </summary>
-        public void UnBind()
+        public void UnBind(GraphicsContext context)
         {
             base.Bind(0);
+            context.Viewport = new Vector4(0, 0, context.WindowSize.X, context.WindowSize.Y);
         }
 
 #if DEBUG

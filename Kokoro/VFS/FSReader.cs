@@ -23,7 +23,7 @@ namespace Kokoro.VFS
         public static void LoadFileSystem(string archive, string directoryMap)
         {
             FileStream arch = File.OpenRead(archive);
-            archives.Add(directoryMap, new ZipArchive(arch, ZipArchiveMode.Read));
+            archives[directoryMap] = new ZipArchive(arch, ZipArchiveMode.Read);
         }
 
         public static void UnloadFileSystem(string directoryMap)

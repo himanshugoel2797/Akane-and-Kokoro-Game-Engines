@@ -11,7 +11,7 @@ namespace Kokoro.Sinus
         internal static Queue<Action> CommandBuffer = new Queue<Action>();
 
         [ThreadStatic]
-        private static Queue<Action> LocalCommands;
+        private static Queue<Action> LocalCommands = new Queue<Action>();
 
         static SinusManager()
         {
@@ -42,13 +42,23 @@ namespace Kokoro.Sinus
 
         internal static void PushCommandBuffer()
         {
-            lock (CommandBuffer)
+            if (LocalCommands != null)  //Make sure LocalCommands has been initialized
             {
-                //Enqueue all local buffer commands
-                LocalCommands.ToList().ForEach(i => CommandBuffer.Enqueue(i));
+                if (LocalCommands.Count > 0)    //Only spend time on a lock if absolutely necessary
+                {
+                    lock (CommandBuffer)
+                    {
+                        //Enqueue all local buffer commands
+                        LocalCommands.ToList().ForEach(i => CommandBuffer.Enqueue(i));
+                    }
+                    //Clear the local command buffer
+                    LocalCommands.Clear();
+                }
             }
-            //Clear the local command buffer
-            LocalCommands.Clear();
+            else
+            {
+                LocalCommands = new Queue<Action>();
+            }
         }
     }
 }

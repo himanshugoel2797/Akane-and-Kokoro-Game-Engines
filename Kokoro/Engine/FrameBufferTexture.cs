@@ -17,12 +17,18 @@ namespace Kokoro.Engine
 
         public void BindToFrameBuffer(FrameBufferAttachments texUnit)
         {
-            base.BindToFBuffer(texUnit, id);
+            Sinus.SinusManager.QueueCommand(() =>
+            {
+                base.BindToFBuffer(texUnit, id);
+            });
         }
 
         public static void UnBindFromFrameBuffer(int texUnit)
         {
-            UnBindFromFBuffer(texUnit);
+            Sinus.SinusManager.QueueCommand(() =>
+            {
+                UnBindFromFBuffer(texUnit);
+            });
         }
 
     }

@@ -19,8 +19,11 @@ namespace Kokoro.OpenGL.PC
 
         protected void Bind(int id)
         {
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, id);
-            GL.Enable(EnableCap.Blend);
+            Sinus.SinusManager.QueueCommand(() =>
+            {
+                GL.BindFramebuffer(FramebufferTarget.Framebuffer, id);
+                GL.Enable(EnableCap.Blend);
+            });
         }
 
         protected void DrawBuffers(Kokoro.Engine.FrameBufferAttachments[] attachments)
@@ -29,21 +32,31 @@ namespace Kokoro.OpenGL.PC
             DrawBuffersEnum[] dbEnum = new DrawBuffersEnum[attachments.Length];
             for (int i = 0; i < dbEnum.Length; i++) { dbEnum[i] = EnumConverters.EDrawBufferAttachment(attachments[i]); }
             GL.DrawBuffers(dbEnum.Length, dbEnum.OrderBy(x => x).ToArray());
+
         }
 
         protected void BlendFunction(Engine.BlendFunc func, int index)
         {
-            GL.BlendFunc(index, EnumConverters.EBlendFuncSRC(func.Src), EnumConverters.EBlendFuncDST(func.Dst));
+            Sinus.SinusManager.QueueCommand(() =>
+            {
+                GL.BlendFunc(index, EnumConverters.EBlendFuncSRC(func.Src), EnumConverters.EBlendFuncDST(func.Dst));
+            });
         }
 
         protected void Delete(int id)
         {
-            GL.DeleteFramebuffer(id);
+            Sinus.SinusManager.QueueCommand(() =>
+            {
+                GL.DeleteFramebuffer(id);
+            });
         }
 
         protected void CheckError()
         {
-            if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete) throw new Exception(GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer).ToString());
+            Sinus.SinusManager.QueueCommand(() =>
+            {
+                if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete) throw new Exception(GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer).ToString());
+            });
         }
 
     }

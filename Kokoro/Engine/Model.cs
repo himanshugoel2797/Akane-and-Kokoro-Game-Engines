@@ -42,7 +42,7 @@ namespace Kokoro.Engine
         {
             public Vector3 Min;
             public Vector3 Max;
-
+            public Vector3 Position;
             public Vector3 Up;
         };
 
@@ -134,6 +134,8 @@ namespace Kokoro.Engine
              * 2: Normal
              * 3: UV
              */
+
+            //TODO: Everything is switched over to Shader storage buffers so the vertex data can be written to in all shader stages, assign a fourth buffer to store indexed material information
 
             staticBufferOffset = new long[numBufs];
             staticBufferLength = new long[numBufs]; /*How much should we allocate?*/  //Current limit = 10 Million Elements

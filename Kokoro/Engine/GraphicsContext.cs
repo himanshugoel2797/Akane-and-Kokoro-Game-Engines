@@ -446,13 +446,20 @@ namespace Kokoro.Engine
             };
         }
 
+        public void ForceDraw()
+        {
+            SubmitDraw();
+            Draw();
+
+            //TODO should we force the Viewport to start processing commands?
+        }
+
         /// <summary>
         /// Swap the backbuffer and frontbuffer
         /// </summary>
         public void SwapBuffers()
         {
-            SubmitDraw();
-            Draw();
+            ForceDraw();
 
             Sinus.SinusManager.QueueCommand(swap);
 

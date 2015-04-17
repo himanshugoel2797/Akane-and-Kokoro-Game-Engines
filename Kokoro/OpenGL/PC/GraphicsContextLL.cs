@@ -72,6 +72,7 @@ namespace Kokoro.OpenGL.PC
         {
             //TODO Implement Resize handler
             SetViewport(new Math.Vector4(0, 0, Window.ClientSize.Width, Window.ClientSize.Height));
+            InputLL.SetWinXY(Window.ParentForm.Location.X, Window.ParentForm.Location.Y, Window.Size.Width, Window.Size.Height);
             InitializeMSAA(0);
         }
 

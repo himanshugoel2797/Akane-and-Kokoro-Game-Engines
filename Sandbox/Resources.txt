@@ -2,3 +2,5 @@
 -a Resources,WorldA.xml
 -a Resources,../Resources/asuna.png
 -a Resources,Inori.jpg
+-a Resources,Shaders/Path Tracer/vertex.glsl
+-a Resources,Shaders/Path Tracer/fragment.glsl

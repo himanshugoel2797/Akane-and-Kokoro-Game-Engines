@@ -93,7 +93,7 @@ namespace Kokoro.Engine.HighLevel.Rendering
             fsq.Draw(context);
 
             //Reset the framebuffer bindings
-            radiositySamplesPassB.UnBind();
+            radiositySamplesPassB.UnBind(context);
             context.Viewport = new Vector4(0, 0, context.WindowSize.X, context.WindowSize.Y);
 
             //Finally composite the results to the backbuffer

@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using MusicalPlatformer;
 using Kokoro.Math;
 using Kokoro.Engine;
 using Kokoro.Debug;
 using Kokoro.Engine.SceneGraph;
 using Kokoro.Engine.Prefabs;
 using Kokoro.Engine.Shaders;
-using Sandbox;
+using Kokoro.Engine.HighLevel.Cameras;
 
 namespace Kokoro.Game
 {
@@ -36,11 +37,23 @@ namespace Kokoro.Game
 
         public void Initialize(GraphicsContext context)
         {
+            context.Render += Render;
+            context.Update += Update;
+            context.ResourceManager += LoadResources;
+
+            context.Camera = new Camera();
+            context.Projection = Matrix4.CreatePerspectiveFieldOfView(0.78539f, 16f / 9f, context.ZNear, context.ZFar);
+            context.DepthFunction = (x, y) => x <= y;
+            context.Blending = new BlendFunc()
+            {
+                Src = BlendingFactor.SrcAlpha,
+                Dst = BlendingFactor.OneMinusSrcAlpha
+            };
+
             sceneManager = new SceneManager();
-            sceneManager.Add("TestA", new TestA(Context));
-            sceneManager.Add("PathTracer", new PathTracer(Context));
-            sceneManager.Register(context);
-            sceneManager.Activate("TestA");
+            sceneManager.Add("MainMenu", new MainMenu(Context));
+            sceneManager.Add("InGame", new InGame(Context));
+            sceneManager.Activate("InGame");
         }
 
         public void Render(double interval, GraphicsContext context)
@@ -50,6 +63,7 @@ namespace Kokoro.Game
 
         public void Update(double interval, GraphicsContext context)
         {
+            context.Camera.Update(interval, context);
             sceneManager.Update(interval, context);
         }
 

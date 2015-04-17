@@ -1,1 +1,1 @@
-﻿-b ../../../Sandbox/Resources.txt
+﻿-b ../../../MusicalPlatformer/Resources.txt

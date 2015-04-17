@@ -19,8 +19,9 @@ namespace Kokoro.Game
 {
     class TestA : IScene
     {
-        Model room, t2, fsq;
+        Model room, t2, fsq, fsq2;
         Texture tmp, wait;
+        FrameBuffer buffer;
         object lockObject = new object();
         bool resourcesLoaded = false;
 
@@ -37,9 +38,15 @@ namespace Kokoro.Game
                 Dst = BlendingFactor.OneMinusSrcAlpha
             };
 
-            fsq = new FullScreenQuad();
-            fsq.Materials[0].Shader = ShaderLib.FrameBufferShader.Create();
-            fsq.Materials[0].ColorMap = new Texture("Resources/Inori.jpg");
+            fsq = new Sphere(3);
+            fsq2 = new FullScreenQuad();
+            fsq2.Materials[0].Shader = ShaderLib.FrameBufferShader.Create();
+            fsq.Materials[0].Shader = ShaderLib.DefaultShader.Create();
+            wait = new Texture("Resources/Inori.jpg");
+            buffer = new FrameBuffer((int)context.WindowSize.X, (int)context.WindowSize.Y, PixelComponentType.RGBA16f, context);
+            fsq.Materials[0].ColorMap = wait;
+            fsq2.Materials[0].ColorMap = buffer["Color"];
+
         }
 
         public IScene Parent
@@ -48,6 +55,8 @@ namespace Kokoro.Game
             set;
         }
 
+        Stopwatch s = Stopwatch.StartNew();
+        Vector4 MPos = Vector4.Zero;
         public void Render(double interval, GraphicsContext context)
         {
             context.Clear(0, 0.5f, 1.0f, 0.0f);
@@ -61,7 +70,12 @@ namespace Kokoro.Game
             }
             else
             {
+                buffer.Bind(context);
+                context.Clear(0, 1.0f, 1.0f, 1);
                 fsq.Draw(context);
+                context.ForceDraw();
+                buffer.UnBind(context);
+                fsq2.Draw(context);
             }
             /*
              * 
@@ -102,20 +116,20 @@ namespace Kokoro.Game
         {
             lock (lockObject)
             {
-                tmp = new Texture("Resources/asuna.png");       //Ok so Image loading works as expected, how do we test the actual rendering if we can't make it show anything?
+                tmp = new Texture("Resources/asuna.png");
 
                 room = new Sphere(5, 50);//Model.Load("room.obj");
                 room.Materials[0].Shader = ShaderLib.DefaultShader.Create();
                 room.Materials[0].ColorMap = tmp;
 
-                t2 = new VertexMesh("Resources/room.obj", false);
-                for (int a = 0; a < t2.Materials.Length; a++)
-                {
-                    t2.Materials[a].Shader = ShaderLib.DefaultShader.Create();
-                    t2.Materials[a].ColorMap = tmp;
-                }
+                //t2 = new VertexMesh("Resources/room.obj", false);
+                //for (int a = 0; a < t2.Materials.Length; a++)
+                //{
+                 //   t2.Materials[a].Shader = ShaderLib.DefaultShader.Create();
+                 //   t2.Materials[a].ColorMap = tmp;
+                //}
 
-                resourcesLoaded = true;
+                //resourcesLoaded = true;
             }
 
         }
