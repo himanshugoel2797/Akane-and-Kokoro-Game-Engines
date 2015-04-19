@@ -12,15 +12,18 @@ using Kokoro.Engine.Prefabs;
 using Kokoro.Engine.Shaders;
 using Kokoro.Engine.HighLevel.CharacterControllers;
 using Kokoro.Engine.HighLevel.Cameras;
+using Kokoro.Engine.HighLevel;
 
 namespace MusicalPlatformer
 {
     class InGame : IScene
     {
-        Model Box, BoxB, Player;
+        Entity eBox;
+        Model BoxB, Player;
         Vector4[] Colors;
         ThirdPersonController2D PlayerController;
         Camera followCam;
+        BroadPhaseWorld world;
         bool loaded = false;
 
         public InGame(GraphicsContext context)
@@ -39,12 +42,13 @@ namespace MusicalPlatformer
             context.Clear(0f, 0f, 0f, 1f);
             if (loaded)
             {
-                Box.World = Matrix4.CreateTranslation(0, -0.25f, -0.5f);
-                Box.Materials[0].Shader["inColor"] = Colors[0];
-                Box.Draw(context);
+                //Box.World = Matrix4.CreateTranslation(-0.5f, -0.25f, 0);
+                eBox.Renderable.Materials[0].Shader["inColor"] = Colors[0];
+                world.Render(interval, context);
+                //eBox.Render(interval, context);
                 context.ForceDraw();
 
-                BoxB.World = Matrix4.CreateTranslation(0, -0.20f, 0f);
+                //BoxB.World = Matrix4.CreateTranslation(0, -0.20f, 0f);
                 BoxB.Materials[0].Shader["inColor"] = Colors[1];
                 BoxB.Draw(context);
                 context.ForceDraw();
@@ -63,7 +67,7 @@ namespace MusicalPlatformer
                 Player.World = Matrix4.CreateTranslation(PlayerController.Position);
                 context.Camera.Position = PlayerController.Position;
 
-                if (PlayerController.Position.Z > -0.25f)
+                if (PlayerController.Position.X > -0.25f)
                 {
                     Colors[1].X = 1f;
                     Colors[0].X = 0.5f;
@@ -78,18 +82,29 @@ namespace MusicalPlatformer
 
         public void LoadResources(GraphicsContext context)
         {
-
-            if (Box == null)
+            if(world == null)
             {
-                Box = new Box(0.25f, 0.05f, 0.5f);
-                Box.World = Matrix4.CreateTranslation(0, -0.25f, -0.5f);
-                Box.Materials[0].Shader = Kokoro.ShaderLib.ColorDefaultShader.Create();
+                world = new BroadPhaseWorld(10, 10);
+                world.DrawDistance = 1;
+            }
+
+            if (eBox == null)
+            {
+                eBox = new Entity()
+                {
+                    ID = 1,
+                    Renderable = new Box(0.5f, 0.05f,0.5f),
+                    Position = new Vector3(-0.5f, -0.25f, 0),
+                    Visible = true
+                };
+                eBox.Renderable.Materials[0].Shader = Kokoro.ShaderLib.ColorDefaultShader.Create();
+                world.Add(eBox);
             }
 
             if (BoxB == null)
             {
-                BoxB = new Box(0.25f, 0.05f, 0.5f);
-                BoxB.World = Matrix4.CreateTranslation(0, -0.25f, -0.5f);
+                BoxB = new Box(0.5f, 0.05f, 0.5f);
+                BoxB.World = Matrix4.CreateTranslation(0, -0.20f, 0);
                 BoxB.Materials[0].Shader = Kokoro.ShaderLib.ColorDefaultShader.Create();
             }
 

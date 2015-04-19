@@ -16,9 +16,10 @@ namespace Kokoro.Engine.HighLevel.Cameras
     {//TODO setup collisions
 
         public float RotationMargin = 0.15f;
+        public Vector3 Distance = new Vector3(0, 0, 1);
         Vector2 mousePos;
 
-        Vector3 Up = Vector3.UnitY, EyeOffset;
+        Vector3 Up = Vector3.UnitY;
 
         /// <summary>
         /// Create a new First Person Camera
@@ -37,18 +38,19 @@ namespace Kokoro.Engine.HighLevel.Cameras
         /// <param name="Context">The current GraphicsContext</param>
         public override void Update(double interval, GraphicsContext Context)
         {
-            Position -= Vector3.UnitX;
-            Vector3 Target = Position + Vector3.UnitX;
-            Vector3 Eye = Position + EyeOffset;
+            Vector3 Target = Position;
+            Position -= Distance;
 
             float rotX = RotationMargin * (float)(Mouse.NDMousePos.X - 0.5f);
             float rotY = RotationMargin * (float)((Mouse.NDMousePos.Y) - 0.5f);
-            Target += new Vector3(0, rotY, rotX);
+            Target += new Vector3(rotX, rotY, 0);
 
             mousePos = Mouse.NDMousePos;
 
-            View = Matrix4.LookAt(Eye, Target, Up);
+            View = Matrix4.LookAt(Position, Target, Up);
             base.Update(interval, Context);
+
+            Position += Distance;
         }
     }
 }

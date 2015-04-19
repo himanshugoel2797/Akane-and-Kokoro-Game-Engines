@@ -14,6 +14,11 @@ namespace Kokoro.Engine.HighLevel
     public class Entity
     {
         /// <summary>
+        /// Contains the identifier of this object
+        /// </summary>
+        public int ID;
+
+        /// <summary>
         /// The position of the body
         /// </summary>
         public Vector3 Position
@@ -27,7 +32,7 @@ namespace Kokoro.Engine.HighLevel
                 State.Position = value;
             }
         }
-        
+
         /// <summary>
         /// The renderable representation of the entity
         /// </summary>
@@ -42,5 +47,20 @@ namespace Kokoro.Engine.HighLevel
         /// The PhysicsState of the body
         /// </summary>
         public PhysicsState State;
+
+        public void Update(double interval, GraphicsContext context)
+        {
+
+        }
+
+        public void Render(double interval, GraphicsContext context)
+        {
+            //Check if this object ought to be visible, if so, draw it
+            if (Renderable != null && Visible)
+            {
+                Renderable.World = Matrix4.CreateTranslation(Position);
+                Renderable.Draw(context);
+            }
+        }
     }
 }

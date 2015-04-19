@@ -27,12 +27,16 @@ namespace Kokoro.Physics
         /// <summary>
         /// The acceleration due to gravity this body experiences
         /// </summary>
-        public float Gravity;
+        public Vector3 Gravity;
 
         /// <summary>
         /// The Position of this object
         /// </summary>
         public Vector3 Position;
-        
+
+        /// <summary>
+        /// The velocity at which this object is currently moving
+        /// </summary>
+        public Vector3 Velocity;
     }
 }

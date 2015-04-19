@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using Kokoro.Math;
 using Kokoro.Engine.Shaders;
+using Kokoro.Physics;
 
 #if OPENGL
 #if PC
@@ -38,7 +39,7 @@ namespace Kokoro.Engine
     public class Model : IDisposable
     {
 
-        public struct BoundingVolume
+        public class BoundingVolume : ICollisionBody
         {
             public Vector3 Min;
             public Vector3 Max;

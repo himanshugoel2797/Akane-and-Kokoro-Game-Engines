@@ -234,8 +234,12 @@
     <Compile Include="OpenGL\PC\Sound.cs" />
     <Compile Include="OpenGL\PC\TextureLL.cs" />
     <Compile Include="OpenGL\PC\VertexArrayLL.cs" />
+    <Compile Include="Physics\CollisionSolver.cs" />
     <Compile Include="Physics\ICollisionBody.cs" />
     <Compile Include="Physics\PhysicsState.cs" />
+    <Compile Include="Physics\VEdge.cs" />
+    <Compile Include="Physics\VerletIntegrator.cs" />
+    <Compile Include="Physics\VPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripting\PyScript.cs" />
     <Compile Include="ShaderLib\ColorDefault.cs" />

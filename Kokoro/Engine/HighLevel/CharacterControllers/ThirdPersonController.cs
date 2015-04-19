@@ -33,20 +33,20 @@ namespace Kokoro.Engine.HighLevel.CharacterControllers
 
             if (Keyboard.IsKeyPressed(Key.Left))
             {
-                Position -= Vector3.UnitZ * (float)(MoveSpeed * interval / 10000f);
+                Position += Vector3.UnitX * (float)(MoveSpeed * interval / 10000f);
             }
             else if (Keyboard.IsKeyPressed(Key.Right))
             {
-                Position += Vector3.UnitZ * (float)(MoveSpeed * interval / 10000f);
+                Position -= Vector3.UnitX * (float)(MoveSpeed * interval / 10000f);
             }
 #if DEBUG
             if (Keyboard.IsKeyPressed(Key.PageUp))
             {
-                Position += Vector3.UnitX * (float)(MoveSpeed * interval / 10000f);
+                Position += Vector3.UnitZ * (float)(MoveSpeed * interval / 10000f);
             }
             else if (Keyboard.IsKeyPressed(Key.PageDown))
             {
-                Position -= Vector3.UnitX * (float)(MoveSpeed * interval / 10000f);
+                Position -= Vector3.UnitZ * (float)(MoveSpeed * interval / 10000f);
             }
 #endif
         }

@@ -1329,6 +1329,15 @@ namespace Kokoro.Math
             return !left.Equals(right);
         }
 
+        public static bool operator <(Vector3 left, Vector3 right)
+        {
+            return (left.X < right.X) && (left.Y < right.Y) && (left.Z < right.Z);
+        }
+
+        public static bool operator >(Vector3 left, Vector3 right)
+        {
+            return (left.X > right.X) && (left.Y > right.Y) && (left.Z > right.Z);
+        }
         #endregion
 
         #region Overrides

@@ -18,6 +18,13 @@ namespace Kokoro.Engine.HighLevel.Cameras
         /// </summary>
         public Matrix4 View { get; internal set; }
 
+        /// <summary>
+        /// The Camera's Projection Matrix
+        /// </summary>
+        public Matrix4 Projection { get; internal set; }
+
+        public Model.BoundingVolume Frustum { get; internal set; }
+
         Vector3 pos;
         /// <summary>
         /// The 3D Position of the Camera
@@ -41,6 +48,7 @@ namespace Kokoro.Engine.HighLevel.Cameras
         {
             View = Matrix4.LookAt(new Vector3(-1, 0, 0), Vector3.Zero, Vector3.UnitY);
             Position = -Vector3.UnitX;
+            SetProjection(0.7853f, 16f / 9f, 0.1f, 1000f);
         }
 
         /// <summary>
@@ -51,6 +59,28 @@ namespace Kokoro.Engine.HighLevel.Cameras
         public virtual void Update(double interval, GraphicsContext Context)
         {
             Context.View = View;
+            Context.Projection = Projection;
+        }
+
+        public void SetProjection(float fov, float aspectRatio, float nearClip, float farClip)
+        {
+            Projection = Matrix4.CreatePerspectiveFieldOfView(fov, aspectRatio, nearClip, farClip);
+            CalculateFrustum(fov, aspectRatio, nearClip, farClip);
+        }
+
+        public void CalculateFrustum(float fov, float aspectRatio, float nearClip, float farClip)
+        {
+            float preComp = 2 * (float)System.Math.Tan(fov / 2);
+            float hNear = preComp * nearClip;
+            float wNear = aspectRatio * hNear;
+            float hFar = preComp * farClip;
+            float wFar = hFar * aspectRatio;
+
+            Frustum = new Model.BoundingVolume()
+            {
+                Max = new Vector3(wFar, hFar, farClip),
+                Min = new Vector3(wNear, hNear, nearClip)
+            };
         }
     }
 }
