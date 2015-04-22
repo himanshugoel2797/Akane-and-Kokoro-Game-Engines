@@ -30,7 +30,7 @@ namespace Kokoro.ShaderLib
 
             for (int index = 0; index < taps; index++)
             {
-                float g = norm * (float)System.Math.Exp(-( System.Math.Pow((index - taps/2) * ((float)width / (float)taps), 2) / coeff));
+                float g = norm * (float)System.Math.Exp(-(System.Math.Pow((index - taps / 2) * ((float)width / (float)taps), 2) / coeff));
                 kern[index] = g;
                 total += g;
             }
@@ -73,8 +73,8 @@ namespace Kokoro.ShaderLib
 
             for (int i = 1; i < kern.Length; i++)
             {
-                Vars.Color += Texture.Read2D(Vars.ColorMap, Vars.UV + (i * Vars.rad)) * kern[i];
-                Vars.Color += Texture.Read2D(Vars.ColorMap, Vars.UV - (i * Vars.rad)) * kern[i];
+                Vars.Color += Texture.Read2D(Vars.ColorMap, KMath.Clamp(Vars.UV + (i * Vars.rad), new Vec2(0, 0), new Vec2(1, 1)) ) * kern[i];
+                Vars.Color += Texture.Read2D(Vars.ColorMap, KMath.Clamp(Vars.UV - (i * Vars.rad), new Vec2(0, 0), new Vec2(1, 1)) ) * kern[i];
             }
         }
 

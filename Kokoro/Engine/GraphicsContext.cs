@@ -106,6 +106,21 @@ namespace Kokoro.Engine
         }
 
         /// <summary>
+        /// Get/Set the mode to draw primitives in
+        /// </summary>
+        public DrawMode DrawMode
+        {
+            get
+            {
+                return mode;
+            }
+            set
+            {
+                mode = value;
+            }
+        }
+
+        /// <summary>
         /// Enable/Disable face culling
         /// </summary>
         public CullMode FaceCulling
@@ -172,6 +187,17 @@ namespace Kokoro.Engine
             set
             {
                 base.SetViewport(value);
+            }
+        }
+
+        /// <summary>
+        /// Get the aspect ratio of the viewport
+        /// </summary>
+        public double AspectRatio
+        {
+            get
+            {
+                return Viewport.Z / Viewport.W;
             }
         }
 
@@ -520,6 +546,7 @@ namespace Kokoro.Engine
         public GraphicsContext(Vector2 WindowSize)
             : base((int)WindowSize.X, (int)WindowSize.Y)
         {
+            DrawMode = Engine.DrawMode.Triangles;
             Debug.DebuggerManager.ShowDebugger();
             Debug.ObjectAllocTracker.NewCreated(this, 0, "GraphicsContext Created");
         }

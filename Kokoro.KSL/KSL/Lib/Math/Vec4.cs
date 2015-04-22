@@ -121,11 +121,11 @@ namespace Kokoro.KSL.Lib.Math
             return k;
         }
 
-        public static Vec4 operator *(Vec4 b, float a)
+        public static Vec4 operator *(Vec4 b, KFloat a)
         {
             var k = new Vec4()
             {
-                ObjName = "(" + a + "*" + b.ObjName + ")"
+                ObjName = "(" + a.ObjName + "*" + b.ObjName + ")"
             };
 
             SyntaxTree.Variables[k.ObjName] = new SyntaxTree.Variable()
@@ -139,11 +139,11 @@ namespace Kokoro.KSL.Lib.Math
             return k;
         }
 
-        public static Vec4 operator *(float a, Vec4 b)
+        public static Vec4 operator *(KFloat a, Vec4 b)
         {
             var k = new Vec4()
             {
-                ObjName = "(" + a + "*" + b.ObjName + ")"
+                ObjName = "(" + a.ObjName + "*" + b.ObjName + ")"
             };
 
             SyntaxTree.Variables[k.ObjName] = new SyntaxTree.Variable()

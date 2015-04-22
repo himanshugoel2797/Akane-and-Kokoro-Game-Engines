@@ -240,7 +240,105 @@ namespace Kokoro.KSL.Lib.Math
         #endregion
 
         #region Clamp
+        /// <summary>
+        /// Clamp 'a' between 'min' and 'max'
+        /// </summary>
+        /// <param name="a">The value to clamp</param>
+        /// <param name="min">The minimum value</param>
+        /// <param name="max">The maximum value</param>
+        /// <returns>The clamped value</returns>
+        public static KFloat Clamp(KInt a, KInt min, KInt max)
+        {
+            var k = new KFloat()
+            {
+                ObjName = CodeGenerator.TranslateSDKFunctionCalls(SyntaxTree.FunctionCalls.Clamp, a.ObjName, min.ObjName, max.ObjName)
+            };
 
+            SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
+            {
+                type = k.GetType(),
+                value = null,
+                paramType = SyntaxTree.ParameterType.Variable,
+                name = k.ObjName
+            });
+
+            return k;
+        }
+
+        /// <summary>
+        /// Clamp 'a' between 'min' and 'max'
+        /// </summary>
+        /// <param name="a">The value to clamp</param>
+        /// <param name="min">The minimum value</param>
+        /// <param name="max">The maximum value</param>
+        /// <returns>The clamped value</returns>
+        public static Vec2 Clamp(Vec2 a, Vec2 min, Vec2 max)
+        {
+            var k = new Vec2()
+            {
+                ObjName = CodeGenerator.TranslateSDKFunctionCalls(SyntaxTree.FunctionCalls.Clamp, a.ObjName, min.ObjName, max.ObjName)
+            };
+
+            SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
+            {
+                type = k.GetType(),
+                value = null,
+                paramType = SyntaxTree.ParameterType.Variable,
+                name = k.ObjName
+            });
+
+            return k;
+        }
+
+        /// <summary>
+        /// Clamp 'a' between 'min' and 'max'
+        /// </summary>
+        /// <param name="a">The value to clamp</param>
+        /// <param name="min">The minimum value</param>
+        /// <param name="max">The maximum value</param>
+        /// <returns>The clamped value</returns>
+        public static Vec3 Clamp(Vec3 a, Vec3 min, Vec3 max)
+        {
+            var k = new Vec3()
+            {
+                ObjName = CodeGenerator.TranslateSDKFunctionCalls(SyntaxTree.FunctionCalls.Clamp, a.ObjName, min.ObjName, max.ObjName)
+            };
+
+            SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
+            {
+                type = k.GetType(),
+                value = null,
+                paramType = SyntaxTree.ParameterType.Variable,
+                name = k.ObjName
+            });
+
+            return k;
+        }
+
+        /// <summary>
+        /// Clamp 'a' between 'min' and 'max'
+        /// </summary>
+        /// <param name="a">The value to clamp</param>
+        /// <param name="min">The minimum value</param>
+        /// <param name="max">The maximum value</param>
+        /// <returns>The clamped value</returns>
+        public static Vec4 Clamp(Vec4 a, Vec4 min, Vec4 max)
+        {
+            var k = new Vec4()
+            {
+                ObjName = CodeGenerator.TranslateSDKFunctionCalls(SyntaxTree.FunctionCalls.Clamp, a.ObjName, min.ObjName, max.ObjName)
+            };
+
+            SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
+            {
+                type = k.GetType(),
+                value = null,
+                paramType = SyntaxTree.ParameterType.Variable,
+                name = k.ObjName
+            });
+
+            return k;
+        }
         #endregion
     }
 }

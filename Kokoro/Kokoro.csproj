@@ -254,6 +254,7 @@
     <Compile Include="ShaderLib\Default.cs" />
     <Compile Include="ShaderLib\FrameBuffer.cs" />
     <Compile Include="ShaderLib\GaussianBlur.cs" />
+    <Compile Include="ShaderLib\BlendShader.cs" />
     <Compile Include="ShaderLib\GBufferShader.cs" />
     <Compile Include="Sinus\SinusManager.cs" />
     <Compile Include="VFS\FSReader.cs" />

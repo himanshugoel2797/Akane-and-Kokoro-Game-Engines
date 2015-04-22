@@ -8,6 +8,12 @@ namespace Kokoro.KSL.Lib.Math
 {
     public class Vec2 : Obj
     {
+        public Vec2() { }
+        public Vec2(KFloat a, KFloat b)
+        {
+            this.ObjName = "vec2(" + a.ObjName + ", " + b.ObjName + ")";
+        }
+
         #region Indexer Hack
 
         /// <summary>
@@ -142,13 +148,13 @@ namespace Kokoro.KSL.Lib.Math
                 ObjName = "(" + a.ObjName + "+" + b.ObjName + ")"
             };
 
-            SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
+            SyntaxTree.Variables[k.ObjName] = new SyntaxTree.Variable()
             {
                 type = typeof(Vec2),
                 value = null,
                 paramType = SyntaxTree.ParameterType.Variable,
                 name = k.ObjName
-            });
+            };
 
             return k;
         }

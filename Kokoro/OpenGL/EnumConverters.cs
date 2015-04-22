@@ -111,6 +111,11 @@ namespace Kokoro.OpenGL
             return (OpenTK.Input.Key)Enum.Parse(typeof(OpenTK.Input.Key), k.ToString());
         }
 
+        public static OpenTK.Graphics.OpenGL4.All EDrawMode(Kokoro.Engine.DrawMode mode)
+        {
+            return (OpenTK.Graphics.OpenGL4.All)Enum.Parse(typeof(OpenTK.Graphics.OpenGL4.All), mode.ToString());
+        }
+
         public static BufferTarget EBufferTarget(Kokoro.Engine.BufferUse use)
         {
             if (use == Engine.BufferUse.Array) return BufferTarget.ArrayBuffer;

@@ -224,6 +224,9 @@ namespace Kokoro.KSL.GLSL
                 case SyntaxTree.FunctionCalls.Mod:
                     str = "mod(" + parameters[0] + ", " + parameters[1] + ")";
                     break;
+                case SyntaxTree.FunctionCalls.Clamp:
+                    str = "clamp(" + parameters[0] + ", " + parameters[1] + ", " + parameters[2] + ")";
+                    break;
             }
 
             return str;

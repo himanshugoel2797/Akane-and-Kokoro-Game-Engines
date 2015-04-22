@@ -108,6 +108,7 @@ namespace Kokoro.OpenGL.PC
         static List<MDIEntry> MDIEntries = new List<MDIEntry>();
         static int EntryCount = 0;
         static int EntryOffset = 0;
+        protected static Kokoro.Engine.DrawMode mode;
 
         internal static void Draw()
         {
@@ -115,7 +116,7 @@ namespace Kokoro.OpenGL.PC
 
             SinusManager.QueueCommand(() =>
             {
-                GL.MultiDrawElementsIndirect(All.Triangles, All.UnsignedInt, IntPtr.Zero, EntryCount, 0);
+                GL.MultiDrawElementsIndirect(EnumConverters.EDrawMode(mode), All.UnsignedInt, IntPtr.Zero, EntryCount, 0);
                 MDIBuffer.PostFence();      //The MDIBuffer can not be modified until this is done
                 Kokoro.Engine.Model.staticBuffer.PostFence();   //The draw buffers may not be modified until they have been drawn
                 Kokoro.Engine.Model.dynamicBuffer.PostFence();

@@ -67,7 +67,10 @@ namespace MusicalPlatformer
 
                 gbuf.UnBind(context);
 
-                FSQ.Materials[0].ColorMap = blurCompositor.ApplyPass(context, gbuf)["RGBA0"];
+                FSQ.Materials[0].Shader["SourceB"] = blurCompositor.ApplyPass(context, gbuf)["RGBA0"];
+                FSQ.Materials[0].Shader["SourceA"] = gbuf["RGBA0"];
+                FSQ.Materials[0].Shader["weightSrcA"] = 0.5f;
+                FSQ.Materials[0].Shader["weightSrcB"] = 0.5f;
                 FSQ.Draw(context);
 
             }
@@ -149,14 +152,14 @@ namespace MusicalPlatformer
             {
                 gbuf = new GBuffer(1920, 1080, context);
                 FSQ = new FullScreenQuad();
-                FSQ.Materials[0].Shader = Kokoro.ShaderLib.FrameBufferShader.Create();
+                FSQ.Materials[0].Shader = Kokoro.ShaderLib.BlendShader.Create(BlendingFactor.One, BlendingFactor.One);
             }
 
             if (blurCompositor == null)
             {
                 blurCompositor = new CompositionPass(1920, 1080, context);
-                blurCompositor.Steps.Add(new HorizontalGaussianBlurNode(5, 0.0025f));
-                blurCompositor.Steps.Add(new VerticalGaussianBlurNode(5, 0.0025f));
+                blurCompositor.Steps.Add(new HorizontalGaussianBlurNode(5, 0.0015f));
+                blurCompositor.Steps.Add(new VerticalGaussianBlurNode(5, 0.0015f));
             }
 
             loaded = true;
