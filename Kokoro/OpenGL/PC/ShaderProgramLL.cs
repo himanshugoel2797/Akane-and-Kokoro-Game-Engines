@@ -172,10 +172,6 @@ namespace Kokoro.OpenGL.PC
                             Vector4 tmpC = (Vector4)variables[i].obj;
                             GL.ProgramUniform4(id, variables[i].pos, 1, new float[] { tmpC.X, tmpC.Y, tmpC.Z, tmpC.W });
                             break;
-                        case VarType.SSBO:
-                            GPUBufferLL tmpGPUB_A = (GPUBufferLL)variables[i].obj;
-                            //GL.GetProgramResourceIndex()
-                            break;
                     }
                 }
 
@@ -337,6 +333,7 @@ namespace Kokoro.OpenGL.PC
                 }
             }
         }
+
         #endregion
 
 

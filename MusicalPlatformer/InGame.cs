@@ -15,6 +15,7 @@ using Kokoro.Engine.HighLevel.Cameras;
 using Kokoro.Engine.HighLevel;
 using Kokoro.Engine.HighLevel.Rendering;
 using Kokoro.Engine.HighLevel.Rendering.Compositor;
+using Kokoro.Engine.Input;
 
 namespace MusicalPlatformer
 {
@@ -51,7 +52,9 @@ namespace MusicalPlatformer
             if (loaded)
             {
                 gbuf.Bind(context);
-                context.Clear(0, 0f, 0, 1f);
+                context.Clear(0, 0f, 0, 0f);
+
+                //context.DrawMode = DrawMode.LineStrip;
 
                 eBox.Renderable.Materials[0].Shader["inColor"] = Colors[0];
                 world.Render(interval, context);
@@ -65,12 +68,17 @@ namespace MusicalPlatformer
                 Player.Draw(context);
                 context.ForceDraw();
 
+                //context.DrawMode = DrawMode.Triangles;
                 gbuf.UnBind(context);
 
-                FSQ.Materials[0].Shader["SourceB"] = blurCompositor.ApplyPass(context, gbuf)["RGBA0"];
+                var outBuf = blurCompositor.ApplyPass(context, gbuf);
+                outBuf["RGBA0"].FilterMode = TextureFilter.Linear;
+                gbuf["RGBA0"].FilterMode = TextureFilter.Linear;
+
+                FSQ.Materials[0].Shader["SourceB"] = outBuf["RGBA0"];
                 FSQ.Materials[0].Shader["SourceA"] = gbuf["RGBA0"];
                 FSQ.Materials[0].Shader["weightSrcA"] = 0.5f;
-                FSQ.Materials[0].Shader["weightSrcB"] = 0.5f;
+                FSQ.Materials[0].Shader["weightSrcB"] = 1.5f;
                 FSQ.Draw(context);
 
             }
@@ -83,17 +91,23 @@ namespace MusicalPlatformer
             {
                 PlayerController.Update(interval, context);
                 Player.World = Matrix4.CreateTranslation(PlayerController.Position);
-                context.Camera.Position = PlayerController.Position;
+                //context.Camera.Position = PlayerController.Position;
 
                 if (PlayerController.Position.X > -0.25f)
                 {
-                    Colors[1].X = 1f;
-                    Colors[0].X = 0f;
+                    //Colors[1].X = 1f;
+                    //Colors[0].X = 0f;
                 }
                 else
                 {
-                    Colors[0].X = 1f;
-                    Colors[1].X = 0f;
+                    //Colors[0].X = 1f;
+                    //Colors[1].X = 0f;
+                }
+
+                if (Mouse.ButtonsDown.Middle)
+                {
+                    eBox.Visible = !eBox.Visible;
+                    System.Threading.Thread.Sleep(1000);
                 }
             }
         }
@@ -102,7 +116,7 @@ namespace MusicalPlatformer
         {
             if (world == null)
             {
-                world = new BroadPhaseWorld(10, 10);
+                world = new BroadPhaseWorld(100, 10);
                 world.DrawDistance = 1;
             }
 
@@ -111,7 +125,7 @@ namespace MusicalPlatformer
                 eBox = new Entity()
                 {
                     ID = 1,
-                    Renderable = new Box(0.5f, 0.05f, 0.5f),
+                    Renderable = new Sphere(1, 10),
                     Position = new Vector3(-0.5f, -0.25f, 0),
                     Visible = true
                 };
@@ -121,7 +135,7 @@ namespace MusicalPlatformer
 
             if (BoxB == null)
             {
-                BoxB = new Box(0.5f, 0.05f, 0.5f);
+                BoxB = new Sphere(1, 20);
                 BoxB.World = Matrix4.CreateTranslation(0, -0.20f, 0);
                 BoxB.Materials[0].Shader = Kokoro.ShaderLib.ColorDefaultShader.Create();
             }
@@ -135,7 +149,7 @@ namespace MusicalPlatformer
 
             if (Player == null)
             {
-                Player = new Sphere(0.025f, 20);
+                Player = new Sphere(0.025f, 10);
                 Player.Materials[0].Shader = Kokoro.ShaderLib.ColorDefaultShader.Create();
 
                 PlayerController = new ThirdPersonController2D(Vector3.Zero);
@@ -144,7 +158,9 @@ namespace MusicalPlatformer
 
             if (followCam == null)
             {
-                followCam = new FollowPointCamera();
+                followCam = new FirstPersonCamera(Vector3.Zero, Vector3.UnitY);
+
+                //followCam = new FollowPointCamera();
                 context.Camera = followCam;
             }
 
@@ -152,14 +168,16 @@ namespace MusicalPlatformer
             {
                 gbuf = new GBuffer(1920, 1080, context);
                 FSQ = new FullScreenQuad();
-                FSQ.Materials[0].Shader = Kokoro.ShaderLib.BlendShader.Create(BlendingFactor.One, BlendingFactor.One);
+                FSQ.Materials[0].Shader = Kokoro.ShaderLib.BlendShader.Create(BlendingFactor.ConstantAlpha, BlendingFactor.ConstantAlpha);
             }
 
             if (blurCompositor == null)
             {
-                blurCompositor = new CompositionPass(1920, 1080, context);
-                blurCompositor.Steps.Add(new HorizontalGaussianBlurNode(5, 0.0015f));
-                blurCompositor.Steps.Add(new VerticalGaussianBlurNode(5, 0.0015f));
+                blurCompositor = new CompositionPass(1920 / 2, 1080 / 2, context);
+                blurCompositor.Steps.Add(new HorizontalGaussianBlurNode(17, 0.005f));
+                blurCompositor.Steps.Add(new VerticalGaussianBlurNode(17, 0.005f));
+                blurCompositor.Steps.Add(new HorizontalGaussianBlurNode(17, 0.005f));
+                blurCompositor.Steps.Add(new VerticalGaussianBlurNode(17, 0.005f));
             }
 
             loaded = true;

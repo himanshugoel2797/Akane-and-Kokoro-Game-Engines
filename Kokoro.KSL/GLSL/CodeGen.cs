@@ -227,6 +227,30 @@ namespace Kokoro.KSL.GLSL
                 case SyntaxTree.FunctionCalls.Clamp:
                     str = "clamp(" + parameters[0] + ", " + parameters[1] + ", " + parameters[2] + ")";
                     break;
+                case SyntaxTree.FunctionCalls.Dot:
+                    str = "dot(" + parameters[0] + ", " + parameters[1] + ")";
+                    break;
+                case SyntaxTree.FunctionCalls.Sin:
+                    str = "sin(" + parameters[0] + ", " + parameters[1] + ")";
+                    break;
+                case SyntaxTree.FunctionCalls.Cos:
+                    str = "cos(" + parameters[0] + ", " + parameters[1] + ")";
+                    break;
+                case SyntaxTree.FunctionCalls.Tan:
+                    str = "tan(" + parameters[0] + ", " + parameters[1] + ")";
+                    break;
+                case SyntaxTree.FunctionCalls.ASin:
+                    str = "asin(" + parameters[0] + ", " + parameters[1] + ")";
+                    break;
+                case SyntaxTree.FunctionCalls.ACos:
+                    str = "acos(" + parameters[0] + ", " + parameters[1] + ")";
+                    break;
+                case SyntaxTree.FunctionCalls.ATan:
+                    str = "atan(" + parameters[0] + ", " + parameters[1] + ")";
+                    break;
+                case SyntaxTree.FunctionCalls.Fract:
+                    str = "fract(" + parameters[0] + ", " + parameters[1] + ")";
+                    break;
             }
 
             return str;

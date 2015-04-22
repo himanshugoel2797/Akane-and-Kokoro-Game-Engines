@@ -87,6 +87,24 @@ namespace Kokoro.KSL.Lib.Math
             return k;
         }
 
+        public static Vec2 operator *(KFloat a, Vec2 b)
+        {
+            var k = new Vec2()
+            {
+                ObjName = "(" + a.ObjName + "*" + b.ObjName + ")"
+            };
+
+            SyntaxTree.Variables[k.ObjName] = new SyntaxTree.Variable()
+            {
+                type = k.GetType(),
+                value = null,
+                paramType = SyntaxTree.ParameterType.Variable,
+                name = k.ObjName
+            };
+
+            return k;
+        }
+
         public static Vec2 operator *(Vec2 a, Vec2 b)
         {
             var k = new Vec2()
@@ -124,6 +142,24 @@ namespace Kokoro.KSL.Lib.Math
         }
 
         public static Vec2 operator /(KInt a, Vec2 b)
+        {
+            Vec2 k = new Vec2()
+            {
+                ObjName = "(" + a.ObjName + "/" + b.ObjName + ")"
+            };
+
+            SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
+            {
+                type = typeof(Vec2),
+                value = null,
+                paramType = SyntaxTree.ParameterType.Variable,
+                name = k.ObjName
+            });
+
+            return k;
+        }
+
+        public static Vec2 operator /(KFloat a, Vec2 b)
         {
             Vec2 k = new Vec2()
             {

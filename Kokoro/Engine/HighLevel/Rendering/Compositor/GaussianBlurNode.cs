@@ -24,7 +24,6 @@ namespace Kokoro.Engine.HighLevel.Rendering.Compositor
         {
             srcBuffer["RGBA0"].WrapX = false;
             srcBuffer["RGBA0"].WrapY = false;
-            srcBuffer["RGBA0"].FilterMode = TextureFilter.Linear;
             surface.Materials[0].Shader = Horizontal;
             surface.Materials[0].ColorMap = srcBuffer["RGBA0"];
             surface.Materials[0].Shader["KernelRad"] = Radius;
@@ -48,7 +47,6 @@ namespace Kokoro.Engine.HighLevel.Rendering.Compositor
         {
             srcBuffer["RGBA0"].WrapX = false;
             srcBuffer["RGBA0"].WrapY = false;
-            srcBuffer["RGBA0"].FilterMode = TextureFilter.Linear;
             surface.Materials[0].Shader = Vertical;
             surface.Materials[0].ColorMap = srcBuffer["RGBA0"];
             surface.Materials[0].Shader["KernelRad"] = Radius * context.AspectRatio;

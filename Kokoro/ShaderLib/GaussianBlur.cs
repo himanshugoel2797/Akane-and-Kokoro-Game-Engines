@@ -21,7 +21,7 @@ namespace Kokoro.ShaderLib
             vertical = Vertical;
             kern = new float[taps];
 
-            float radius = 3f;
+            float radius = 1f;
             int width = (int)System.Math.Ceiling(radius);
             float sigma = radius / 3f;
             float norm = 1f / (float)(System.Math.Sqrt(2 * System.Math.PI * sigma * sigma));
@@ -39,7 +39,6 @@ namespace Kokoro.ShaderLib
             {
                 kern[x] /= total;
             }
-
         }
 
         public void Vertex()
@@ -71,10 +70,9 @@ namespace Kokoro.ShaderLib
 
             Vars.Color = Texture.Read2D(Vars.ColorMap, Vars.UV) * kern[0];
 
-            for (int i = 1; i < kern.Length; i++)
+            for (int i = 0; i < kern.Length; i++)
             {
-                Vars.Color += Texture.Read2D(Vars.ColorMap, KMath.Clamp(Vars.UV + (i * Vars.rad), new Vec2(0, 0), new Vec2(1, 1)) ) * kern[i];
-                Vars.Color += Texture.Read2D(Vars.ColorMap, KMath.Clamp(Vars.UV - (i * Vars.rad), new Vec2(0, 0), new Vec2(1, 1)) ) * kern[i];
+                Vars.Color += Texture.Read2D(Vars.ColorMap, KMath.Clamp(Vars.UV + ((i - (float)kern.Length / 2f) * Vars.rad), new Vec2(0, 0), new Vec2(1, 1))) * kern[i];
             }
         }
 

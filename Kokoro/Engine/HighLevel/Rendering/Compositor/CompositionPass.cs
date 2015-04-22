@@ -28,8 +28,10 @@ namespace Kokoro.Engine.HighLevel.Rendering.Compositor
             var Src = InternalBufferB;
             GBuffer tmpVar;
 
+            Src.Bind(context);
+            context.Clear(0, 0, 0, 1);
             Target.Bind(context);
-            context.Clear(0, 0, 0, 0);
+            context.Clear(0, 0, 0, 1);
             Steps[0].Apply(context, Surface, input, input);
             context.ForceDraw();
 
@@ -42,7 +44,7 @@ namespace Kokoro.Engine.HighLevel.Rendering.Compositor
                 context.Clear(0, 0, 0, 0);
                 Steps[i].Apply(context, Surface, Src, input);
                 context.ForceDraw();
-
+                
                 tmpVar = Target;
                 Target = Src;
                 Src = tmpVar;
