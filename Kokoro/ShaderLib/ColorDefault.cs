@@ -30,9 +30,9 @@ namespace Kokoro.ShaderLib
 
             Vars.RGBA0 = Texture.Read2D(Vars.ColorMap, Vars.UV);
             Vars.Normal0.Construct(KMath.Normalize(0.5f * Vars.NormPos + (Vec3)0.5f), 1);
-            Vars.Depth0["xyz"] = Vars.WorldPos;
-            Vars.Depth0["w"] = 1f;
-
+            Vars.Depth0["r"] = Vars.WorldPos["z"] / 50;
+            Vars.Depth0["gb"] = Vars.WorldPos["xy"];
+            Vars.Depth0["a"] = 1;
 
             Vars.RGBA0 = Vars.inColor;
 

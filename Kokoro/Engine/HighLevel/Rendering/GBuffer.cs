@@ -25,7 +25,7 @@ namespace Kokoro.Engine.HighLevel.Rendering
             buffer = new FrameBuffer(width, height, PixelComponentType.RGBA16f, context);
 
             //Create the GBuffer texture targets
-            buffer.Add("RGBA0", new FrameBufferTexture(width, height, PixelFormat.BGRA, PixelComponentType.RGBA16f, PixelType.Float), FrameBufferAttachments.ColorAttachment0, context);
+            buffer.Add("RGBA0", new FrameBufferTexture(width, height, PixelFormat.BGRA, PixelComponentType.RGBA8, PixelType.Float), FrameBufferAttachments.ColorAttachment0, context);
             buffer.Add("Depth0", new FrameBufferTexture(width, height, PixelFormat.BGRA, PixelComponentType.RGBA8, PixelType.UInt1010102), FrameBufferAttachments.ColorAttachment1, context);
             buffer.Add("Normal0", new FrameBufferTexture(width, height, PixelFormat.BGRA, PixelComponentType.RGBA8, PixelType.Float), FrameBufferAttachments.ColorAttachment2, context);
 

@@ -19,17 +19,35 @@ namespace Kokoro.OpenGL.PC
 
         protected void SetFilterMode(Engine.TextureFilter filter)
         {
+            Sinus.SinusManager.QueueCommand(() =>
+            {
+                if (filter == Engine.TextureFilter.Linear)
+                {
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+                }
+                else
+                {
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+                }
+            });
+        }
 
-            if (filter == Engine.TextureFilter.Linear)
+        protected void SetWrapX(bool mode)
+        {
+            Sinus.SinusManager.QueueCommand(() =>
             {
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-            }
-            else
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)(mode ? TextureWrapMode.Repeat : TextureWrapMode.ClampToBorder));
+            });
+        }
+
+        protected void SetWrapY(bool mode)
+        {
+            Sinus.SinusManager.QueueCommand(() =>
             {
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
-            }
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)(mode ? TextureWrapMode.Repeat : TextureWrapMode.ClampToBorder));
+            });
         }
 
         protected int Create(int width, int height, Kokoro.Engine.PixelComponentType pfI, Kokoro.Engine.PixelFormat pf, Kokoro.Engine.PixelType type, bool multisample = false, int sampleCount = 1)

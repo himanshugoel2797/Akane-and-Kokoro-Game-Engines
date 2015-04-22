@@ -55,6 +55,22 @@ namespace Kokoro.Engine
             }
         }
 
+        public bool WrapX
+        {
+            set
+            {
+                SetWrapX(value);
+            }
+        }
+
+        public bool WrapY
+        {
+            set
+            {
+                SetWrapY(value);
+            }
+        }
+
         public Texture(int width, int height, PixelFormat pf, PixelComponentType pct, PixelType pixelType)
         {
             Sinus.SinusManager.QueueCommand(() =>

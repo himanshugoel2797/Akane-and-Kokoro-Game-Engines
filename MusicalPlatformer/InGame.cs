@@ -22,7 +22,7 @@ namespace MusicalPlatformer
     {
         Entity eBox;
         GBuffer gbuf;
-        FrameBuffer buf;
+        CompositionPass blurCompositor;
 
         Model BoxB, Player, FSQ;
         Vector4[] Colors;
@@ -44,13 +44,14 @@ namespace MusicalPlatformer
             set;
         }
 
+        double i = 0;
         public void Render(double interval, GraphicsContext context)
         {
             context.Clear(0f, 0f, 0f, 1f);
             if (loaded)
             {
                 gbuf.Bind(context);
-                context.Clear(0, 0.5f, 0, 1f);
+                context.Clear(0, 0f, 0, 1f);
 
                 eBox.Renderable.Materials[0].Shader["inColor"] = Colors[0];
                 world.Render(interval, context);
@@ -66,8 +67,7 @@ namespace MusicalPlatformer
 
                 gbuf.UnBind(context);
 
-                FSQ.Materials[0].ColorMap = gbuf["RGBA0"];
-                FSQ.Materials[0].Shader["KernRadius"] = 0.005;
+                FSQ.Materials[0].ColorMap = blurCompositor.ApplyPass(context, gbuf)["RGBA0"];
                 FSQ.Draw(context);
 
             }
@@ -85,12 +85,12 @@ namespace MusicalPlatformer
                 if (PlayerController.Position.X > -0.25f)
                 {
                     Colors[1].X = 1f;
-                    Colors[0].X = 0.5f;
+                    Colors[0].X = 0f;
                 }
                 else
                 {
                     Colors[0].X = 1f;
-                    Colors[1].X = 0.5f;
+                    Colors[1].X = 0f;
                 }
             }
         }
@@ -149,13 +149,14 @@ namespace MusicalPlatformer
             {
                 gbuf = new GBuffer(1920, 1080, context);
                 FSQ = new FullScreenQuad();
-                FSQ.Materials[0].Shader = Kokoro.ShaderLib.GaussianBlurShader.Create(5, true);
+                FSQ.Materials[0].Shader = Kokoro.ShaderLib.FrameBufferShader.Create();
             }
 
-            if (buf == null)
+            if (blurCompositor == null)
             {
-                //buf = new FrameBuffer(1024, 1024, PixelComponentType.RGBA8, context);
-                //buf.UnBind(context);
+                blurCompositor = new CompositionPass(1920, 1080, context);
+                blurCompositor.Steps.Add(new HorizontalGaussianBlurNode(5, 0.0025f));
+                blurCompositor.Steps.Add(new VerticalGaussianBlurNode(5, 0.0025f));
             }
 
             loaded = true;

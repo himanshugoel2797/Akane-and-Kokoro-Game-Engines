@@ -20,24 +20,26 @@ namespace Kokoro.ShaderLib
         {
             vertical = Vertical;
             kern = new float[taps];
-            double[,] kernel = new double[taps, taps];
 
-            double sigma = 1;
-            double mean = taps / 2;
-            double sum = 0.0; // For accumulating the kernel values
-            for (int x = 0; x < taps; ++x)
-                for (int y = 0; y < taps; ++y)
-                {
-                    kernel[x, y] = System.Math.Exp(-0.5 * (System.Math.Pow((x - mean) / sigma, 2.0) + System.Math.Pow((y - mean) / sigma, 2.0)))
-                                     / (2 * System.Math.PI * sigma * sigma);
+            float radius = 3f;
+            int width = (int)System.Math.Ceiling(radius);
+            float sigma = radius / 3f;
+            float norm = 1f / (float)(System.Math.Sqrt(2 * System.Math.PI * sigma * sigma));
+            float coeff = 2 * sigma * sigma;
+            float total = 0;
 
-                    // Accumulate the kernel values
-                    sum += kernel[x, y];
-                }
+            for (int index = 0; index < taps; index++)
+            {
+                float g = norm * (float)System.Math.Exp(-( System.Math.Pow((index - taps/2) * ((float)width / (float)taps), 2) / coeff));
+                kern[index] = g;
+                total += g;
+            }
 
-            // Normalize the kernel
-            for (int y = 0; y < taps; ++y)
-                kern[y] = (float)(kernel[0, y] / sum);
+            for (int x = 0; x < taps; x++)
+            {
+                kern[x] /= total;
+            }
+
         }
 
         public void Vertex()
@@ -59,16 +61,17 @@ namespace Kokoro.ShaderLib
             var Vars = Manager.ShaderStart("GaussianBlur" + kern.Length + "_S_Frag");
             Manager.SharedIn<Vec2>("UV");
             Manager.StreamOut<Vec4>("Color", 0);
+            Manager.Uniform<KFloat>("KernelRad");
 
-            Manager.Uniform<KFloat>("KernRadius");
             Manager.Create<Vec4>("tmpCol");
             Manager.Create<Vec2>("rad");
 
-            if (vertical) Vars.rad.Construct(0, Vars.KernRadius);
-            else Vars.rad.Construct(Vars.KernRadius, 0);
-            Vars.tmpCol = Texture.Read2D(Vars.ColorMap, Vars.UV);
+            if (vertical) Vars.rad.Construct(0, Vars.KernelRad);
+            else Vars.rad.Construct(Vars.KernelRad, 0);
 
-            for (int i = 0; i < kern.Length; i++)
+            Vars.Color = Texture.Read2D(Vars.ColorMap, Vars.UV) * kern[0];
+
+            for (int i = 1; i < kern.Length; i++)
             {
                 Vars.Color += Texture.Read2D(Vars.ColorMap, Vars.UV + (i * Vars.rad)) * kern[i];
                 Vars.Color += Texture.Read2D(Vars.ColorMap, Vars.UV - (i * Vars.rad)) * kern[i];

@@ -22,18 +22,16 @@ namespace Kokoro.Engine.HighLevel.Rendering.Compositor
             else Surface = surf;
         }
 
-        public GBuffer ApplyPass(GraphicsContext context, GBuffer src)
+        public GBuffer ApplyPass(GraphicsContext context, GBuffer input)
         {
-            Surface.Materials[0].ColorMap = src["RGBA0"];
-            Surface.Materials[0].Shader["PositionMap"] = src["Depth0"];
-            Surface.Materials[0].NormalMap = src["Normal0"];
-
             var Target = InternalBufferA;
             var Src = InternalBufferB;
             GBuffer tmpVar;
 
             Target.Bind(context);
-            Steps[0].Apply(context, Surface);
+            context.Clear(0, 0, 0, 0);
+            Steps[0].Apply(context, Surface, input, input);
+            context.ForceDraw();
 
             Target = InternalBufferB;
             Src = InternalBufferA;
@@ -41,16 +39,16 @@ namespace Kokoro.Engine.HighLevel.Rendering.Compositor
             for (int i = 1; i < Steps.Count; i++)
             {
                 Target.Bind(context);
-                Surface.Materials[0].ColorMap = Src["RGBA0"];
-                Surface.Materials[0].Shader["PositionMap"] = Src["Depth0"];
-                Surface.Materials[0].NormalMap = Src["Normal0"];
-                Steps[i].Apply(context, Surface);
+                context.Clear(0, 0, 0, 0);
+                Steps[i].Apply(context, Surface, Src, input);
+                context.ForceDraw();
 
                 tmpVar = Target;
                 Target = Src;
                 Src = tmpVar;
             }
 
+            Src.UnBind(context);
             return Src;
         }
 

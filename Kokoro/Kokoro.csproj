@@ -155,6 +155,7 @@
     <Compile Include="Engine\HighLevel\CharacterControllers\ThirdPersonController.cs" />
     <Compile Include="Engine\HighLevel\Entity.cs" />
     <Compile Include="Engine\HighLevel\Rendering\Compositor\CompositionPass.cs" />
+    <Compile Include="Engine\HighLevel\Rendering\Compositor\GaussianBlurNode.cs" />
     <Compile Include="Engine\HighLevel\Rendering\Compositor\ICompositorNode.cs" />
     <Compile Include="Engine\HighLevel\Rendering\GBuffer.cs" />
     <Compile Include="Engine\HighLevel\Rendering\Grass.cs" />

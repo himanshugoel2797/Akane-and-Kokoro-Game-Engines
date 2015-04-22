@@ -145,7 +145,8 @@ namespace Kokoro.Engine.Shaders
                 else if (t == typeof(Vector3)) SetShaderVector(name, (Vector3)value);
                 else if (t == typeof(Vector2)) SetShaderVector(name, (Vector2)value);
                 else if (t == typeof(float)) SetShaderFloat(name, (float)value);
-                else if (t == typeof(int)) SetShaderFloat(name, (int)(float)value);
+                else if (t == typeof(double)) SetShaderFloat(name, (float)(double)value);
+                else if (t == typeof(int)) SetShaderFloat(name, (float)(int)value);
                 else if (t == typeof(Texture)) SetTexture(name, (Texture)value);
                 else if (t == typeof(FrameBufferTexture)) SetTexture(name, (Texture)value);
                 else throw new Exception("Unknown type " + name);
