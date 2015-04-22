@@ -14,16 +14,13 @@ namespace Kokoro.OpenGL.PC
     {
         protected int Generate()
         {
-            return GL.GenFramebuffer();
+            int id = GL.GenFramebuffer();
+            return id;
         }
 
         protected void Bind(int id)
         {
-            Sinus.SinusManager.QueueCommand(() =>
-            {
-                GL.BindFramebuffer(FramebufferTarget.Framebuffer, id);
-                GL.Enable(EnableCap.Blend);
-            });
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, id);
         }
 
         protected void DrawBuffers(Kokoro.Engine.FrameBufferAttachments[] attachments)
@@ -55,7 +52,7 @@ namespace Kokoro.OpenGL.PC
         {
             Sinus.SinusManager.QueueCommand(() =>
             {
-                if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete) throw new Exception(GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer).ToString());
+                Kokoro.Debug.ErrorLogger.AddMessage(0, GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer).ToString(), Kokoro.Debug.DebugType.Marker, Kokoro.Debug.Severity.Notification);
             });
         }
 

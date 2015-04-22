@@ -98,8 +98,15 @@ namespace Kokoro.OpenGL.PC
 
         public static Vector2 GetNDMousePos(Vector2 mousePos)
         {
-            if (mousePos.X > xy.X + dim.X | mousePos.Y > xy.Y + dim.Y) return Vector2.One;
-            return new Vector2(System.Math.Min(System.Math.Max((mousePos.X - xy.X) / dim.X, 0), 1), System.Math.Min(System.Math.Max((mousePos.Y - xy.Y) / dim.Y, 0), 1));
+            Vector2 relativePos = mousePos;
+            if (relativePos.X < 0) relativePos.X = 0;
+            if (relativePos.Y < 0) relativePos.Y = 0;
+            if (relativePos.X > dim.X) relativePos.X = dim.X;
+            if (relativePos.Y > dim.Y) relativePos.Y = dim.Y;
+
+            relativePos.X /= dim.X;
+            relativePos.Y /= dim.Y;
+            return relativePos;
         }
         #endregion
     }

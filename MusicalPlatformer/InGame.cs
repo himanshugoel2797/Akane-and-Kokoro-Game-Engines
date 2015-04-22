@@ -13,13 +13,17 @@ using Kokoro.Engine.Shaders;
 using Kokoro.Engine.HighLevel.CharacterControllers;
 using Kokoro.Engine.HighLevel.Cameras;
 using Kokoro.Engine.HighLevel;
+using Kokoro.Engine.HighLevel.Rendering;
 
 namespace MusicalPlatformer
 {
     class InGame : IScene
     {
         Entity eBox;
-        Model BoxB, Player;
+        GBuffer gbuf;
+        FrameBuffer buf;
+
+        Model BoxB, Player, FSQ;
         Vector4[] Colors;
         ThirdPersonController2D PlayerController;
         Camera followCam;
@@ -28,6 +32,8 @@ namespace MusicalPlatformer
 
         public InGame(GraphicsContext context)
         {
+
+
             context.ResourceManager += LoadResources;
         }
 
@@ -42,19 +48,26 @@ namespace MusicalPlatformer
             context.Clear(0f, 0f, 0f, 1f);
             if (loaded)
             {
-                //Box.World = Matrix4.CreateTranslation(-0.5f, -0.25f, 0);
+                gbuf.Bind(context);
+                context.Clear(0, 0.5f, 0, 1f);
+
                 eBox.Renderable.Materials[0].Shader["inColor"] = Colors[0];
                 world.Render(interval, context);
-                //eBox.Render(interval, context);
                 context.ForceDraw();
 
-                //BoxB.World = Matrix4.CreateTranslation(0, -0.20f, 0f);
                 BoxB.Materials[0].Shader["inColor"] = Colors[1];
                 BoxB.Draw(context);
                 context.ForceDraw();
 
                 Player.Materials[0].Shader["inColor"] = new Vector4(1, 1, 1, 1);
                 Player.Draw(context);
+                context.ForceDraw();
+
+                gbuf.UnBind(context);
+
+                FSQ.Materials[0].ColorMap = gbuf["RGBA0"];
+                FSQ.Draw(context);
+
             }
             context.SwapBuffers();
         }
@@ -82,7 +95,7 @@ namespace MusicalPlatformer
 
         public void LoadResources(GraphicsContext context)
         {
-            if(world == null)
+            if (world == null)
             {
                 world = new BroadPhaseWorld(10, 10);
                 world.DrawDistance = 1;
@@ -93,7 +106,7 @@ namespace MusicalPlatformer
                 eBox = new Entity()
                 {
                     ID = 1,
-                    Renderable = new Box(0.5f, 0.05f,0.5f),
+                    Renderable = new Box(0.5f, 0.05f, 0.5f),
                     Position = new Vector3(-0.5f, -0.25f, 0),
                     Visible = true
                 };
@@ -128,6 +141,19 @@ namespace MusicalPlatformer
             {
                 followCam = new FollowPointCamera();
                 context.Camera = followCam;
+            }
+
+            if (gbuf == null)
+            {
+                gbuf = new GBuffer(1920, 1080, context);
+                FSQ = new FullScreenQuad();
+                FSQ.Materials[0].Shader = Kokoro.ShaderLib.FrameBufferShader.Create();
+            }
+
+            if (buf == null)
+            {
+                //buf = new FrameBuffer(1024, 1024, PixelComponentType.RGBA8, context);
+                //buf.UnBind(context);
             }
 
             loaded = true;

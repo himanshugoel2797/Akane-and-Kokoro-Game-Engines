@@ -39,7 +39,7 @@ namespace Kokoro.Engine
     public class Model : IDisposable
     {
 
-        public class BoundingVolume : ICollisionBody
+        public class BoundingVolume
         {
             public Vector3 Min;
             public Vector3 Max;

@@ -80,14 +80,15 @@ namespace Kokoro.Engine
 
             Size = new Vector2(width, height);
 
-            id = base.Generate();
-            base.Bind(id);
+            Sinus.SinusManager.QueueCommand(() =>
+            {
+                id = base.Generate();
+            });
 
             Add("Color", new FrameBufferTexture(width, height, PixelFormat.BGRA, pct, PixelType.Float), FrameBufferAttachments.ColorAttachment0, context);
             Add("DepthBuffer", new FrameBufferTexture(width, height, PixelFormat.Depth, PixelComponentType.D32, PixelType.Float), FrameBufferAttachments.DepthAttachment, context); //Attach the depth buffer to the framebuffer
 
             base.CheckError();
-            base.Bind(0);
 
             Kokoro.Debug.ObjectAllocTracker.NewCreated(this, id, "Framebuffer");
         }
@@ -104,9 +105,9 @@ namespace Kokoro.Engine
             Sinus.SinusManager.QueueCommand(() =>
             {
                 if (fbufTex.Size != this.Size) throw new Exception("The dimensions of the FrameBufferTexture must be the same as the dimensions of the FrameBuffer");
+                base.Bind(this.id);
             });
 
-            this.Bind(context);
             RenderTargets.Add(id);
 
             if (!fbufTextures.ContainsKey(id)) fbufTextures.Add(id, fbufTex);
@@ -119,8 +120,12 @@ namespace Kokoro.Engine
             }
 
             fbufTex.BindToFrameBuffer(attachment);
-            base.DrawBuffers(attachments.Values.ToArray());
+            Sinus.SinusManager.QueueCommand(() => { base.DrawBuffers(attachments.Values.ToArray()); });
             base.CheckError();
+            Sinus.SinusManager.QueueCommand(() =>
+            {
+                base.Bind(0);
+            });
         }
 
         /// <summary>
@@ -159,9 +164,9 @@ namespace Kokoro.Engine
         {
             if (id != -1)
             {
-                base.Bind(id);
                 Sinus.SinusManager.QueueCommand(() =>
                 {
+                    base.Bind(id);
                     base.DrawBuffers(attachments.Values.ToArray());
                     currentFBUF = this;
                 });
@@ -193,7 +198,7 @@ namespace Kokoro.Engine
         /// </summary>
         public void UnBind(GraphicsContext context)
         {
-            base.Bind(0);
+            Sinus.SinusManager.QueueCommand(() => { base.Bind(0); });
             context.Viewport = new Vector4(0, 0, context.WindowSize.X, context.WindowSize.Y);
         }
 

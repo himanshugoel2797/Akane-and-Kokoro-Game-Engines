@@ -237,8 +237,13 @@
     <Compile Include="Physics\CollisionSolver.cs" />
     <Compile Include="Physics\ICollisionBody.cs" />
     <Compile Include="Physics\PhysicsState.cs" />
+    <Compile Include="Physics\Prefabs\AABB.cs" />
+    <Compile Include="Physics\Prefabs\PhysSphere.cs" />
+    <Compile Include="Physics\Prefabs\Ray.cs" />
+    <Compile Include="Physics\Prefabs\PhysVertexMesh.cs" />
     <Compile Include="Physics\VEdge.cs" />
     <Compile Include="Physics\VerletIntegrator.cs" />
+    <Compile Include="Physics\VObject.cs" />
     <Compile Include="Physics\VPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripting\PyScript.cs" />
@@ -280,7 +285,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Engine\HighLevel\Rendering\Compositor\" />
+  </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
       <Visible>False</Visible>

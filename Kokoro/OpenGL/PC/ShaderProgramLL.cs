@@ -126,7 +126,16 @@ namespace Kokoro.OpenGL.PC
         {
             SinusManager.QueueCommand(() =>
             {
-                var variables = this.variables.Values.ToList();
+                List<shaderVars> variables = null;
+
+                try
+                {
+                    variables = this.variables.Values.ToList();
+                }catch(ArgumentException)
+                {
+                    //Stupid error thrown for no real reason, there aren't any arguments!!!
+                    variables = this.variables.Values.ToList();
+                }
 
                 for (int i = 0; i < variables.Count; i++)
                 {

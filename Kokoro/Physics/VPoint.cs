@@ -7,6 +7,9 @@ using Kokoro.Math;
 
 namespace Kokoro.Physics
 {
+    /// <summary>
+    /// Represents a single Verlet object point
+    /// </summary>
     public class VPoint
     {
         Vector3 pos;
@@ -24,5 +27,6 @@ namespace Kokoro.Physics
         }
         public Vector3 OldPosition { get; private set; }
         public Vector3 Acceleration { get; set; }
+        public bool Pin { get; set; }   //Allows fixing a point in place
     }
 }

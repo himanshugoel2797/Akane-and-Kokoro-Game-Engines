@@ -43,11 +43,11 @@ namespace Kokoro.Engine.HighLevel.Rendering
         public void Bind(GraphicsContext context)
         {
             buffer.Bind(context);
-            context.Blending = new BlendFunc()
+            /*context.Blending = new BlendFunc()
             {
                 Src = BlendingFactor.One,
                 Dst = BlendingFactor.Zero
-            };
+            };*/
 
             //buffer.SetBlendFunc(context.Blending, FrameBufferAttachments.ColorAttachment0);
         }
@@ -62,7 +62,7 @@ namespace Kokoro.Engine.HighLevel.Rendering
         public void UnBind(GraphicsContext context)
         {
             buffer.UnBind(context);
-            context.Viewport = new Vector4(0, 0, context.WindowSize.X, context.WindowSize.Y);
+            //context.Viewport = new Vector4(0, 0, context.WindowSize.X, context.WindowSize.Y);
         }
 
     }
