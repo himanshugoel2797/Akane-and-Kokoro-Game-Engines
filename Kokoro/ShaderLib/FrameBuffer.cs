@@ -32,6 +32,7 @@ namespace Kokoro.ShaderLib
 
             Vars.VertexPosition.Construct(Vars.VertexPos, 1);
             Vars.UV = Vars.UV0;
+            Manager.ShaderEnd();
         }
 
         public static Ubershader Create()

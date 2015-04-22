@@ -154,6 +154,8 @@
     <Compile Include="Engine\HighLevel\CharacterControllers\CharacterControllerBase.cs" />
     <Compile Include="Engine\HighLevel\CharacterControllers\ThirdPersonController.cs" />
     <Compile Include="Engine\HighLevel\Entity.cs" />
+    <Compile Include="Engine\HighLevel\Rendering\Compositor\CompositionPass.cs" />
+    <Compile Include="Engine\HighLevel\Rendering\Compositor\ICompositorNode.cs" />
     <Compile Include="Engine\HighLevel\Rendering\GBuffer.cs" />
     <Compile Include="Engine\HighLevel\Rendering\Grass.cs" />
     <Compile Include="Engine\HighLevel\Rendering\LightingEngine.cs" />
@@ -250,6 +252,7 @@
     <Compile Include="ShaderLib\ColorDefault.cs" />
     <Compile Include="ShaderLib\Default.cs" />
     <Compile Include="ShaderLib\FrameBuffer.cs" />
+    <Compile Include="ShaderLib\GaussianBlur.cs" />
     <Compile Include="ShaderLib\GBufferShader.cs" />
     <Compile Include="Sinus\SinusManager.cs" />
     <Compile Include="VFS\FSReader.cs" />
@@ -285,9 +288,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Engine\HighLevel\Rendering\Compositor\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
       <Visible>False</Visible>

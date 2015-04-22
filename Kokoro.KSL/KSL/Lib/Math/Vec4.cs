@@ -121,6 +121,42 @@ namespace Kokoro.KSL.Lib.Math
             return k;
         }
 
+        public static Vec4 operator *(Vec4 b, float a)
+        {
+            var k = new Vec4()
+            {
+                ObjName = "(" + a + "*" + b.ObjName + ")"
+            };
+
+            SyntaxTree.Variables[k.ObjName] = new SyntaxTree.Variable()
+            {
+                type = k.GetType(),
+                value = null,
+                paramType = SyntaxTree.ParameterType.Variable,
+                name = k.ObjName
+            };
+
+            return k;
+        }
+
+        public static Vec4 operator *(float a, Vec4 b)
+        {
+            var k = new Vec4()
+            {
+                ObjName = "(" + a + "*" + b.ObjName + ")"
+            };
+
+            SyntaxTree.Variables[k.ObjName] = new SyntaxTree.Variable()
+            {
+                type = k.GetType(),
+                value = null,
+                paramType = SyntaxTree.ParameterType.Variable,
+                name = k.ObjName
+            };
+
+            return k;
+        }
+
         public static Vec4 operator /(Vec4 a, Mat4 b)
         {
             Vec4 k = new Vec4()
@@ -128,13 +164,13 @@ namespace Kokoro.KSL.Lib.Math
                 ObjName = "(" + a.ObjName + "/" + b.ObjName + ")"
             };
 
-            SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
+            SyntaxTree.Variables[k.ObjName] = new SyntaxTree.Variable()
             {
                 type = typeof(Mat4),
                 value = null,
                 paramType = SyntaxTree.ParameterType.Variable,
                 name = k.ObjName
-            });
+            };
 
             return k;
         }
@@ -146,13 +182,13 @@ namespace Kokoro.KSL.Lib.Math
                 ObjName = "(" + a.ObjName + "*" + b.ObjName + ")"
             };
 
-            SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
+            SyntaxTree.Variables[k.ObjName] = new SyntaxTree.Variable()
             {
                 type = k.GetType(),
                 value = null,
                 paramType = SyntaxTree.ParameterType.Variable,
                 name = k.ObjName
-            });
+            };
 
             return k;
         }
@@ -164,13 +200,13 @@ namespace Kokoro.KSL.Lib.Math
                 ObjName = "(" + a.ObjName + "*" + b.ObjName + ")"
             };
 
-            SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
+            SyntaxTree.Variables[k.ObjName] = new SyntaxTree.Variable()
             {
                 type = k.GetType(),
                 value = null,
                 paramType = SyntaxTree.ParameterType.Variable,
                 name = k.ObjName
-            });
+            };
 
             return k;
         }
@@ -218,13 +254,13 @@ namespace Kokoro.KSL.Lib.Math
                 ObjName = "(" + a.ObjName + "+" + b.ObjName + ")"
             };
 
-            SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
+            SyntaxTree.Variables[k.ObjName] = new SyntaxTree.Variable()
             {
                 type = typeof(Vec4),
                 value = null,
                 paramType = SyntaxTree.ParameterType.Variable,
                 name = k.ObjName
-            });
+            };
 
             return k;
         }
@@ -236,13 +272,13 @@ namespace Kokoro.KSL.Lib.Math
                 ObjName = "(" + a.ObjName + "-" + b.ObjName + ")"
             };
 
-            SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
+            SyntaxTree.Variables[k.ObjName] = new SyntaxTree.Variable()
             {
                 type = typeof(Vec4),
                 value = null,
                 paramType = SyntaxTree.ParameterType.Variable,
                 name = k.ObjName
-            });
+            };
 
             return k;
         }

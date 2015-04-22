@@ -14,6 +14,7 @@ using Kokoro.Engine.HighLevel.CharacterControllers;
 using Kokoro.Engine.HighLevel.Cameras;
 using Kokoro.Engine.HighLevel;
 using Kokoro.Engine.HighLevel.Rendering;
+using Kokoro.Engine.HighLevel.Rendering.Compositor;
 
 namespace MusicalPlatformer
 {
@@ -66,6 +67,7 @@ namespace MusicalPlatformer
                 gbuf.UnBind(context);
 
                 FSQ.Materials[0].ColorMap = gbuf["RGBA0"];
+                FSQ.Materials[0].Shader["KernRadius"] = 0.005;
                 FSQ.Draw(context);
 
             }
@@ -147,7 +149,7 @@ namespace MusicalPlatformer
             {
                 gbuf = new GBuffer(1920, 1080, context);
                 FSQ = new FullScreenQuad();
-                FSQ.Materials[0].Shader = Kokoro.ShaderLib.FrameBufferShader.Create();
+                FSQ.Materials[0].Shader = Kokoro.ShaderLib.GaussianBlurShader.Create(5, true);
             }
 
             if (buf == null)
