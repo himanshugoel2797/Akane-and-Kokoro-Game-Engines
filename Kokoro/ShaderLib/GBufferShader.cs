@@ -22,13 +22,14 @@ namespace Kokoro.ShaderLib
             Manager.SharedIn<Vec3>("NormPos");
             Manager.SharedIn<Vec3>("Tangent");
             Manager.SharedIn<Vec3>("BiTangent");
+            Manager.SharedIn<KInt>("DrawId");
 
             Manager.StreamOut<Vec4>("RGBA0", 0);
             Manager.StreamOut<Vec4>("Depth0", 1);
             Manager.StreamOut<Vec4>("Normal0", 2);
 
-
-            Vars.RGBA0 = Texture.Read2D(Vars.ColorMap, Vars.UV);
+            Vars.RGBA0.Construct( (KFloat)Vars.DrawId, (KFloat)Vars.DrawId, (KFloat)Vars.DrawId, 1);
+            //Vars.RGBA0 = Texture.Read2D(Vars.ColorMap, Vars.UV);
             Vars.Normal0.Construct
                 (
                     KMath.Normalize(0.5f * Vars.NormPos + (Vec3)0.5f),
@@ -43,18 +44,22 @@ namespace Kokoro.ShaderLib
         {
             var Vars = Manager.ShaderStart("GBuffer_S_Vert");
             Manager.StreamIn<Vec3>("VertexPos", 0);
-            Manager.StreamIn<Vec2>("UV0", 2);
             Manager.StreamIn<Vec3>("Normal", 1);
-            Manager.StreamIn<Vec3>("Tan", 3);
+            Manager.StreamIn<Vec2>("UV0", 2);
+            Manager.StreamIn<KInt>("DrawID", 3);
+            Manager.StreamIn<Vec3>("Tan", 4);
 
             Manager.SharedOut<Vec2>("UV");
             Manager.SharedOut<Vec3>("WorldPos");
             Manager.SharedOut<Vec3>("NormPos");
             Manager.SharedOut<Vec3>("Tangent");
             Manager.SharedOut<Vec3>("BiTangent");
+            Manager.SharedOut<KInt>("DrawId");
 
             Manager.Create<Mat4>("MVP");
             Manager.Create<Vec4>("tmp");
+
+            Vars.DrawId = Vars.DrawID;
 
             Vars.MVP = Vars.Projection * Vars.View * Vars.World;
             Vars.VertexPosition.Construct(Vars.VertexPos, 1);

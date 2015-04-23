@@ -48,25 +48,25 @@ namespace MusicalPlatformer
         double i = 0;
         public void Render(double interval, GraphicsContext context)
         {
-            context.Clear(0f, 0f, 0f, 1f);
+            context.Clear(0f, 0.5f, 0f, 0f);
             if (loaded)
             {
                 gbuf.Bind(context);
-                context.Clear(0, 0f, 0, 0f);
+                context.Clear(0, 0.5f, 0, 0f);
 
                 //context.DrawMode = DrawMode.LineStrip;
 
                 eBox.Renderable.Materials[0].Shader["inColor"] = Colors[0];
                 world.Render(interval, context);
-                context.ForceDraw();
+                //context.ForceDraw();
 
                 BoxB.Materials[0].Shader["inColor"] = Colors[1];
                 BoxB.Draw(context);
                 context.ForceDraw();
 
-                Player.Materials[0].Shader["inColor"] = new Vector4(1, 1, 1, 1);
-                Player.Draw(context);
-                context.ForceDraw();
+                //Player.Materials[0].Shader["inColor"] = new Vector4(1, 1, 1, 1);
+                //Player.Draw(context);
+                //context.ForceDraw();
 
                 //context.DrawMode = DrawMode.Triangles;
                 gbuf.UnBind(context);
@@ -77,8 +77,8 @@ namespace MusicalPlatformer
 
                 FSQ.Materials[0].Shader["SourceB"] = outBuf["RGBA0"];
                 FSQ.Materials[0].Shader["SourceA"] = gbuf["RGBA0"];
-                FSQ.Materials[0].Shader["weightSrcA"] = 0.5f;
-                FSQ.Materials[0].Shader["weightSrcB"] = 1.5f;
+                FSQ.Materials[0].Shader["weightSrcA"] = 1f;
+                FSQ.Materials[0].Shader["weightSrcB"] = 0f;
                 FSQ.Draw(context);
 
             }
@@ -90,7 +90,7 @@ namespace MusicalPlatformer
             if (loaded)
             {
                 PlayerController.Update(interval, context);
-                Player.World = Matrix4.CreateTranslation(PlayerController.Position);
+                //Player.World = Matrix4.CreateTranslation(PlayerController.Position);
                 //context.Camera.Position = PlayerController.Position;
 
                 if (PlayerController.Position.X > -0.25f)
@@ -125,19 +125,19 @@ namespace MusicalPlatformer
                 eBox = new Entity()
                 {
                     ID = 1,
-                    Renderable = new Sphere(1, 10),
+                    Renderable = new Box(10, 1, 1),
                     Position = new Vector3(-0.5f, -0.25f, 0),
                     Visible = true
                 };
-                eBox.Renderable.Materials[0].Shader = Kokoro.ShaderLib.ColorDefaultShader.Create();
+                eBox.Renderable.Materials[0].Shader = Kokoro.ShaderLib.GBufferShader.Create();
                 world.Add(eBox);
             }
 
             if (BoxB == null)
             {
-                BoxB = new Sphere(1, 20);
+                BoxB = new Sphere(2, 20);
                 BoxB.World = Matrix4.CreateTranslation(0, -0.20f, 0);
-                BoxB.Materials[0].Shader = Kokoro.ShaderLib.ColorDefaultShader.Create();
+                BoxB.Materials[0].Shader = Kokoro.ShaderLib.GBufferShader.Create();
             }
 
             if (Colors == null)

@@ -104,7 +104,7 @@ namespace Kokoro.OpenGL.PC
 
         #region Multidraw
         static object locker = new object();
-        static GPUBufferLL MDIBuffer = new GPUBufferLL(Engine.UpdateMode.Dynamic, Engine.BufferUse.Indirect, 1024); //Allocate 1kb to the indirect buffer
+        static GPUBufferLL MDIBuffer = new GPUBufferLL(Engine.UpdateMode.Dynamic, Engine.BufferUse.Indirect, 10240); //Allocate 1kb to the indirect buffer
         static List<MDIEntry> MDIEntries = new List<MDIEntry>();
         static int EntryCount = 0;
         static int EntryOffset = 0;
@@ -116,7 +116,12 @@ namespace Kokoro.OpenGL.PC
 
             SinusManager.QueueCommand(() =>
             {
-                GL.MultiDrawElementsIndirect(EnumConverters.EDrawMode(mode), All.UnsignedInt, IntPtr.Zero, EntryCount, 0);
+                GL.EnableVertexAttribArray(Engine.Model.staticBuffer.BufferCount - 1);
+                MDIBuffer.Bind(BufferTarget.ArrayBuffer);
+                GL.VertexAttribPointer(Engine.Model.staticBuffer.BufferCount - 1, 1, VertexAttribPointerType.UnsignedInt, false, 5 * sizeof(uint), 4 * sizeof(uint));
+                GL.VertexAttribDivisor(Engine.Model.staticBuffer.BufferCount - 1, 1);
+
+                GL.MultiDrawElementsIndirect(EnumConverters.EDrawMode(mode), All.UnsignedInt, IntPtr.Zero, 10240 / (5 * sizeof(uint)), 0);
                 MDIBuffer.PostFence();      //The MDIBuffer can not be modified until this is done
                 Kokoro.Engine.Model.staticBuffer.PostFence();   //The draw buffers may not be modified until they have been drawn
                 Kokoro.Engine.Model.dynamicBuffer.PostFence();

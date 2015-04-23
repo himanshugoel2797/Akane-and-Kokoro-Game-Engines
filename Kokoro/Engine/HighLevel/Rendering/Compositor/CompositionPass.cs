@@ -29,9 +29,9 @@ namespace Kokoro.Engine.HighLevel.Rendering.Compositor
             GBuffer tmpVar;
 
             Src.Bind(context);
-            context.Clear(0, 0, 0, 1);
+            context.Clear(0, 0, 0, 0);
             Target.Bind(context);
-            context.Clear(0, 0, 0, 1);
+            context.Clear(0, 0, 0, 0);
             Steps[0].Apply(context, Surface, input, input);
             context.ForceDraw();
 

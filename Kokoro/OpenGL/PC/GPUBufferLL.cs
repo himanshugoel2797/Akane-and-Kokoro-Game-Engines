@@ -58,6 +58,11 @@ namespace Kokoro.OpenGL.PC
             GL.BindBuffer(target, staticID);
         }
 
+        public void Bind(BufferTarget target)
+        {
+            GL.BindBuffer(target, staticID);
+        }
+
         public void UnBind()
         {
             GL.BindBuffer(target, 0);
@@ -112,7 +117,7 @@ namespace Kokoro.OpenGL.PC
         /// <param name="length">The amount of data to copy (only used for dynamic objects)</param>
         public void BufferData(float[] data, int offset = 0, int length = -1)
         {
-            if(length == -1)length = data.Length * sizeof(float);
+            if (length == -1) length = data.Length * sizeof(float);
             byte[] tmp = new byte[length];
             Buffer.BlockCopy(data, 0, tmp, 0, tmp.Length);
             BufferData(tmp, offset, length);

@@ -97,8 +97,17 @@ namespace Kokoro.KSL.Lib.Math
         #region Converters
         public static implicit operator KInt(int i)
         {
-            return new KInt() {
+            return new KInt()
+            {
                 ObjName = i.ToString()
+            };
+        }
+
+        public static explicit operator KInt(KFloat k)
+        {
+            return new KInt()
+            {
+                ObjName = k.ObjName
             };
         }
         #endregion

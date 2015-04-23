@@ -32,6 +32,14 @@ namespace Kokoro.OpenGL.PC
             }
         }
 
+        public int BufferCount
+        {
+            get
+            {
+                return buffers.Length;
+            }
+        }
+
         public void PostFence()
         {
             for (int i = 0; i < buffers.Length; i++)

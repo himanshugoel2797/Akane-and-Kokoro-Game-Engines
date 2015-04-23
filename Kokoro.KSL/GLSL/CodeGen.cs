@@ -116,10 +116,11 @@ namespace Kokoro.KSL.GLSL
 
             strBuilder.AppendLine();
 
-            //Generate code for the shader variables
+            //Generate code for the shared variables
             foreach (SyntaxTree.Variable variable in SharedVars)
             {
-                strBuilder.AppendFormat("{0} {1} {2};\n",
+                strBuilder.AppendFormat("{0} {1} {2} {3};\n",
+                    ((ConvertType(variable.type) == "int") ? "flat" : "smooth"),
                     ((variable.paramType == SyntaxTree.ParameterType.SharedOut) ? "out" : "in"),
                     ConvertType(variable.type),
                     variable.name);
