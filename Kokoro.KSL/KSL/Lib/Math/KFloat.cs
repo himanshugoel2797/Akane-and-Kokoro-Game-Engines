@@ -28,13 +28,13 @@ namespace Kokoro.KSL.Lib.Math
                 ObjName = "(" + a.ObjName + "*" + b.ObjName + ")"
             };
 
-            SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
+            SyntaxTree.Variables[k.ObjName] = new SyntaxTree.Variable()
             {
                 type = typeof(KFloat),
                 value = null,
                 paramType = SyntaxTree.ParameterType.Variable,
                 name = k.ObjName
-            });
+            };
 
             return k;
         }

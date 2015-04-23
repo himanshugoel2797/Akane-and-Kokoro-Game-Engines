@@ -29,13 +29,13 @@ namespace Kokoro.KSL.Lib.Texture
                 ObjName = CodeGenerator.TranslateSDKFunctionCalls( SyntaxTree.FunctionCalls.Tex2D, sampler.ObjName, uv.ObjName)
             };
 
-            SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
+            SyntaxTree.Variables[k.ObjName] = new SyntaxTree.Variable()
             {
                 type = k.GetType(),
                 value = null,
                 paramType = SyntaxTree.ParameterType.Variable,
                 name = k.ObjName
-            });
+            };
 
             return k;
         }

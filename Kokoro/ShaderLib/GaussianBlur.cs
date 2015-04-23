@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Kokoro.ShaderLib
 {
-    public class GaussianBlurShader : IKUbershader
+    public class GaussianBlurShader : IKShaderProgram
     {
         float[] kern;
         bool vertical;
@@ -41,13 +41,13 @@ namespace Kokoro.ShaderLib
             }
         }
 
-        public void Vertex()
+        public override void Vertex()
         {
             var Vars = Manager.ShaderStart("GaussianBlur" + kern.Length + "_S_Vert");
             Manager.StreamIn<Vec3>("VertexPos", 0);
             Manager.StreamIn<Vec2>("UV0", 2);
 
-            Manager.SharedOut<Vec2>("UV");
+            Manager.SharedOut<Vec2>("UV", KSL.Lib.General.Interpolators.Smooth);
 
             Vars.VertexPosition.Construct(Vars.VertexPos, 1);
             Vars.UV = Vars.UV0;
@@ -55,12 +55,12 @@ namespace Kokoro.ShaderLib
             Manager.ShaderEnd();
         }
 
-        public void Fragment(int num)
+        public override void Fragment()
         {
             var Vars = Manager.ShaderStart("GaussianBlur" + kern.Length + "_S_Frag");
-            Manager.SharedIn<Vec2>("UV");
+            Manager.SharedIn<Vec2>("UV", KSL.Lib.General.Interpolators.Smooth);
             Manager.StreamOut<Vec4>("Color", 0);
-            Manager.Uniform<KFloat>("KernelRad");
+            RequestUniform<KFloat>("KernelRad");
 
             Manager.Create<Vec4>("tmpCol");
             Manager.Create<Vec2>("rad");
@@ -79,14 +79,6 @@ namespace Kokoro.ShaderLib
         public static Ubershader Create(int tapCount, bool vertical)
         {
             return new Ubershader(new GaussianBlurShader(tapCount, vertical));
-        }
-
-        public static object Create(ShaderTypes t, int tapCount, bool vertical)
-        {
-            if (t == ShaderTypes.Fragment) return (Action<int>)new GaussianBlurShader(tapCount, vertical).Fragment;
-            else if (t == ShaderTypes.Vertex) return (Action)new GaussianBlurShader(tapCount, vertical).Vertex;
-
-            return null;
         }
 
     }

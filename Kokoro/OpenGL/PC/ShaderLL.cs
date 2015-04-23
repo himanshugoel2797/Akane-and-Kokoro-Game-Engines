@@ -53,7 +53,12 @@ namespace Kokoro.OpenGL.PC
             {
                 int result = 0;
                 GL.GetShader(id, ShaderParameter.CompileStatus, out result);
-                if (result != 1) throw new Exception(GL.GetShaderInfoLog(id));
+                if (result != 1)
+                {
+                    Kokoro.Debug.ErrorLogger.AddMessage(id, GL.GetShaderInfoLog(id), Kokoro.Debug.DebugType.Error, Kokoro.Debug.Severity.High);
+                    Kokoro.Debug.ErrorLogger.AddMessage(id, fshader, Kokoro.Debug.DebugType.Other, Kokoro.Debug.Severity.High);
+                    Kokoro.Debug.DebuggerManager.logger.Pause = true;
+                }
             });
         }
 

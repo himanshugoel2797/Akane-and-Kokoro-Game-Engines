@@ -22,6 +22,16 @@ namespace Kokoro.Engine.Shaders
     /// </summary>
     public class ShaderProgram : ShaderProgramLL, IDisposable
     {
+        /// <summary>
+        /// Implicity convert an ubershader to a shader program
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static implicit operator ShaderProgram(Ubershader s)
+        {
+            return new ShaderProgram(s);
+        }
+
         static ShaderProgram()
         {
             KSL.KSLCompiler.RegisterPreDefinedUniform<Sampler2D>("ColorMap");
@@ -83,27 +93,9 @@ namespace Kokoro.Engine.Shaders
         }
         private static Shader[] PreProcess(Ubershader shader)
         {
-            //Combine all the pieces together from the ubershader
-            int subCount = shader.Subroutines.Count;
-            string[] fragmentSubroutines = new string[subCount];
-
-            KSL.KSLCompiler.Initialize();
-            string vshader = KSL.KSLCompiler.Compile(shader.UberMain, KSLCompiler.KShaderType.Vertex);
-            vshader = KSL.KSLCompiler.GenerateHeader(KSLCompiler.KShaderType.Vertex) + vshader;
-
-            KSL.KSLCompiler.Initialize();
-            string fshader = KSL.KSLCompiler.Compile(shader.UberMain, KSLCompiler.KShaderType.Fragment, subCount);
-            string fragHeader = KSL.KSLCompiler.GenerateHeader(KSLCompiler.KShaderType.Fragment, subCount);
-
-            for (int i = 0; i < subCount; i++)
-            {
-                fragmentSubroutines[i] = KSL.KSLCompiler.Compile(shader.Subroutines[i], KSLCompiler.KShaderType.Fragment);
-                fragHeader += fragmentSubroutines[i];
-            }
-
             return new Shader[]{
-                new VertexShader(vshader),
-                new FragmentShader(fragHeader + fshader)
+                new VertexShader(shader.Compile(KSLCompiler.KShaderType.Vertex)),
+                new FragmentShader(shader.Compile(KSLCompiler.KShaderType.Fragment))
             };
         }
 

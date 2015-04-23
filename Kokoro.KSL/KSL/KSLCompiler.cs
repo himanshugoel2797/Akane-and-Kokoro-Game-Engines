@@ -35,7 +35,7 @@ namespace Kokoro.KSL
         /// <param name="name">The name of the uniform</param>
         public static void RegisterPreDefinedUniform<T>(string name) where T : Obj, new()
         {
-            preDefUniforms.Add(name, new T());
+            preDefUniforms[name] = new T();
         }
 
         /// <summary>
@@ -45,18 +45,6 @@ namespace Kokoro.KSL
         public static void UnRegisterPreDefinedUniform(string name)
         {
             preDefUniforms.Remove(name);
-        }
-
-        //Generate the shader header with params in UBO/SSBO format with given number of subroutines, this functions should be called in the end to generate the header for hte ubershader
-        /// <summary>
-        /// Generate the header for the shader (inputs outputs)
-        /// </summary>
-        /// <param name="num">The number of materials the shader needs to support</param>
-        /// <param name="s">The shader type for which to generate the header</param>
-        /// <returns></returns>
-        public static string GenerateHeader(KShaderType s, int num = 0)
-        {
-            return CodeGenerator.GenerateHeader(s, num);      //TODO make it generate the code for shader subroutines
         }
 
         /// <summary>
@@ -70,36 +58,15 @@ namespace Kokoro.KSL
             //Execute the object and collect the output code from the code generator
             switch (s)
             {
+                case KShaderType.Vertex:
+                    shader.Vertex();
+                    break;
                 case KShaderType.Fragment:
                     shader.Fragment();
                     break;
             }
 
-            string vshader = CodeGenerator.CompileFromSyntaxTree(s);
-            return vshader;
-        }
-
-        /// <summary>
-        /// Compile the main component of an ubershader
-        /// </summary>
-        /// <param name="shader">The shader to compile</param>
-        /// <param name="s">The shader type to compile</param>
-        /// <param name="num">The number of possible subroutines to make available</param>
-        /// <returns>The string representation of the shader in the language specified during build</returns>
-        public static string Compile(IKUbershader shader, KShaderType s, int num = 0)
-        {
-            switch (s)
-            {
-                case KShaderType.Fragment:
-                    shader.Fragment(num);
-                    break;
-                case KShaderType.Vertex:
-                    shader.Vertex();
-                    break;
-            }
-
-            SyntaxTree.ShaderName = "main"; //Ubershader methods are always called 'main'
-            string vshader = CodeGenerator.CompileFromSyntaxTree(s);
+            string vshader = CodeGenerator.GenerateShader(s);
             return vshader;
         }
 

@@ -3,6 +3,7 @@ using Kokoro.KSL;
 using Kokoro.KSL.Lib;
 using Kokoro.KSL.Lib.Math;
 using Kokoro.KSL.Lib.Texture;
+using Kokoro.KSL.Lib.General;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,14 +12,14 @@ using System.Threading.Tasks;
 
 namespace Kokoro.ShaderLib
 {
-    public class ColorDefaultShader : IKUbershader
+    public class ColorDefaultShader : IKShaderProgram
     {
-        public void Fragment(int num)
+        public override void Fragment()
         {
             var Vars = Manager.ShaderStart("Color_S_Frag");
-            Manager.SharedIn<Vec2>("UV");
-            Manager.SharedIn<Vec3>("WorldPos");
-            Manager.SharedIn<Vec3>("NormPos");
+            Manager.SharedIn<Vec2>("UV", Interpolators.Smooth);
+            Manager.SharedIn<Vec3>("WorldPos", Interpolators.Smooth);
+            Manager.SharedIn<Vec3>("NormPos", Interpolators.Smooth);
             //Manager.SharedIn<Vec3>("Tangent");
             //Manager.SharedIn<Vec3>("BiTangent");
 
@@ -26,7 +27,7 @@ namespace Kokoro.ShaderLib
             Manager.StreamOut<Vec4>("Depth0", 1);
             Manager.StreamOut<Vec4>("Normal0", 2);
 
-            Manager.Uniform<Vec4>("inColor");
+            RequestUniform<Vec4>("inColor");
 
             Vars.RGBA0 = Texture.Read2D(Vars.ColorMap, Vars.UV);
             Vars.Normal0.Construct(KMath.Normalize(0.5f * Vars.NormPos + (Vec3)0.5f), 1);
@@ -39,7 +40,7 @@ namespace Kokoro.ShaderLib
             Manager.ShaderEnd();
         }
 
-        public void Vertex()
+        public override void Vertex()
         {
             var Vars = Manager.ShaderStart("Color_S_Vert");
             Manager.StreamIn<Vec3>("VertexPos", 0);
@@ -47,9 +48,9 @@ namespace Kokoro.ShaderLib
             Manager.StreamIn<Vec3>("Normal", 1);
             //Manager.StreamIn<Vec3>("Tan", 3);
 
-            Manager.SharedOut<Vec2>("UV");
-            Manager.SharedOut<Vec3>("WorldPos");
-            Manager.SharedOut<Vec3>("NormPos");
+            Manager.SharedOut<Vec2>("UV", Interpolators.Smooth);
+            Manager.SharedOut<Vec3>("WorldPos", Interpolators.Smooth);
+            Manager.SharedOut<Vec3>("NormPos", Interpolators.Smooth);
             //Manager.SharedOut<Vec3>("Tangent");
             //Manager.SharedOut<Vec3>("BiTangent");
 
@@ -77,13 +78,6 @@ namespace Kokoro.ShaderLib
         public static Ubershader Create()
         {
             return new Ubershader(new ColorDefaultShader());
-        }
-
-        public static object Create(ShaderTypes s)
-        {
-            if (s == ShaderTypes.Vertex) return (Action)new ColorDefaultShader().Vertex;
-            else if (s == ShaderTypes.Fragment) return (Action<int>)new ColorDefaultShader().Fragment;
-            return null;
         }
     }
 }

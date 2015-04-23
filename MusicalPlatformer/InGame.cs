@@ -78,7 +78,7 @@ namespace MusicalPlatformer
                 FSQ.Materials[0].Shader["SourceB"] = outBuf["RGBA0"];
                 FSQ.Materials[0].Shader["SourceA"] = gbuf["RGBA0"];
                 FSQ.Materials[0].Shader["weightSrcA"] = 1f;
-                FSQ.Materials[0].Shader["weightSrcB"] = 0f;
+                FSQ.Materials[0].Shader["weightSrcB"] = 1f;
                 FSQ.Draw(context);
 
             }

@@ -8,27 +8,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kokoro.KSL.Lib.General;
 
 namespace Kokoro.ShaderLib
 {
-    public class GBufferShader : IKUbershader
+    public class GBufferShader : IKShaderProgram
     {
-        public void Fragment(int num)
+        public override void Fragment()
         {
             var Vars = Manager.ShaderStart("GBuffer_S_Frag");
 
-            Manager.SharedIn<Vec2>("UV");
-            Manager.SharedIn<Vec3>("WorldPos");
-            Manager.SharedIn<Vec3>("NormPos");
-            Manager.SharedIn<Vec3>("Tangent");
-            Manager.SharedIn<Vec3>("BiTangent");
-            Manager.SharedIn<KInt>("DrawId");
+            Manager.SharedIn<Vec2>("UV", KSL.Lib.General.Interpolators.Smooth);
+            Manager.SharedIn<Vec3>("WorldPos", Interpolators.Smooth);
+            Manager.SharedIn<Vec3>("NormPos", Interpolators.Smooth);
+            Manager.SharedIn<Vec3>("Tangent", Interpolators.Smooth);
+            Manager.SharedIn<Vec3>("BiTangent", Interpolators.Smooth);
+            Manager.SharedIn<KInt>("DrawId", Interpolators.Flat);   //TODO implement automatic generation for DrawID
 
             Manager.StreamOut<Vec4>("RGBA0", 0);
             Manager.StreamOut<Vec4>("Depth0", 1);
             Manager.StreamOut<Vec4>("Normal0", 2);
 
-            Vars.RGBA0.Construct( (KFloat)Vars.DrawId, (KFloat)Vars.DrawId, (KFloat)Vars.DrawId, 1);
+            Vars.RGBA0.Construct((KFloat)Vars.DrawId, (KFloat)Vars.DrawId, (KFloat)Vars.DrawId, 1);
             //Vars.RGBA0 = Texture.Read2D(Vars.ColorMap, Vars.UV);
             Vars.Normal0.Construct
                 (
@@ -40,7 +41,7 @@ namespace Kokoro.ShaderLib
             Vars.Depth0["a"] = 1;
         }
 
-        public void Vertex()
+        public override void Vertex()
         {
             var Vars = Manager.ShaderStart("GBuffer_S_Vert");
             Manager.StreamIn<Vec3>("VertexPos", 0);
@@ -49,12 +50,12 @@ namespace Kokoro.ShaderLib
             Manager.StreamIn<KInt>("DrawID", 3);
             Manager.StreamIn<Vec3>("Tan", 4);
 
-            Manager.SharedOut<Vec2>("UV");
-            Manager.SharedOut<Vec3>("WorldPos");
-            Manager.SharedOut<Vec3>("NormPos");
-            Manager.SharedOut<Vec3>("Tangent");
-            Manager.SharedOut<Vec3>("BiTangent");
-            Manager.SharedOut<KInt>("DrawId");
+            Manager.SharedOut<Vec2>("UV", Interpolators.Smooth);
+            Manager.SharedOut<Vec3>("WorldPos", Interpolators.Smooth);
+            Manager.SharedOut<Vec3>("NormPos", Interpolators.Smooth);
+            Manager.SharedOut<Vec3>("Tangent", Interpolators.Smooth);
+            Manager.SharedOut<Vec3>("BiTangent", Interpolators.Smooth);
+            Manager.SharedOut<KInt>("DrawId", Interpolators.Flat);
 
             Manager.Create<Mat4>("MVP");
             Manager.Create<Vec4>("tmp");
@@ -82,14 +83,6 @@ namespace Kokoro.ShaderLib
         public static Ubershader Create()
         {
             return new Ubershader(new GBufferShader());
-        }
-
-        public static object Create(ShaderTypes s)
-        {
-            if (s == ShaderTypes.Vertex) return (Action)new GBufferShader().Vertex;
-            else if (s == ShaderTypes.Fragment) return (Action<int>)new GBufferShader().Fragment;
-
-            return null;
         }
     }
 }

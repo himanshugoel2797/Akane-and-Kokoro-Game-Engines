@@ -14,6 +14,7 @@ namespace Kokoro.KSL
             public object value;
             public ParameterType paramType;
             public string name;
+            public string extraInfo;
         }
 
         internal enum ParameterType
@@ -23,7 +24,7 @@ namespace Kokoro.KSL
 
         internal enum InstructionType
         {
-            Assign, Math, Create
+            Assign, Math, Create, If, Else, EndIf
         }
 
         internal enum FunctionCalls

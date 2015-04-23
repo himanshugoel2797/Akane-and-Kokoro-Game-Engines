@@ -29,7 +29,11 @@ namespace Kokoro.KSL.GLSL
             PreDefinedVariablesMap["FragCoord"] = "gl_FragCoord";
         }
 
-        internal static string GenerateHeader(KSLCompiler.KShaderType ktype, int num)
+        static List<SyntaxTree.Variable> StreamVars = new List<SyntaxTree.Variable>();
+        static List<SyntaxTree.Variable> UniformVars = new List<SyntaxTree.Variable>();
+        static List<SyntaxTree.Variable> SharedVars = new List<SyntaxTree.Variable>();
+        static List<SyntaxTree.Variable> TextureSamplers = new List<SyntaxTree.Variable>();
+        internal static string GenerateShader(KSLCompiler.KShaderType ktype)
         {
             //Specify version as per Logic.AvailableSM
             switch (KSL.Lib.General.Logic.AvailableSM)
@@ -50,32 +54,11 @@ namespace Kokoro.KSL.GLSL
             }
             strBuilder = new StringBuilder(src);
 
-            //Ubershader code is only needed in the fragment shader
-            if (ktype == KSLCompiler.KShaderType.Fragment && num > 1)
-            {
-                strBuilder.AppendLine();
-                strBuilder.Append("subroutine void mainType();\n");
-                strBuilder.AppendFormat("subroutine uniform mainType shaderRoutines[{0}];\n", num);     //TODO In order to actually be able to proceed with this, we need KSL to support Arrays
-            }
-
             //Get variable declarations from the syntax tree and organize them
-            List<SyntaxTree.Variable> StreamVars = new List<SyntaxTree.Variable>();
-            List<SyntaxTree.Variable> UniformVars = new List<SyntaxTree.Variable>();
-            List<SyntaxTree.Variable> SharedVars = new List<SyntaxTree.Variable>();
 
             //Insert the ubershader index selection id, to select a shader, perform an in-fragment shader texture fetch
             //We should have multiple switches to control which kind of ubershader is generated, there should also only be one vertex shader
 
-            if (num > 1)
-            {
-                SharedVars.Add(new SyntaxTree.Variable()
-                {
-                    name = "materialID",
-                    paramType = (ktype == KSLCompiler.KShaderType.Fragment) ? SyntaxTree.ParameterType.SharedIn : SyntaxTree.ParameterType.SharedOut,
-                    type = typeof(KInt),
-                    value = null
-                });
-            }
 
 
             foreach (KeyValuePair<string, SyntaxTree.Variable> pair in SyntaxTree.Parameters)
@@ -86,7 +69,8 @@ namespace Kokoro.KSL.GLSL
                 }
                 else if (pair.Value.paramType == SyntaxTree.ParameterType.Uniform)
                 {
-                    UniformVars.Add(pair.Value);
+                    if (pair.Value.type != typeof(Sampler1D) && pair.Value.type != typeof(Sampler2D) && pair.Value.type != typeof(Sampler3D)) UniformVars.Add(pair.Value);
+                    else TextureSamplers.Add(pair.Value);
                 }
                 else if (pair.Value.paramType == SyntaxTree.ParameterType.SharedIn || pair.Value.paramType == SyntaxTree.ParameterType.SharedOut)
                 {
@@ -105,13 +89,22 @@ namespace Kokoro.KSL.GLSL
             }
 
             strBuilder.AppendLine();
-
+            //TODO Generate all uniforms as a uniform buffer array for AZDO
             //Generate code for the uniform variables
-            foreach (SyntaxTree.Variable variable in UniformVars)
+            strBuilder.Append("layout (std140) uniform Inputs {\n");
+            for (int i = 0; i < UniformVars.Count; i++)
             {
-                strBuilder.AppendFormat("uniform {0} {1};\n",
-                    ConvertType(variable.type),
-                    variable.name);
+                strBuilder.AppendFormat("{0} {1};\n",
+                    ConvertType(UniformVars[i].type),
+                    UniformVars[i].name);
+            }
+            strBuilder.Append("} inputData[512];\n"); //NOTE: 512 is the maximum number of draw calls that can be submitted in one multidraw call
+
+            strBuilder.AppendLine();
+
+            foreach (SyntaxTree.Variable variable in TextureSamplers)
+            {
+                strBuilder.AppendFormat("uniform {0} {1};\n", ConvertType(variable.type), variable.name);
             }
 
             strBuilder.AppendLine();
@@ -120,25 +113,13 @@ namespace Kokoro.KSL.GLSL
             foreach (SyntaxTree.Variable variable in SharedVars)
             {
                 strBuilder.AppendFormat("{0} {1} {2} {3};\n",
-                    ((ConvertType(variable.type) == "int") ? "flat" : "smooth"),
+                    variable.extraInfo.ToLower(),
                     ((variable.paramType == SyntaxTree.ParameterType.SharedOut) ? "out" : "in"),
                     ConvertType(variable.type),
                     variable.name);
             }
-
             strBuilder.AppendLine();
-
-            return strBuilder.ToString();
-        }
-
-        //Generate code from the syntax tree created from its execution
-        internal static string CompileFromSyntaxTree(KSL.KSLCompiler.KShaderType shaderType)
-        {
-            strBuilder = new StringBuilder();
-            //Generate the main method signature
-            strBuilder.AppendLine();
-            if (SyntaxTree.ShaderName != "main") strBuilder.Append("subroutine (mainType) ");       //If is a subroutine, fix the definition
-            strBuilder.Append("void " + SyntaxTree.ShaderName + "(){\n");
+            strBuilder.Append("void main(){\n");
 
             //Build the code body using the fundamental operations available to the language
             while (SyntaxTree.Instructions.Count >= 1)
@@ -169,6 +150,16 @@ namespace Kokoro.KSL.GLSL
                         if (IsArrayType(VAR.value, VAR.type, out aLen)) strBuilder.AppendFormat("{0} {1}[{2}];\n", ConvertType(VAR.type), VAR.name, aLen);
                         else strBuilder.AppendFormat("{0} {1};\n", ConvertType(VAR.type), VAR.name);
                         break;
+
+                    case SyntaxTree.InstructionType.If:
+                        strBuilder.Append("if " + instruction.Parameters[0] + " {\n");
+                        break;
+                    case SyntaxTree.InstructionType.EndIf:
+                        strBuilder.Append("\n}\n");
+                        break;
+                    case SyntaxTree.InstructionType.Else:
+                        strBuilder.Append("else { \n");
+                        break;
                 }
             }
 
@@ -184,6 +175,40 @@ namespace Kokoro.KSL.GLSL
 
 
         static string currentDeclaration = "";
+
+        internal static string TranslateCondition(Obj l, Comparisons c, Obj r)
+        {
+            string toRet = "((" + SubstitutePredefinedVars(l.ObjName) + ")";
+            switch (c)
+            {
+                case Comparisons.And:
+                    toRet += " && ";
+                    break;
+                case Comparisons.Or:
+                    toRet += " || ";
+                    break;
+                case Comparisons.Equal:
+                    toRet += " == ";
+                    break;
+                case Comparisons.GreaterThan:
+                    toRet += " > ";
+                    break;
+                case Comparisons.LessThan:
+                    toRet += " < ";
+                    break;
+                case Comparisons.GreaterThanEqual:
+                    toRet += " >= ";
+                    break;
+                case Comparisons.LessThanEqual:
+                    toRet += " <= ";
+                    break;
+                case Comparisons.Xor:
+                    toRet += " ^^ ";
+                    break;
+            }
+            toRet += "(" + SubstitutePredefinedVars(r.ObjName) + "))";
+            return toRet;
+        }
 
         //Translate KSL function calls to GLSL equivalents
         internal static string TranslateSDKFunctionCalls(SyntaxTree.FunctionCalls function, params string[] parameters)
@@ -263,6 +288,11 @@ namespace Kokoro.KSL.GLSL
             foreach (KeyValuePair<string, string> substitutions in PreDefinedVariablesMap)
             {
                 varName = varName.Replace(substitutions.Key, substitutions.Value);
+            }
+
+            for (int i = 0; i < UniformVars.Count; i++)
+            {
+                if (UniformVars[i].name == varName) varName = "inputData[DrawID].";
             }
 
             return varName;

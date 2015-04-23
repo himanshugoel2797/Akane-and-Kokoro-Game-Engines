@@ -195,9 +195,9 @@
     <Compile Include="Engine\Shaders\Shader.cs" />
     <Compile Include="Engine\Shaders\ShaderProgram.cs" />
     <Compile Include="Engine\Shaders\TessellationShader.cs" />
-    <Compile Include="Engine\Shaders\Ubershader.cs" />
     <Compile Include="Engine\Shaders\VertexShader.cs" />
     <Compile Include="Engine\Texture.cs" />
+    <Compile Include="Engine\UniformBuffer.cs" />
     <Compile Include="Math\BezierCurve.cs" />
     <Compile Include="Math\BezierCurveCubic.cs" />
     <Compile Include="Math\BezierCurveQuadric.cs" />

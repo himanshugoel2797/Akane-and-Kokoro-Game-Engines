@@ -7,6 +7,13 @@ using System.Dynamic;
 using System.ComponentModel;
 using Kokoro.KSL.Lib.General;
 
+#if GLSL
+using CodeGenerator = Kokoro.KSL.GLSL.GLSLCodeGenerator;
+#if PC
+using Kokoro.KSL.GLSL.PC;
+#endif
+#endif
+
 namespace Kokoro.KSL.Lib
 {
     /// <summary>
@@ -20,6 +27,18 @@ namespace Kokoro.KSL.Lib
         //We now have dynamic models, we need to setup draw calls for them as well
         //Need to work on more functions for the shading language
         //Implement the path tracer in KSL and attempt to speed it up if possible, use the oppurtunity to study if a realtime path tracing process is feasible
+
+        static bool uberMode = false;
+        internal static void UbershaderMode(bool enabled)
+        {
+            //Ubershader mode is used to make the system ignore some problems like the ShaderStart to allow the continuous chain to be evaluated
+            uberMode = enabled;
+        }
+
+        internal static string TranslateVarName(string var)
+        {
+            return CodeGenerator.SubstitutePredefinedVars(var);
+        }
 
         private static void HandlePropertyChanges(
         object sender, PropertyChangedEventArgs e)
@@ -89,13 +108,6 @@ namespace Kokoro.KSL.Lib
                 ObjName = "FragCoord"
             });
 
-            //Just make this available to the system, it doesn't need defining
-            ((IDictionary<string, object>)VarDB).Add("materialID", new Math.KInt()
-            {
-                ObjName = "materialID"
-            });
-            //TODO add more variables into the shader compiler?
-
 
             //Reset the engine state
             ((INotifyPropertyChanged)VarDB).PropertyChanged +=
@@ -132,20 +144,119 @@ namespace Kokoro.KSL.Lib
         /// <returns>Provides a dynamic object which will contain all the shader's variables</returns>
         public static dynamic ShaderStart(string name)
         {
-
             //Define predefined variables beforehand
+
             SyntaxTree.ShaderName = name;
-
-
             return VarDB;
         }
+
+        public static void ShaderEnd() { }
 
         /// <summary>
         /// Marks the end of a shader object
         /// </summary>
-        public static void ShaderEnd()
+        public static void ShaderEnd<A, B>(A input, B output)
+            where A : struct
+            where B : struct
         {
+            var inputFields = input.GetType().GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+            var outputFields = output.GetType().GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
 
+            //TODO Streams might be bugged, test later
+
+            #region Input Fields
+            for (int i = 0; i < inputFields.Length; i++)
+            {
+                var iFieldAttributes = inputFields[i].CustomAttributes.ToArray();
+                for (int i1 = 0; i1 < iFieldAttributes.Length; i1++)
+                {
+                    if (iFieldAttributes[i1].AttributeType == typeof(SharedAttribute))
+                    {
+                        #region Shared In
+                        SyntaxTree.Parameters[inputFields[i].Name] = new SyntaxTree.Variable()
+                        {
+                            type = inputFields[i].FieldType,
+                            value = inputFields[i].GetValue(input),
+                            paramType = SyntaxTree.ParameterType.SharedIn,
+                            name = inputFields[i].Name,
+                            extraInfo = ((Interpolators)iFieldAttributes[i1].ConstructorArguments[0].Value).ToString()
+                        };
+
+                        SyntaxTree.Variables[inputFields[i].Name] = SyntaxTree.Parameters[inputFields[i].Name];
+                        #endregion
+                    }
+                    else if (iFieldAttributes[i1].AttributeType == typeof(UniformAttribute))
+                    {
+                        #region Uniform
+                        SyntaxTree.Parameters[inputFields[i].Name] = new SyntaxTree.Variable()
+                        {
+                            type = inputFields[i].FieldType,
+                            value = inputFields[i].GetValue(input),
+                            paramType = SyntaxTree.ParameterType.Uniform,
+                            name = inputFields[i].Name
+                        };
+
+                        SyntaxTree.Variables[inputFields[i].Name] = SyntaxTree.Parameters[inputFields[i].Name];
+                        #endregion
+                    }
+                    else if (iFieldAttributes[i1].AttributeType == typeof(StreamAttribute))
+                    {
+                        #region Stream In
+                        SyntaxTree.Parameters[inputFields[i].Name] = new SyntaxTree.Variable()
+                        {
+                            type = inputFields[i].FieldType,
+                            value = inputFields[i].GetValue(input),
+                            paramType = SyntaxTree.ParameterType.StreamIn,
+                            name = inputFields[i].Name,
+                            extraInfo = ((int)iFieldAttributes[i1].ConstructorArguments[0].Value).ToString()
+                        };
+
+                        SyntaxTree.Variables[inputFields[i].Name] = SyntaxTree.Parameters[inputFields[i].Name];
+                        #endregion
+                    }
+                }
+            }
+            #endregion
+
+            #region Output Fields
+            for (int i = 0; i < outputFields.Length; i++)
+            {
+                var iFieldAttributes = outputFields[i].CustomAttributes.ToArray();
+                for (int i1 = 0; i1 < iFieldAttributes.Length; i1++)
+                {
+                    if (iFieldAttributes[i1].AttributeType == typeof(SharedAttribute))
+                    {
+                        #region Shared Out
+                        SyntaxTree.Parameters[outputFields[i].Name] = new SyntaxTree.Variable()
+                        {
+                            type = outputFields[i].FieldType,
+                            value = outputFields[i].GetValue(output),
+                            paramType = SyntaxTree.ParameterType.SharedOut,
+                            name = outputFields[i].Name,
+                            extraInfo = ((Interpolators)iFieldAttributes[i1].ConstructorArguments[0].Value).ToString()
+                        };
+
+                        SyntaxTree.Variables[outputFields[i].Name] = SyntaxTree.Parameters[outputFields[i].Name];
+                        #endregion
+                    }
+                    else if (iFieldAttributes[i1].AttributeType == typeof(StreamAttribute))
+                    {
+                        #region Stream Out
+                        SyntaxTree.Parameters[outputFields[i].Name] = new SyntaxTree.Variable()
+                        {
+                            type = outputFields[i].FieldType,
+                            value = outputFields[i].GetValue(output),
+                            paramType = SyntaxTree.ParameterType.StreamOut,
+                            name = outputFields[i].Name,
+                            extraInfo = ((int)iFieldAttributes[i1].ConstructorArguments[0].Value).ToString()
+                        };
+
+                        SyntaxTree.Variables[outputFields[i].Name] = SyntaxTree.Parameters[outputFields[i].Name];
+                        #endregion
+                    }
+                }
+            }
+            #endregion
         }
 
         /// <summary>
@@ -153,7 +264,7 @@ namespace Kokoro.KSL.Lib
         /// </summary>
         /// <typeparam name="T">The type of the input</typeparam>
         /// <param name="name">The name of the variable</param>
-        public static void SharedIn<T>(string name) where T : Obj, new()
+        public static void SharedIn<T>(string name, Interpolators interpolator) where T : Obj, new()
         {
             T tmp = new T();
             tmp.ObjName = name;
@@ -163,7 +274,8 @@ namespace Kokoro.KSL.Lib
                 type = typeof(T),
                 value = null,
                 paramType = SyntaxTree.ParameterType.SharedIn,
-                name = name
+                name = name,
+                extraInfo = interpolator.ToString()
             };
 
             SyntaxTree.Variables[name] = SyntaxTree.Parameters[name];
@@ -176,7 +288,7 @@ namespace Kokoro.KSL.Lib
         /// </summary>
         /// <typeparam name="T">The type of the output</typeparam>
         /// <param name="name">The name of the variable</param>
-        public static void SharedOut<T>(string name) where T : Obj, new()
+        public static void SharedOut<T>(string name, Interpolators interpolator) where T : Obj, new()
         {
             T tmp = new T();
             tmp.ObjName = name;
@@ -186,7 +298,8 @@ namespace Kokoro.KSL.Lib
                 type = typeof(T),
                 value = null,
                 paramType = SyntaxTree.ParameterType.SharedOut,
-                name = name
+                name = name,
+                extraInfo = interpolator.ToString()
             };
 
             SyntaxTree.Variables[name] = SyntaxTree.Parameters[name];
@@ -247,7 +360,7 @@ namespace Kokoro.KSL.Lib
         /// </summary>
         /// <typeparam name="T">The type of the variable</typeparam>
         /// <param name="name">The name of the variable</param>
-        public static void Uniform<T>(string name) where T : Obj, new()
+        internal static void RequestUniform<T>(string name) where T : Obj, new()
         {
             T tmp = new T();
             tmp.ObjName = name;
@@ -263,6 +376,27 @@ namespace Kokoro.KSL.Lib
             SyntaxTree.Variables[name] = SyntaxTree.Parameters[name];
 
             ((IDictionary<string, object>)VarDB)[name] = tmp;
+        }
+
+        internal static void DeclareUniformFromType(string name, Type t)
+        {
+            if (uberMode)   //This is a hacky setup so only allow it in UberMode
+            {
+                object tmp = Activator.CreateInstance(t);
+                (tmp as Obj).ObjName = name;
+
+                SyntaxTree.Parameters[name] = new SyntaxTree.Variable()
+                {
+                    type = t,
+                    value = null,
+                    paramType = SyntaxTree.ParameterType.Uniform,
+                    name = name
+                };
+
+                SyntaxTree.Variables[name] = SyntaxTree.Parameters[name];
+
+                ((IDictionary<string, object>)VarDB)[name] = tmp;
+            }
         }
 
         /// <summary>

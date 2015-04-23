@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace Kokoro.ShaderLib
 {
-    public class DefaultShader : IKUbershader
+    public class DefaultShader : IKShaderProgram
     {
-        public void Fragment(int num)
+        public override void Fragment()
         {
             var Vars = Manager.ShaderStart("Default_S_Frag");
-            Manager.SharedIn<Vec2>("UV");
+            Manager.SharedIn<Vec2>("UV", KSL.Lib.General.Interpolators.Smooth);
             Manager.StreamOut<Vec4>("Color", 0);
 
             Vars.Color = Texture.Read2D(Vars.ColorMap, Vars.UV);
@@ -24,13 +24,13 @@ namespace Kokoro.ShaderLib
             Manager.ShaderEnd();
         }
 
-        public void Vertex()
+        public override void Vertex()
         {
             var Vars = Manager.ShaderStart("Default_S_Vert");
             Manager.StreamIn<Vec3>("VertexPos", 0);
             Manager.StreamIn<Vec2>("UV0", 2);
 
-            Manager.SharedOut<Vec2>("UV");
+            Manager.SharedOut<Vec2>("UV", KSL.Lib.General.Interpolators.Smooth);
             Manager.Create<Mat4>("MVP");
 
             Vars.MVP = Vars.Projection * Vars.View * Vars.World;
@@ -44,13 +44,6 @@ namespace Kokoro.ShaderLib
         public static Ubershader Create()
         {
             return new Ubershader(new DefaultShader());
-        }
-
-        public static object Create(ShaderTypes s)
-        {
-            if (s == ShaderTypes.Vertex) return (Action)new DefaultShader().Vertex;
-            else if (s == ShaderTypes.Fragment) return (Action<int>)new DefaultShader().Fragment;
-            return null;
         }
     }
 }

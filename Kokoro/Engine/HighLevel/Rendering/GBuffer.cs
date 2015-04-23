@@ -11,6 +11,7 @@ using Kokoro.Engine.SceneGraph;
 using Kokoro.Engine.Prefabs;
 using Kokoro.Engine.Shaders;
 using Kokoro.Engine.HighLevel.Cameras;
+using Kokoro.KSL;
 
 namespace Kokoro.Engine.HighLevel.Rendering
 {

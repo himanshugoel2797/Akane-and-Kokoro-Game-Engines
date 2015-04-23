@@ -11,24 +11,24 @@ using System.Threading.Tasks;
 
 namespace Kokoro.ShaderLib
 {
-    public class FrameBufferShader : IKUbershader
+    public class FrameBufferShader : IKShaderProgram
     {
-        public void Fragment(int num)
+        public override void Fragment()
         {
             var Vars = Manager.ShaderStart("FrameBuf_S_Frag");
-            Manager.SharedIn<Vec2>("UV");
+            Manager.SharedIn<Vec2>("UV", KSL.Lib.General.Interpolators.Smooth);
             Manager.StreamOut<Vec4>("Color", 0);
 
             Vars.Color = Texture.Read2D(Vars.ColorMap, Vars.UV);
         }
 
-        public void Vertex()
+        public override void Vertex()
         {
             var Vars = Manager.ShaderStart("FrameBuf_S_Vert");
             Manager.StreamIn<Vec3>("VertexPos", 0);
             Manager.StreamIn<Vec2>("UV0", 2);
 
-            Manager.SharedOut<Vec2>("UV");
+            Manager.SharedOut<Vec2>("UV", KSL.Lib.General.Interpolators.Smooth);
 
             Vars.VertexPosition.Construct(Vars.VertexPos, 1);
             Vars.UV = Vars.UV0;
@@ -38,14 +38,6 @@ namespace Kokoro.ShaderLib
         public static Ubershader Create()
         {
             return new Ubershader(new FrameBufferShader());
-        }
-
-        public static object Create(ShaderTypes t)
-        {
-            if (t == ShaderTypes.Fragment) return (Action<int>)new FrameBufferShader().Fragment;
-            else if (t == ShaderTypes.Vertex) return (Action)new FrameBufferShader().Vertex;
-
-            return null;
         }
 
     }

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Kokoro.ShaderLib
 {
-    public class BlendShader : IKUbershader
+    public class BlendShader : IKShaderProgram
     {
         Kokoro.Engine.BlendingFactor src, dst;
 
@@ -21,12 +21,12 @@ namespace Kokoro.ShaderLib
             dst = d;
         }
 
-        public void Fragment(int num)
+        public override void Fragment()
         {
             var Vars = Manager.ShaderStart("Bloom_S_Frag");
-            Manager.SharedIn<Vec2>("UV");
-            Manager.Uniform<Sampler2D>("SourceA");
-            Manager.Uniform<Sampler2D>("SourceB");
+            Manager.SharedIn<Vec2>("UV", KSL.Lib.General.Interpolators.Smooth);
+            RequestUniform<Sampler2D>("SourceA");
+            RequestUniform<Sampler2D>("SourceB");
 
             Manager.StreamOut<Vec4>("Color", 0);
 
@@ -39,7 +39,7 @@ namespace Kokoro.ShaderLib
             switch (src)
             {
                 case Engine.BlendingFactor.ConstantAlpha:
-                    Manager.Uniform<KFloat>("weightSrcA");
+                    RequestUniform<KFloat>("weightSrcA");
                     break;
                 case Engine.BlendingFactor.DstAlpha:
                     Manager.Create<KFloat>("weightSrcA");
@@ -70,7 +70,7 @@ namespace Kokoro.ShaderLib
             switch (dst)
             {
                 case Engine.BlendingFactor.ConstantAlpha:
-                    Manager.Uniform<KFloat>("weightSrcB");
+                    RequestUniform<KFloat>("weightSrcB");
                     break;
                 case Engine.BlendingFactor.DstAlpha:
                     Manager.Create<KFloat>("weightSrcB");
@@ -101,13 +101,13 @@ namespace Kokoro.ShaderLib
             Vars.Color = Vars.SrcA * Vars.weightSrcA + Vars.SrcB * Vars.weightSrcB;
         }
 
-        public void Vertex()
+        public override void Vertex()
         {
             var Vars = Manager.ShaderStart("Bloom_S_Vert");
             Manager.StreamIn<Vec3>("VertexPos", 0);
             Manager.StreamIn<Vec2>("UV0", 2);
 
-            Manager.SharedOut<Vec2>("UV");
+            Manager.SharedOut<Vec2>("UV", KSL.Lib.General.Interpolators.Smooth);
 
             Vars.VertexPosition.Construct(Vars.VertexPos, 1);
             Vars.UV = Vars.UV0;
@@ -117,14 +117,6 @@ namespace Kokoro.ShaderLib
         public static Ubershader Create(Kokoro.Engine.BlendingFactor s = 0, Kokoro.Engine.BlendingFactor d = 0)
         {
             return new Ubershader(new BlendShader(s, d));
-        }
-
-        public static object Create(ShaderTypes s, Kokoro.Engine.BlendingFactor src = 0, Kokoro.Engine.BlendingFactor d = 0)
-        {
-            if (s == ShaderTypes.Vertex) return (Action)new BlendShader(src, d).Vertex;
-            else if (s == ShaderTypes.Fragment) return (Action<int>)new BlendShader(src, d).Fragment;
-
-            return null;
         }
     }
 }

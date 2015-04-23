@@ -40,9 +40,9 @@
   <ItemGroup>
     <Compile Include="GLSL\CodeGen.cs" />
     <Compile Include="GLSL\PC\CodeGenerator.cs" />
-    <Compile Include="KSL\IKUbershader.cs" />
     <Compile Include="KSL\IKShaderProgram.cs" />
     <Compile Include="KSL\Lib\General\Logic.cs" />
+    <Compile Include="KSL\Lib\General\ParamAttributes.cs" />
     <Compile Include="KSL\Lib\General\StreamLocation.cs" />
     <Compile Include="KSL\Lib\KArray.cs" />
     <Compile Include="KSL\Lib\Manager.cs" />
@@ -61,6 +61,7 @@
     <Compile Include="KSL\Lib\Texture\Sampler3D.cs" />
     <Compile Include="KSL\Lib\Texture\Texture.cs" />
     <Compile Include="KSL\SyntaxTree.cs" />
+    <Compile Include="KSL\Ubershader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="KSL\KParams.cs" />
     <Compile Include="KSL\KSLCompiler.cs" />
