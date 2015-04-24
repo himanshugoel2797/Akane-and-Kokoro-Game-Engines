@@ -116,6 +116,7 @@ namespace Kokoro.KSL
 
         public string Compile(KSLCompiler.KShaderType shaderType)
         {
+            KSLCompiler.Initialize();
             Manager.Init();
             #region Vertex Shader
             if (shaderType == KSLCompiler.KShaderType.Vertex)
@@ -123,8 +124,14 @@ namespace Kokoro.KSL
                 dynamic Var = Manager.ShaderStart(Name + "_vertex");    //Set the shader name
                 Manager.UbershaderMode(true);       //Enable ubershader mode
 
-                uniforms.All((a) => { Manager.DeclareUniformFromType(a.Key, a.Value); return true; });  //Declare all uniforms so the correct uniform buffer structure is generated
+                //uniforms.All((a) => { Manager.DeclareUniformFromType(a.Key, a.Value); return true; });  //Declare all uniforms so the correct uniform buffer structure is generated
                 Manager.DeclareUniformFromType("ShaderID", typeof(KInt));  //Define the ShaderID as a uniform as well
+                Manager.StreamIn<KInt>("draw_ID", 3);
+                Manager.SharedOut<KInt>("did", Interpolators.Flat);
+                Var.did = Var.draw_ID;
+                CodeGenerator.PreDefinedVariablesMap["DrawID"] = "draw_ID";
+                CodeGenerator.PreDefinedVariablesMap["ShaderID"] = "ShaderID";
+                Manager.SharedOut<KInt>("ShadID", Interpolators.Flat);
 
                 //Iterate over all shaders, compiling the ones which have the vertex shader support marked to be enabled
                 for (int i = 0; i < Shaders.Count; i++)
@@ -140,9 +147,11 @@ namespace Kokoro.KSL
                 }
                 Logic.UndoElse();   //Remove the last else
 
+                Var.ShadID = Var.ShaderID;
                 Manager.UbershaderMode(false);  //Disable ubershader mode
-                return CodeGenerator.GenerateShader(shaderType);    //Generate the shader
-
+                string val = CodeGenerator.GenerateShader(shaderType);    //Generate the shader
+                System.IO.File.WriteAllText(new Random().NextDouble() + Name + "Vert.txt", val);
+                return val;
             }
             #endregion
             #region Fragment Shader
@@ -151,8 +160,14 @@ namespace Kokoro.KSL
                 dynamic Var = Manager.ShaderStart(Name + "_fragment");  //Set the shader name
                 Manager.UbershaderMode(true);       //Enable ubershader mode
 
-                uniforms.All((a) => { Manager.DeclareUniformFromType(a.Key, a.Value); return true; });      //Create all uniforms
-                Manager.DeclareUniformFromType("ShaderID", typeof(KInt));   //Define the ShaderID uniform
+                //uniforms.All((a) => { Manager.DeclareUniformFromType(a.Key, a.Value); return true; });      //Create all uniforms
+                Manager.DeclareSharedIn(typeof(KInt), "ShadID", Interpolators.Flat);   //Define the ShaderID uniform
+                Manager.SharedIn<KInt>("did", Interpolators.Flat);
+                Manager.Create<KInt>("DrawID");
+                Manager.Create<KInt>("ShaderID");
+                CodeGenerator.PreDefinedVariablesMap["DrawID"] = "did";
+                CodeGenerator.PreDefinedVariablesMap["ShaderID"] = "ShadID";
+
 
                 //Iterate over all shaders, compiling the ones which have fragment shader support marked as enabled
                 for (int i = 0; i < Shaders.Count; i++)
@@ -169,7 +184,9 @@ namespace Kokoro.KSL
                 Logic.UndoElse();   //Undo the last else
 
                 Manager.UbershaderMode(false);  //Disable ubershader mode
-                return CodeGenerator.GenerateShader(shaderType);    //Generate and return the shader
+                string val = CodeGenerator.GenerateShader(shaderType);    //Generate the shader
+                System.IO.File.WriteAllText(new Random().NextDouble() + "Frag.txt", val);
+                return val;
             }
             #endregion
 

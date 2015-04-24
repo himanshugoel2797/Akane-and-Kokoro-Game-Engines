@@ -25,7 +25,7 @@ namespace Kokoro.KSL.Lib.Math
         {
             KFloat k = new KFloat()
             {
-                ObjName = "(" + a.ObjName + "*" + b.ObjName + ")"
+                ObjName = "(" + Manager.TranslateVarName(a.ObjName) + "*" + Manager.TranslateVarName(b.ObjName) + ")"
             };
 
             SyntaxTree.Variables[k.ObjName] = new SyntaxTree.Variable()
@@ -43,7 +43,7 @@ namespace Kokoro.KSL.Lib.Math
         {
             KFloat k = new KFloat()
             {
-                ObjName = "(" + a.ObjName + "/" + b.ObjName + ")"
+                ObjName = "(" + Manager.TranslateVarName(a.ObjName) + "/" + Manager.TranslateVarName(b.ObjName) + ")"
             };
 
             SyntaxTree.Variables[k.ObjName] = new SyntaxTree.Variable()
@@ -61,7 +61,7 @@ namespace Kokoro.KSL.Lib.Math
         {
             KFloat k = new KFloat()
             {
-                ObjName = "(" + a.ObjName + "+" + b.ObjName + ")"
+                ObjName = "(" + Manager.TranslateVarName(a.ObjName) + "+" + Manager.TranslateVarName(b.ObjName) + ")"
             };
 
             SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
@@ -79,7 +79,7 @@ namespace Kokoro.KSL.Lib.Math
         {
             KFloat k = new KFloat()
             {
-                ObjName = "(" + a.ObjName + "-" + b.ObjName + ")"
+                ObjName = "(" + Manager.TranslateVarName(a.ObjName) + "-" + Manager.TranslateVarName(b.ObjName) + ")"
             };
 
             SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()

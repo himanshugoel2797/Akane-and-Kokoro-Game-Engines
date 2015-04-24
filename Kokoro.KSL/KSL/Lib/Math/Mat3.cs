@@ -52,7 +52,7 @@ namespace Kokoro.KSL.Lib.Math
         {
             var k = new Mat3()
             {
-                ObjName = "(" + a.ObjName + "*" + b.ObjName + ")"
+                ObjName = "(" + Manager.TranslateVarName(a.ObjName) + "*" + Manager.TranslateVarName(b.ObjName) + ")"
             };
 
             SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
@@ -70,7 +70,7 @@ namespace Kokoro.KSL.Lib.Math
         {
             var k = new Mat3()
             {
-                ObjName = "(" + a.ObjName + "*" + b.ObjName + ")"
+                ObjName = "(" + Manager.TranslateVarName(a.ObjName) + "*" + Manager.TranslateVarName(b.ObjName) + ")"
             };
 
             SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
@@ -88,7 +88,7 @@ namespace Kokoro.KSL.Lib.Math
         {
             Mat3 k = new Mat3()
             {
-                ObjName = "(" + a.ObjName + "/" + b.ObjName + ")"
+                ObjName = "(" + Manager.TranslateVarName(a.ObjName) + "/" + Manager.TranslateVarName(b.ObjName) + ")"
             };
 
             SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
@@ -106,7 +106,7 @@ namespace Kokoro.KSL.Lib.Math
         {
             Mat3 k = new Mat3()
             {
-                ObjName = "(" + a.ObjName + "/" + b.ObjName + ")"
+                ObjName = "(" + Manager.TranslateVarName(a.ObjName) + "/" + Manager.TranslateVarName(b.ObjName) + ")"
             };
 
             SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
@@ -124,7 +124,7 @@ namespace Kokoro.KSL.Lib.Math
         {
             Mat3 k = new Mat3()
             {
-                ObjName = "(" + a.ObjName + "+" + b.ObjName + ")"
+                ObjName = "(" + Manager.TranslateVarName(a.ObjName) + "+" + Manager.TranslateVarName(b.ObjName) + ")"
             };
 
             SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
@@ -142,7 +142,7 @@ namespace Kokoro.KSL.Lib.Math
         {
             Mat3 k = new Mat3()
             {
-                ObjName = "(" + a.ObjName + "-" + b.ObjName + ")"
+                ObjName = "(" + Manager.TranslateVarName(a.ObjName) + "-" + Manager.TranslateVarName(b.ObjName) + ")"
             };
 
             SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()

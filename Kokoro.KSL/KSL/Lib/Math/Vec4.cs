@@ -89,7 +89,7 @@ namespace Kokoro.KSL.Lib.Math
         {
             var k = new Vec4()
             {
-                ObjName = "(" + a.ObjName + "*" + b.ObjName + ")"
+                ObjName = "(" + Manager.TranslateVarName(a.ObjName) + "*" + Manager.TranslateVarName(b.ObjName) + ")"
             };
 
             SyntaxTree.Variables[k.ObjName] = new SyntaxTree.Variable()
@@ -107,7 +107,7 @@ namespace Kokoro.KSL.Lib.Math
         {
             var k = new Vec4()
             {
-                ObjName = "(" + a.ObjName + "*" + b.ObjName + ")"
+                ObjName = "(" + Manager.TranslateVarName(a.ObjName) + "*" + Manager.TranslateVarName(b.ObjName) + ")"
             };
 
             SyntaxTree.Variables[k.ObjName] = new SyntaxTree.Variable()
@@ -125,7 +125,7 @@ namespace Kokoro.KSL.Lib.Math
         {
             var k = new Vec4()
             {
-                ObjName = "(" + a.ObjName + "*" + b.ObjName + ")"
+                ObjName = "(" + Manager.TranslateVarName(a.ObjName) + "*" + Manager.TranslateVarName(b.ObjName) + ")"
             };
 
             SyntaxTree.Variables[k.ObjName] = new SyntaxTree.Variable()
@@ -143,7 +143,7 @@ namespace Kokoro.KSL.Lib.Math
         {
             var k = new Vec4()
             {
-                ObjName = "(" + a.ObjName + "*" + b.ObjName + ")"
+                ObjName = "(" + Manager.TranslateVarName(a.ObjName) + "*" + Manager.TranslateVarName(b.ObjName) + ")"
             };
 
             SyntaxTree.Variables[k.ObjName] = new SyntaxTree.Variable()
@@ -161,7 +161,7 @@ namespace Kokoro.KSL.Lib.Math
         {
             Vec4 k = new Vec4()
             {
-                ObjName = "(" + a.ObjName + "/" + b.ObjName + ")"
+                ObjName = "(" + Manager.TranslateVarName(a.ObjName) + "/" + Manager.TranslateVarName(b.ObjName) + ")"
             };
 
             SyntaxTree.Variables[k.ObjName] = new SyntaxTree.Variable()
@@ -179,7 +179,7 @@ namespace Kokoro.KSL.Lib.Math
         {
             var k = new Vec4()
             {
-                ObjName = "(" + a.ObjName + "*" + b.ObjName + ")"
+                ObjName = "(" + Manager.TranslateVarName(a.ObjName) + "*" + Manager.TranslateVarName(b.ObjName) + ")"
             };
 
             SyntaxTree.Variables[k.ObjName] = new SyntaxTree.Variable()
@@ -197,7 +197,7 @@ namespace Kokoro.KSL.Lib.Math
         {
             var k = new Vec4()
             {
-                ObjName = "(" + a.ObjName + "*" + b.ObjName + ")"
+                ObjName = "(" + Manager.TranslateVarName(a.ObjName) + "*" + Manager.TranslateVarName(b.ObjName) + ")"
             };
 
             SyntaxTree.Variables[k.ObjName] = new SyntaxTree.Variable()
@@ -215,7 +215,7 @@ namespace Kokoro.KSL.Lib.Math
         {
             Vec4 k = new Vec4()
             {
-                ObjName = "(" + a.ObjName + "/" + b.ObjName + ")"
+                ObjName = "(" + Manager.TranslateVarName(a.ObjName) + "/" + Manager.TranslateVarName(b.ObjName) + ")"
             };
 
             SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
@@ -233,7 +233,7 @@ namespace Kokoro.KSL.Lib.Math
         {
             Vec4 k = new Vec4()
             {
-                ObjName = "(" + a.ObjName + "/" + b.ObjName + ")"
+                ObjName = "(" + Manager.TranslateVarName(a.ObjName) + "/" + Manager.TranslateVarName(b.ObjName) + ")"
             };
 
             SyntaxTree.Variables.Add(k.ObjName, new SyntaxTree.Variable()
@@ -251,7 +251,7 @@ namespace Kokoro.KSL.Lib.Math
         {
             Vec4 k = new Vec4()
             {
-                ObjName = "(" + a.ObjName + "+" + b.ObjName + ")"
+                ObjName = "(" + Manager.TranslateVarName(a.ObjName) + "+" + Manager.TranslateVarName(b.ObjName) + ")"
             };
 
             SyntaxTree.Variables[k.ObjName] = new SyntaxTree.Variable()
@@ -269,7 +269,7 @@ namespace Kokoro.KSL.Lib.Math
         {
             Vec4 k = new Vec4()
             {
-                ObjName = "(" + a.ObjName + "-" + b.ObjName + ")"
+                ObjName = "(" + Manager.TranslateVarName(a.ObjName) + "-" + Manager.TranslateVarName(b.ObjName) + ")"
             };
 
             SyntaxTree.Variables[k.ObjName] = new SyntaxTree.Variable()
@@ -281,18 +281,6 @@ namespace Kokoro.KSL.Lib.Math
             };
 
             return k;
-        }
-        #endregion
-
-        #region Logic Operators
-        public static Vec4 operator <(Vec4 a, Vec4 b)
-        {
-            //Implement these properly, specifically, generate function calls for these (like GLSL builtins?) or manual comparison generation?
-            return a;
-        }
-        public static Vec4 operator >(Vec4 a, Vec4 b)
-        {
-            return a;
         }
         #endregion
 

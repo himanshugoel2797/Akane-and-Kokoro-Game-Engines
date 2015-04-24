@@ -18,7 +18,7 @@ namespace Kokoro.KSL.GLSL
     {
         static string src;
         static StringBuilder strBuilder;
-        static Dictionary<string, string> PreDefinedVariablesMap = new Dictionary<string, string>();
+        internal static Dictionary<string, string> PreDefinedVariablesMap = new Dictionary<string, string>();
 
         static GLSLCodeGenerator()
         {
@@ -35,6 +35,11 @@ namespace Kokoro.KSL.GLSL
         static List<SyntaxTree.Variable> TextureSamplers = new List<SyntaxTree.Variable>();
         internal static string GenerateShader(KSLCompiler.KShaderType ktype)
         {
+            StreamVars = new List<SyntaxTree.Variable>();
+            UniformVars = new List<SyntaxTree.Variable>();
+            SharedVars = new List<SyntaxTree.Variable>();
+            TextureSamplers = new List<SyntaxTree.Variable>();
+
             //Specify version as per Logic.AvailableSM
             switch (KSL.Lib.General.Logic.AvailableSM)
             {
@@ -89,17 +94,27 @@ namespace Kokoro.KSL.GLSL
             }
 
             strBuilder.AppendLine();
-            //TODO Generate all uniforms as a uniform buffer array for AZDO
-            //Generate code for the uniform variables
-            strBuilder.Append("layout (std140) uniform Inputs {\n");
-            for (int i = 0; i < UniformVars.Count; i++)
-            {
-                strBuilder.AppendFormat("{0} {1};\n",
-                    ConvertType(UniformVars[i].type),
-                    UniformVars[i].name);
-            }
-            strBuilder.Append("} inputData[512];\n"); //NOTE: 512 is the maximum number of draw calls that can be submitted in one multidraw call
 
+#if STUPID_CRAP
+            if (ktype == KSLCompiler.KShaderType.Vertex)
+            {
+                //TODO Generate all uniforms as a uniform buffer array for AZDO
+                //Generate code for the uniform variables
+                strBuilder.Append("layout (std140) uniform Inputs {\n");
+                for (int i = 0; i < UniformVars.Count; i++)
+                {
+                    strBuilder.AppendFormat("{0} {1};\n",
+                        ConvertType(UniformVars[i].type),
+                        UniformVars[i].name);
+                }
+                strBuilder.Append("} inputData[16];\n"); //NOTE: 512 is the maximum number of draw calls that can be submitted in one multidraw call
+            }
+#else
+            foreach (SyntaxTree.Variable variable in UniformVars)
+            {
+                strBuilder.AppendFormat("uniform {0} {1};\n", ConvertType(variable.type), variable.name);
+            }
+#endif
             strBuilder.AppendLine();
 
             foreach (SyntaxTree.Variable variable in TextureSamplers)
@@ -213,18 +228,22 @@ namespace Kokoro.KSL.GLSL
         //Translate KSL function calls to GLSL equivalents
         internal static string TranslateSDKFunctionCalls(SyntaxTree.FunctionCalls function, params string[] parameters)
         {
+            for (int i = 0; i < parameters.Length; i++)
+            {
+                parameters[i] = Manager.TranslateVarName(parameters[i]);
+            }
             string str = "";
 
             switch (function)
             {
                 case SyntaxTree.FunctionCalls.Tex3D:
-                    str = "texture3D(" + parameters[0] + "," + parameters[1] + ")";
+                    str = "texture(" + parameters[0] + "," + parameters[1] + ")";
                     break;
                 case SyntaxTree.FunctionCalls.Tex2D:
-                    str = "texture2D(" + parameters[0] + ", " + parameters[1] + ")";
+                    str = "texture(" + parameters[0] + ", " + parameters[1] + ")";
                     break;
                 case SyntaxTree.FunctionCalls.Tex1D:
-                    str = "texture1D(" + parameters[0] + ", " + parameters[1] + ")";
+                    str = "texture(" + parameters[0] + ", " + parameters[1] + ")";
                     break;
 
                 case SyntaxTree.FunctionCalls.Cross2D:
@@ -285,14 +304,17 @@ namespace Kokoro.KSL.GLSL
         //Substitute reserved predefined variables with the GLSL specifc name
         internal static string SubstitutePredefinedVars(string varName)
         {
+#if STUPID_CRAP
+            var tmp = SyntaxTree.Parameters.Values.ToArray();
+            for (int i = 0; i < tmp.Length; i++)
+            {
+                if (tmp[i].paramType == SyntaxTree.ParameterType.Uniform && tmp[i].type != typeof(Sampler1D) && tmp[i].type != typeof(Sampler2D) && tmp[i].type != typeof(Sampler3D) && tmp[i].name == varName) varName = "inputData[DrawID]." + varName;
+            }
+#endif
+
             foreach (KeyValuePair<string, string> substitutions in PreDefinedVariablesMap)
             {
                 varName = varName.Replace(substitutions.Key, substitutions.Value);
-            }
-
-            for (int i = 0; i < UniformVars.Count; i++)
-            {
-                if (UniformVars[i].name == varName) varName = "inputData[DrawID].";
             }
 
             return varName;

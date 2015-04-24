@@ -62,7 +62,7 @@ namespace Kokoro.OpenGL.PC
                 //Depth Test is always enabled, it's a matter of what the depth function is
                 GL.Enable(EnableCap.DepthTest);
                 GL.Enable(EnableCap.LineSmooth);
-                GL.LineWidth(4);
+                GL.LineWidth(1);
                 MDIBuffer.Bind();   //This is the only place the draw indirect can be used so we only bind this once, it will never be replaced unless someone does something really wrong
             });
 

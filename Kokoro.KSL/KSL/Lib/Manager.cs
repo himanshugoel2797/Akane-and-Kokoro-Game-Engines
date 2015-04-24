@@ -56,6 +56,20 @@ namespace Kokoro.KSL.Lib
             }
         }
 
+        internal static void IssueAssign(string varNameA, string varNameB)
+        {
+
+            SyntaxTree.Instructions.Enqueue(new SyntaxTree.Instruction()
+            {
+                instructionType = SyntaxTree.InstructionType.Assign,
+                Parameters = new string[] { varNameA, varNameB }
+            });
+
+            //if (((Obj)((IDictionary<string, object>)VarDB)[varNameA]) == null) ((IDictionary<string, object>)VarDB)[varNameA] = new Obj();
+            //((Obj)((IDictionary<string, object>)VarDB)[varNameA]).ObjName = varNameA;
+
+        }
+
         internal static void Init()
         {
             VarDB = new ExpandoObject();
@@ -107,7 +121,6 @@ namespace Kokoro.KSL.Lib
             {
                 ObjName = "FragCoord"
             });
-
 
             //Reset the engine state
             ((INotifyPropertyChanged)VarDB).PropertyChanged +=
@@ -396,6 +409,61 @@ namespace Kokoro.KSL.Lib
                 SyntaxTree.Variables[name] = SyntaxTree.Parameters[name];
 
                 ((IDictionary<string, object>)VarDB)[name] = tmp;
+            }
+        }
+
+
+        /// <summary>
+        /// Define a new shader shared input value
+        /// </summary>
+        /// <typeparam name="T">The type of the input</typeparam>
+        /// <param name="name">The name of the variable</param>
+        internal static void DeclareSharedIn(Type t, string name, Interpolators interpolator)
+        {
+            if (uberMode)
+            {
+                object tmp = Activator.CreateInstance(t);
+                (tmp as Obj).ObjName = name;
+
+                SyntaxTree.Parameters[name] = new SyntaxTree.Variable()
+                {
+                    type = t,
+                    value = null,
+                    paramType = SyntaxTree.ParameterType.SharedIn,
+                    name = name,
+                    extraInfo = interpolator.ToString()
+                };
+
+                SyntaxTree.Variables[name] = SyntaxTree.Parameters[name];
+
+                ((IDictionary<string, object>)VarDB)[name] = tmp;
+            }
+        }
+
+        /// <summary>
+        /// Define a new shader shared output value
+        /// </summary>
+        /// <typeparam name="T">The type of the output</typeparam>
+        /// <param name="name">The name of the variable</param>
+        internal static void DeclareSharedOut(Type t, string name, Interpolators interpolator)
+        {
+            if (uberMode)
+            {
+                object tmp = Activator.CreateInstance(t);
+                (tmp as Obj).ObjName = name;
+
+                SyntaxTree.Parameters[name] = new SyntaxTree.Variable()
+                {
+                    type = t,
+                    value = null,
+                    paramType = SyntaxTree.ParameterType.SharedOut,
+                    name = name,
+                    extraInfo = interpolator.ToString()
+                };
+
+                SyntaxTree.Variables[name] = SyntaxTree.Parameters[name];
+
+                ((IDictionary<string, object>)VarDB)[name] = null;
             }
         }
 

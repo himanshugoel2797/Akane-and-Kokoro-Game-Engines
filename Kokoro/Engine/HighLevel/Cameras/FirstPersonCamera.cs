@@ -92,6 +92,7 @@ namespace Kokoro.Engine.HighLevel.Cameras
                 Position += Right * (float)(moveSpeed * interval / 10000f);
             }
 
+#if DEBUG
             if (Keyboard.IsKeyPressed(Key.PageDown))
             {
                 Position -= cameraRotatedUpVector * (float)(moveSpeed * interval / 10000f);
@@ -101,6 +102,17 @@ namespace Kokoro.Engine.HighLevel.Cameras
                 Position += cameraRotatedUpVector * (float)(moveSpeed * interval / 10000f);
             }
 
+            if (Keyboard.IsKeyPressed(Key.Home))
+            {
+                moveSpeed += 0.05f;
+                Debug.ErrorLogger.AddMessage(0, "[INPUT] moveSpeed = " + moveSpeed, Debug.DebugType.Marker, Debug.Severity.Notification);
+            }
+            else if (Keyboard.IsKeyPressed(Key.End))
+            {
+                moveSpeed -= 0.05f;
+                Debug.ErrorLogger.AddMessage(0, "[INPUT] moveSpeed = " + moveSpeed, Debug.DebugType.Marker, Debug.Severity.Notification);
+            }
+#endif
             //View = UpdateViewMatrix();
             View = Matrix4.LookAt(Position, Position + Direction, cameraRotatedUpVector);
             base.Update(interval, Context);

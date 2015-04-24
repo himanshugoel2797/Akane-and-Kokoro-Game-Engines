@@ -68,8 +68,6 @@ namespace Kokoro.ShaderLib
             if (vertical) Vars.rad.Construct(0, Vars.KernelRad);
             else Vars.rad.Construct(Vars.KernelRad, 0);
 
-            Vars.Color = Texture.Read2D(Vars.ColorMap, Vars.UV) * kern[0];
-
             for (int i = 0; i < kern.Length; i++)
             {
                 Vars.Color += Texture.Read2D(Vars.ColorMap, KMath.Clamp(Vars.UV + ((i - (float)kern.Length / 2f) * Vars.rad), new Vec2(0, 0), new Vec2(1, 1))) * kern[i];

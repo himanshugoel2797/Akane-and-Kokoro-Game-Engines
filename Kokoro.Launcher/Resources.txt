@@ -1,1 +1,1 @@
-﻿-b ../../../MusicalPlatformer/Resources.txt
+﻿-b ../../../Messier104/Resources.txt
