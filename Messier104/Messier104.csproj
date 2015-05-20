@@ -40,7 +40,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Game.cs" />
+    <Compile Include="HeavenlyObjects\Star.cs" />
     <Compile Include="InGame.cs" />
+    <Compile Include="LocalObjects\Moon.cs" />
+    <Compile Include="LocalObjects\Planet.cs" />
+    <Compile Include="LocalObjects\SolarSystem.cs" />
     <Compile Include="LocalObjects\SpaceRock.cs" />
     <Compile Include="MainMenu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -59,9 +63,7 @@
       <Name>Kokoro</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="HeavenlyObjects\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -23,15 +23,16 @@ namespace Messier104.LocalObjects
     {
         static Sphere[] LODs;   //Represents 20 different levels of detail for a space rock
 
-        float Mass;
-        Texture terrainHeightMap, terrainColorMap;
-        float Radius;
+        protected float Mass;
+        protected Texture terrainHeightMap, terrainColorMap;
+        protected float Radius;
         public Vector3 Center;
 
         public Material ObjectMaterial;
 
-        public SpaceRock(float Mass, float Radius, Vector3 center, Texture heightMap, Texture colorMap)
+        public SpaceRock()
         {
+
             if (LODs == null)
             {
                 LODs = new Sphere[20];
@@ -51,13 +52,17 @@ namespace Messier104.LocalObjects
                 LODs[12] = new Sphere(1, 70);
                 LODs[13] = new Sphere(1, 84);
                 LODs[14] = new Sphere(1, 88);
-                LODs[15]= new Sphere(1, 100);
+                LODs[15] = new Sphere(1, 100);
                 LODs[16] = new Sphere(1, 130);
                 LODs[17] = new Sphere(1, 135);
                 LODs[18] = new Sphere(1, 150);
                 LODs[19] = new Sphere(1, 160);
 
             }
+        }
+
+        public SpaceRock(float Mass, float Radius, Vector3 center, Texture heightMap, Texture colorMap) : this()
+        {
 
             this.Mass = Mass;
             this.Radius = Radius;
@@ -66,7 +71,7 @@ namespace Messier104.LocalObjects
             this.Center = center;
         }
 
-        public void Draw(GraphicsContext context, Vector3 playerPos)
+        public void Render(GraphicsContext context, Vector3 playerPos)
         {
             float distSq = (playerPos - Center).LengthSquared;
 
@@ -92,7 +97,7 @@ namespace Messier104.LocalObjects
                 LODs[index].World = Matrix4.Scale(Radius / 1000) * Matrix4.CreateTranslation(Center);
                 LODs[index].Draw(context);
             }
-            context.ForceDraw();
+            //context.ForceDraw();
         }
     }
 }

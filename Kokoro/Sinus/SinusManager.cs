@@ -10,12 +10,26 @@ namespace Kokoro.Sinus
     {
         internal static Queue<Action> CommandBuffer = new Queue<Action>();
 
+        internal static List<Queue<Action>> ChildCommandBuffers = new List<Queue<Action>>();
+
         [ThreadStatic]
         private static Queue<Action> LocalCommands = new Queue<Action>();
 
         static SinusManager()
         {
             LocalCommands = new Queue<Action>();
+            ChildCommandBuffers.Add(LocalCommands);
+        }
+
+        public static void PullCommandBuffers()
+        {
+            for (int i = 0; i < ChildCommandBuffers.Count; i++)
+            {
+                lock (ChildCommandBuffers[i])
+                {
+                    ChildCommandBuffers[i].ToList().ForEach(i1 => CommandBuffer.Enqueue(i1));
+                }
+            }
         }
 
         /// <summary>
@@ -25,7 +39,11 @@ namespace Kokoro.Sinus
         /// <remarks>This should only be called from the Render thread, there may be undefined behavior if called from other threads</remarks>
         public static void QueueCommand(params Action[] command)
         {
-            if (LocalCommands == null) LocalCommands = new Queue<Action>();
+            if (LocalCommands == null)
+            {
+                LocalCommands = new Queue<Action>();
+                ChildCommandBuffers.Add(LocalCommands);
+            }
 
             for (int i = 0; i < command.Length; i++)
             {
@@ -46,18 +64,19 @@ namespace Kokoro.Sinus
             {
                 if (LocalCommands.Count > 0)    //Only spend time on a lock if absolutely necessary
                 {
-                    lock (CommandBuffer)
+                    //lock (CommandBuffer)
                     {
                         //Enqueue all local buffer commands
-                        LocalCommands.ToList().ForEach(i => CommandBuffer.Enqueue(i));
+                        //LocalCommands.ToList().ForEach(i => CommandBuffer.Enqueue(i));
                     }
                     //Clear the local command buffer
-                    LocalCommands.Clear();
+                    //LocalCommands.Clear();
                 }
             }
             else
             {
                 LocalCommands = new Queue<Action>();
+                ChildCommandBuffers.Add(LocalCommands);
             }
         }
     }

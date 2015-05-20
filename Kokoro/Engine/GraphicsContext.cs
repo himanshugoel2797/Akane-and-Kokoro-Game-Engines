@@ -390,12 +390,12 @@ namespace Kokoro.Engine
             //Physics handler thread
             PhysicsThread = new Thread(() =>
             {
-                GameLooper(160000, Physics);
+                //GameLooper(160000, Physics);
             });
 
             AnimationThread = new Thread(() =>
             {
-                GameLooper(80000, Animation);
+                //GameLooper(80000, Animation);
             });
 
             RenderThread = new Thread(() =>
@@ -429,6 +429,7 @@ namespace Kokoro.Engine
 
                     if (!s.IsRunning) s.Start();
                     Window_RenderFrame(0);
+                    Sinus.SinusManager.PullCommandBuffers();
                     lock (Sinus.SinusManager.CommandBuffer)
                     {
                         while (Sinus.SinusManager.CommandBuffer.Count > 0)
@@ -478,6 +479,13 @@ namespace Kokoro.Engine
             Draw();
 
             //TODO should we force the Viewport to start processing commands?
+            if (ViewportControl.IsHandleCreated)
+            {
+                ViewportControl.BeginInvoke(new MethodInvoker(() =>
+                {
+                    ViewportControl.Invalidate();
+                }));
+            }
         }
 
         /// <summary>
@@ -490,16 +498,10 @@ namespace Kokoro.Engine
             Sinus.SinusManager.QueueCommand(swap);
 
             //Push all data, this should 
-            //Sinus.SinusManager.PushCommandBuffer();
+            Sinus.SinusManager.PushCommandBuffer();
 
             //Invalidate the winform paint and trigger the draw thread
-            if (ViewportControl.IsHandleCreated)
-            {
-                ViewportControl.BeginInvoke(new MethodInvoker(() =>
-                    {
-                        ViewportControl.Invalidate();
-                    }));
-            }
+            
         }
 
         private void GameLooper(double timestep, Action<double, GraphicsContext> handler)

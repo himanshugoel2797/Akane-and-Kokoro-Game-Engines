@@ -479,6 +479,16 @@ namespace Kokoro.Math
 
         #endregion
 
+        #region Converters
+        public static Vector3 FromSpherical(Vector3 SphericalCoord)
+        {
+            double X = SphericalCoord.X * System.Math.Sin(SphericalCoord.Y) * System.Math.Cos(SphericalCoord.Z);
+            double Y = SphericalCoord.X * System.Math.Sin(SphericalCoord.Y) * System.Math.Sin(SphericalCoord.Z);
+            double Z = SphericalCoord.X * System.Math.Cos(SphericalCoord.Y);
+            return new Vector3((float)X, (float)Y, (float)Z);
+        }
+        #endregion
+
         #region Add
 
         /// <summary>

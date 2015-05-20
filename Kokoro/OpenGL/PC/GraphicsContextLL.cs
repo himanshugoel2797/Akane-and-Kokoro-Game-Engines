@@ -63,6 +63,7 @@ namespace Kokoro.OpenGL.PC
                 GL.Enable(EnableCap.DepthTest);
                 GL.Enable(EnableCap.LineSmooth);
                 GL.LineWidth(1);
+                Window.VSync = false;
                 MDIBuffer.Bind();   //This is the only place the draw indirect can be used so we only bind this once, it will never be replaced unless someone does something really wrong
             });
 
@@ -116,6 +117,7 @@ namespace Kokoro.OpenGL.PC
 
             SinusManager.QueueCommand(() =>
             {
+#if MULTIDRAW
                 GL.EnableVertexAttribArray(Engine.Model.staticBuffer.BufferCount - 1);
                 MDIBuffer.Bind(BufferTarget.ArrayBuffer);
                 GL.VertexAttribPointer(Engine.Model.staticBuffer.BufferCount - 1, 1, VertexAttribPointerType.UnsignedInt, false, 5 * sizeof(uint), 4 * sizeof(uint));
@@ -123,6 +125,12 @@ namespace Kokoro.OpenGL.PC
 
                 GL.MultiDrawElementsIndirect(EnumConverters.EDrawMode(mode), All.UnsignedInt, IntPtr.Zero, 10240 / (5 * sizeof(uint)), 0);
                 MDIBuffer.PostFence();      //The MDIBuffer can not be modified until this is done
+#endif
+                for (int i = 0; i < MDIEntries.Count; i++)
+                {
+                    GL.DrawElementsInstancedBaseVertex(PrimitiveType.Triangles, (int)MDIEntries[i].count, DrawElementsType.UnsignedInt, (IntPtr)(MDIEntries[i].first * sizeof(uint)), (int)MDIEntries[i].instanceCount, (int)MDIEntries[i].baseVertex);
+                }
+                MDIEntries.Clear();
                 Kokoro.Engine.Model.staticBuffer.PostFence();   //The draw buffers may not be modified until they have been drawn
                 Kokoro.Engine.Model.dynamicBuffer.PostFence();
             });
@@ -131,6 +139,8 @@ namespace Kokoro.OpenGL.PC
         //Submit all the current draw calls and clear the draw list
         internal static void SubmitDraw()
         {
+#if MULTIDRAW
+
             lock (locker)
             {
                 //Build the array to submit to the GPU
@@ -151,6 +161,7 @@ namespace Kokoro.OpenGL.PC
                     MDIBuffer.BufferData(buf, 0, buf.Length * sizeof(uint));
                 }
             }
+#endif
         }
 
         internal static void AddDrawCall(uint first, uint count, uint baseVertex)

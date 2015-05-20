@@ -186,9 +186,9 @@ namespace Kokoro.Engine
                         Materials[a].Apply(context, this);      //Material pipeline will just setup textures and uniform buffer parameters somehow
 
                         GraphicsContextLL.AddDrawCall(offsets[a][0] / sizeof(uint), lengths[a], offsets[a][1] / (3 * sizeof(float)));   //Send the draw call
-
+                        context.ForceDraw();
                         //Cleanup the Material
-                        //Materials[a].Cleanup(context, this);    //Queue the material to be cleaned out after everything has been done
+                        Materials[a].Cleanup(context, this);    //Queue the material to be cleaned out after everything has been done
                     }
                 }
             }

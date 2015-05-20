@@ -18,6 +18,7 @@ using Kokoro.Engine.HighLevel.Rendering;
 using Kokoro.Engine.HighLevel.Rendering.Compositor;
 using Kokoro.Engine.Input;
 using Messier104.LocalObjects;
+using Messier104.HeavenlyObjects;
 
 namespace Messier104
 {
@@ -26,8 +27,8 @@ namespace Messier104
         bool loaded = false;
 
         FirstPersonCamera FPSCam;
-        SpaceRock spaceRockA;
-        Material spaceRockAMat;
+        Star star;
+        SpaceRock a, b;
 
         public InGame(GraphicsContext context)
         {
@@ -42,21 +43,22 @@ namespace Messier104
 
         public void Render(double interval, GraphicsContext context)
         {
-            context.Clear(0f, 0f, 0f, 1f);
+            context.Clear(0f, 1f, 0f, 1f);
             if (loaded)
             {
-                spaceRockAMat.Shader["inColor"] = Vector4.One;
-                spaceRockA.ObjectMaterial = spaceRockAMat;
-                spaceRockA.Draw(context, FPSCam.Position);
+                star.Draw(context, interval, FPSCam.Position);
+                //a.Render(context, FPSCam.Position);
+                //b.Render(context, FPSCam.Position);
             }
             context.SwapBuffers();
         }
 
         public void Update(double interval, GraphicsContext context)
         {
+            //Console.WriteLine(interval);
             if (loaded)
             {
-
+                star.Update(interval / 100);
             }
         }
 
@@ -68,20 +70,22 @@ namespace Messier104
                 context.Camera = FPSCam;
             }
 
-            if (spaceRockA == null)
+            if (star == null)
             {
-                spaceRockA = new SpaceRock(100, 1000, Vector3.Zero, null, null);
-                spaceRockAMat = new Material()
+                star = new Star(500);
+                //star.Update(100);
+
+                a = new SpaceRock(10, 1000, Vector3.Zero, null, null);
+                a.ObjectMaterial = new Material()
                 {
-                    Name = "spaceRockAMat",
                     Shader = ColorDefaultShader.Create()
                 };
-                spaceRockAMat.Shader["inColor"] = Vector4.One;
-                spaceRockA.ObjectMaterial = spaceRockAMat;
+                b = new SpaceRock(10, 1000, new Vector3(1, 1, 1), null, null);
+                b.ObjectMaterial = a.ObjectMaterial;
             }
 
             context.Wireframe = true;
-            context.FaceCulling = CullMode.Back;
+            //context.FaceCulling = CullMode.Back;
             loaded = true;
         }
     }

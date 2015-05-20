@@ -35,7 +35,7 @@ namespace Kokoro.ShaderLib
             Vars.Depth0["gb"] = Vars.WorldPos["xy"];
             Vars.Depth0["a"] = 1;
 
-            Vars.RGBA0 = Vars.inColor;
+            Vars.RGBA0.Construct(1, 1, 1, 1);
 
             Manager.ShaderEnd();
         }
